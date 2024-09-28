@@ -6,8 +6,8 @@ services:
     container_name: php-backend
     ports:
       - "8080:80"
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
     volumes:
       - ./php-backend:/var/www/html
     networks:
@@ -21,20 +21,20 @@ services:
     networks:
       - app-network
 
-  # db:
-  #   image: postgres:13
-  #   container_name: postgres-db
-  #   environment:
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: mydb
-  #   volumes:
-  #     - ./postgresql-database/db-init:/docker-entrypoint-initdb.d
-  #     - pgdata:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
-  #   networks:
-  #     - app-network
+  db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - ./postgresql-database/db-init:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
 
 networks:
   app-network:
