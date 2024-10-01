@@ -15,6 +15,12 @@ RUN apt-get update && \
 # Включение модуля Apache mod_rewrite
 RUN a2enmod rewrite
 
+# Настройка DocumentRoot
+RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf
+
+# Разрешение использования .htaccess
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
 # Установка Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -30,7 +36,7 @@ WORKDIR /var/www/html
 COPY skeleton/ /var/www/html/
 
 # Установка зависимостей через Composer
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
 
 # Очистка и прогрев кэша Symfony
 RUN php bin/console cache:clear --env=prod --no-debug && \

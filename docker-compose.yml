@@ -10,8 +10,9 @@ services:
       - "8080:80"
     depends_on:
       - db
-    volumes:
-      - ./php-backend/app/skeleton:/var/www/html
+    # Удаляем или комментируем раздел volumes
+    # volumes:
+    #   - ./php-backend/app/skeleton:/var/www/html
     networks:
       - app-network
     environment:
