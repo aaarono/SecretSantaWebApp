@@ -26,20 +26,19 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash && \
 # Установка рабочей директории
 WORKDIR /var/www/html
 
-# Копирование файлов composer и установка зависимостей
-COPY composer.json composer.lock /var/www/html/
+# Копирование всего приложения из папки skeleton в контейнер
+COPY skeleton/ /var/www/html/
+
+# Установка зависимостей через Composer
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Копирование остального исходного кода приложения
-COPY . /var/www/html/
-
-# Установка прав на директории var и vendor (опционально)
-RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor && \
-    chmod -R 775 /var/www/html/var /var/www/html/vendor
-
-# Очистка и прогрев кэша Symfony (опционально для продакшена)
+# Очистка и прогрев кэша Symfony
 RUN php bin/console cache:clear --env=prod --no-debug && \
     php bin/console cache:warmup --env=prod --no-debug
+
+# Установка прав на директории var и vendor
+RUN chown -R www-data:www-data var vendor && \
+    chmod -R 775 var vendor
 
 # Экспонирование порта Apache
 EXPOSE 80
