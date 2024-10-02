@@ -35,8 +35,9 @@ WORKDIR /var/www/html
 # Копирование всего приложения из папки skeleton в контейнер
 COPY skeleton/ /var/www/html/
 
-# Установка зависимостей через Composer
-RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
+# Установка зависимостей через Composer и Symfony Runtime
+RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts && \
+    composer require symfony/runtime
 
 # Очистка и прогрев кэша Symfony
 RUN php bin/console cache:clear --env=prod --no-debug && \
