@@ -4,8 +4,8 @@ namespace App\Service;
 
 use App\Repository\UserRepository;
 use App\Repository\GameRepository;
-use Entity\User;
-use Entity\Game;
+use App\Entity\User;
+use App\Entity\Game;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**

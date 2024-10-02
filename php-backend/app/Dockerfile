@@ -29,19 +29,30 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash && \
     mv /root/.symfony5/bin/symfony /usr/local/bin/symfony && \
     rm -rf /root/.symfony5
 
-# Установка рабочей директории
-WORKDIR /var/www/html
+# Создание нового пользователя и группы
+RUN groupadd -g 1000 appuser && \
+    useradd -r -u 1000 -g appuser appuser
 
 # Копирование всего приложения из папки skeleton в контейнер
 COPY skeleton/ /var/www/html/
 
+# Изменение прав доступа для нового пользователя
+RUN chown -R appuser:appuser /var/www/html
+
+# Переход на пользователя "appuser"
+USER appuser
+
 # Установка зависимостей через Composer и Symfony Runtime
+WORKDIR /var/www/html
 RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts && \
     composer require symfony/runtime
 
 # Очистка и прогрев кэша Symfony
 RUN php bin/console cache:clear --env=prod --no-debug && \
     php bin/console cache:warmup --env=prod --no-debug
+
+# Переход обратно к пользователю root для выполнения системных команд
+USER root
 
 # Установка прав на директории var и vendor
 RUN chown -R www-data:www-data var vendor && \
