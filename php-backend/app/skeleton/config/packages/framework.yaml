@@ -1,10 +1,13 @@
-# see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
 
-    # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    # Настройка сессий
+    session:
+        enabled: true               # Включаем сессии явно
+        handler_id: null            # Используем стандартный обработчик PHP сессий
+        cookie_secure: auto         # Автоматическое определение secure cookie
+        cookie_samesite: lax        # Политика SameSite для защиты от CSRF атак
 
     #esi: true
     #fragments: true

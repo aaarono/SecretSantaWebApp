@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit97f6860905f17c15752ec5fdc002d294
+class ComposerStaticInitc5d6cdeecfffacb95c825398d987fc05
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -13,8 +13,8 @@ class ComposerStaticInit97f6860905f17c15752ec5fdc002d294
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -33,11 +33,16 @@ class ComposerStaticInit97f6860905f17c15752ec5fdc002d294
             'Symfony\\Component\\Webhook\\' => 26,
             'Symfony\\Component\\VarExporter\\' => 30,
             'Symfony\\Component\\VarDumper\\' => 28,
+            'Symfony\\Component\\TypeInfo\\' => 27,
             'Symfony\\Component\\String\\' => 25,
+            'Symfony\\Component\\Security\\Http\\' => 32,
+            'Symfony\\Component\\Security\\Csrf\\' => 32,
             'Symfony\\Component\\Security\\Core\\' => 32,
             'Symfony\\Component\\Runtime\\' => 26,
             'Symfony\\Component\\Routing\\' => 26,
             'Symfony\\Component\\RemoteEvent\\' => 30,
+            'Symfony\\Component\\PropertyInfo\\' => 31,
+            'Symfony\\Component\\PropertyAccess\\' => 33,
             'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\PasswordHasher\\' => 33,
             'Symfony\\Component\\Messenger\\' => 28,
@@ -53,6 +58,7 @@ class ComposerStaticInit97f6860905f17c15752ec5fdc002d294
             'Symfony\\Component\\Config\\' => 25,
             'Symfony\\Component\\Clock\\' => 24,
             'Symfony\\Component\\Cache\\' => 24,
+            'Symfony\\Bundle\\SecurityBundle\\' => 30,
             'Symfony\\Bundle\\MakerBundle\\' => 27,
             'Symfony\\Bundle\\FrameworkBundle\\' => 31,
             'Symfony\\Bridge\\Doctrine\\' => 24,
@@ -141,9 +147,21 @@ class ComposerStaticInit97f6860905f17c15752ec5fdc002d294
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
+        'Symfony\\Component\\TypeInfo\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/type-info',
+        ),
         'Symfony\\Component\\String\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/string',
+        ),
+        'Symfony\\Component\\Security\\Http\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/security-http',
+        ),
+        'Symfony\\Component\\Security\\Csrf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/security-csrf',
         ),
         'Symfony\\Component\\Security\\Core\\' => 
         array (
@@ -160,6 +178,14 @@ class ComposerStaticInit97f6860905f17c15752ec5fdc002d294
         'Symfony\\Component\\RemoteEvent\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/remote-event',
+        ),
+        'Symfony\\Component\\PropertyInfo\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/property-info',
+        ),
+        'Symfony\\Component\\PropertyAccess\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/property-access',
         ),
         'Symfony\\Component\\Process\\' => 
         array (
@@ -220,6 +246,10 @@ class ComposerStaticInit97f6860905f17c15752ec5fdc002d294
         'Symfony\\Component\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/cache',
+        ),
+        'Symfony\\Bundle\\SecurityBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/security-bundle',
         ),
         'Symfony\\Bundle\\MakerBundle\\' => 
         array (
@@ -335,9 +365,9 @@ class ComposerStaticInit97f6860905f17c15752ec5fdc002d294
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit97f6860905f17c15752ec5fdc002d294::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit97f6860905f17c15752ec5fdc002d294::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit97f6860905f17c15752ec5fdc002d294::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc5d6cdeecfffacb95c825398d987fc05::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc5d6cdeecfffacb95c825398d987fc05::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc5d6cdeecfffacb95c825398d987fc05::$classMap;
 
         }, null, ClassLoader::class);
     }
