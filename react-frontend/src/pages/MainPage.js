@@ -1,23 +1,13 @@
 import React from 'react';
-import Button from './Button';
+import Button from '../components/ui/Button';
 import '../index.css';
 
 const SecretSantaPage = () => {
   const styles = {
-    backgroundContainer: {
-      backgroundColor: 'var(--main-bg-dark)',
-      height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     centerContainer: {
       textAlign: 'center',
-    },
-    title: {
-      color: 'var(--text-dark)',
-      fontFamily: 'cursive',
-      fontSize: '3rem',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     buttonContainer: {
       marginTop: '20px',
@@ -28,7 +18,6 @@ const SecretSantaPage = () => {
   };
 
   return (
-    <div style={styles.backgroundContainer}>
       <div style={styles.centerContainer}>
         <h1 style={styles.title}>Secret Santa</h1>
         <div style={styles.buttonContainer}>
@@ -36,7 +25,6 @@ const SecretSantaPage = () => {
           <Button text="Sign Up" onClick={() => console.log('Sign Up clicked')} className="button-main" />
         </div>
       </div>
-    </div>
   );
 };
 
