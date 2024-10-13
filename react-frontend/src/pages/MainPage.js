@@ -1,33 +1,32 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
-import TextInput from '../components/ui/TextInput';
 import '../index.css';
 
-const LoginForm = () => {
+const MainPage = () => {
+  const navigate = useNavigate();
+
   const styles = {
     centerContainer: {
       textAlign: 'center',
     },
-  };
-
-  const validateUsername = (username) => {
-    return username.length >= 3;
-  };
-
-  const validatePassword = (password) => {
-    return password.length >= 6;
+    buttonContainer: {
+      marginTop: '20px',
+      display: 'flex',
+      gap: '10px',
+      justifyContent: 'center',
+    },
   };
 
   return (
-    <form style={styles.backgroundContainer}>
-      <div style={styles.centerContainer}>
-        <h1>Login</h1>
-        <TextInput name="username" placeholder={"Username"} errorCheck={validateUsername} errorText="Username must be at least 3 characters long" />
-        <TextInput name="password" placeholder={"Password"} type='password' errorCheck={validatePassword} errorText="Password must be at least 6 characters long" />
-        <Button text="Log In" onClick={() => console.log('Log In clicked')} />
-      </div>
-    </form>
+    <div style={styles.centerContainer}>
+        <h1>Secret Santa</h1>
+        <div style={styles.buttonContainer}>
+            <Button text="Log In" onClick={() => navigate('/login')} />
+            <Button text="Sign Up" onClick={() => navigate('/registration')} />
+        </div>
+    </div>
   );
 };
 
-export default LoginForm;
+export default MainPage;
