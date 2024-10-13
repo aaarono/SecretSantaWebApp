@@ -7,9 +7,11 @@ const LoginForm = () => {
   const styles = {
     centerContainer: {
       textAlign: 'center',
-      display: 'flex',
-      gap: '10px',
     },
+    buttonMain: {
+      margin: 'auto',
+      marginTop: '20px',
+    }
   };
 
   const validateUsername = (username) => {
@@ -21,14 +23,18 @@ const LoginForm = () => {
   };
 
   return (
-    <form className='section-container'>
-      <div style={styles.centerContainer}>
-        <h1>Login</h1>
-        <TextInput name="username" placeholder={"Username"} errorCheck={validateUsername} errorText="Username must be at least 3 characters long" />
-        <TextInput name="password" placeholder={"Password"} type='password' errorCheck={validatePassword} errorText="Password must be at least 6 characters long" />
-        <Button text="Log In" onClick={() => console.log('Log In clicked')} />
+    <div>
+      <h1>Secret Santa</h1>
+      <div className="section-container">
+        <form>
+          <div style={styles.centerContainer}>
+            <TextInput name="username" placeholder={"Username"} errorCheck={validateUsername} errorText="Username must be at least 3 characters long" />
+            <TextInput name="password" placeholder={"Password"} type='password' errorCheck={validatePassword} errorText="Password must be at least 6 characters long" />
+            <Button style={styles.buttonMain} text="Log In" onClick={() => console.log('Log In clicked')} />
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 };
 
