@@ -1,3 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap');
+
+@font-face {
+  font-family: sansationBold;
+  src: url(assets/Sansation_Bold.ttf);
+}
+@font-face {
+  font-family: sansationRegular;
+  src: url(assets/Sansation_Regular.ttf);
+}
+@font-face {
+  font-family: sansationLight;
+  src: url(assets/Sansation_Light.ttf);
+}
+
 * {
   --main-bg-dark: #222B5A;
   --secondary-bg-dark: #243D6D;
@@ -10,4 +25,16 @@
   --main-element-light: #CFDBDC;
   --secondary-element-light: #143248;
   --text-light: #143248;
+}
+
+h1 {
+  font-family: "Jolly Lodger", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.button {
+  background-color: var(--main-element-dark);
+  color: var(--text-dark);
+  font-family: sansationBold;
 }
