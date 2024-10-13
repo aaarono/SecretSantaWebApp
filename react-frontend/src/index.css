@@ -1,0 +1,13 @@
+* {
+  --main-bg-dark: #222B5A;
+  --secondary-bg-dark: #243D6D;
+  --main-element-dark: #2A5B80;
+  --secondary-element-dark: #fff;
+  --text-dark: #fff;
+
+  --main-bg-light: #3C7FA5;
+  --secondary-bg-light: #96CED6;
+  --main-element-light: #CFDBDC;
+  --secondary-element-light: #143248;
+  --text-light: #143248;
+}
