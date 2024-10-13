@@ -33,7 +33,7 @@ h1 {
   font-style: normal;
 }
 
-.button {
+.button-main {
   background-color: var(--main-element-dark);
   color: var(--text-dark);
   font-family: sansationBold;

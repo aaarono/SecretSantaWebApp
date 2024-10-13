@@ -6,7 +6,7 @@ const Button = ({ text, onClick, style }) => {
     <button 
       className="button-main"
       onClick={onClick}
-      style={style}
+      style={{ ...{}, ...style }}
     >
       {text}
     </button>
