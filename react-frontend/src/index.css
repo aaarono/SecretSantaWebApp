@@ -23,12 +23,14 @@
   --main-element-dark: #2A5B80;
   --secondary-element-dark: #fff;
   --text-dark: #fff;
+  --text-input-dark: #A3B3C1;
 
   --main-bg-light: #3C7FA5;
   --secondary-bg-light: #96CED6;
   --main-element-light: #CFDBDC;
   --secondary-element-light: #143248;
   --text-light: #143248;
+  --text-input-light: #A3B3C1;
 }
 
 body {
@@ -82,16 +84,22 @@ h1 {
   height: 50px;
   width: 180px;
   border-radius: 10px;
+  transition: ease 0.1s;
+}
+
+.button-main:hover {
+  background-color: var(--main-bg-light);
 }
 
 .section-container {
   background-color: var(--secondary-bg-dark);
-  height: 310px;
+  height: inherit;
   width: 410px;
   border-radius: 20px;
   margin: auto;
   display: flex;
   justify-content: center;
+  padding: 20px 0;
 }
 
 .text-input-container {
@@ -105,7 +113,11 @@ h1 {
   height: 50px;
   background-color: var(--main-element-dark);
   border-radius: 10px;
-  margin-top: 20px;
+  margin: 20px;
   padding: 0 20px;
   color: var(--secondary-element-dark);
+}
+
+.text-input-container input::placeholder {
+  color: var(--text-input-dark);
 }
