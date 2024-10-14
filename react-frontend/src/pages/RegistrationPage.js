@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../components/ui/Button';
 import TextInput from '../components/ui/TextInput';
-import RadioButtons from '../components/ui/RadioButtons';
+import SelectInput from '../components/ui/SelectInput';
 import '../index.css';
 
 const RegistrationForm = () => {
@@ -19,7 +19,10 @@ const RegistrationForm = () => {
   const styles = {
     buttonMain: {
       margin: '10px auto',
-    }
+    },
+    selectInput : {
+      width: '110%'
+    },
   };
 
   const validateEmail = (email) => {
@@ -99,10 +102,7 @@ const RegistrationForm = () => {
             value={formValues.surname}
             onChange={handleInputChange}
           />
-          <RadioButtons 
-            options={{ Male: 'male', Female: 'female' }} 
-            direction='horizontal'
-          />
+          <SelectInput style={styles.selectInput}/>
           <TextInput 
             name="password" 
             placeholder="Password" 

@@ -102,11 +102,11 @@ h1 {
   padding: 20px 0;
 }
 
-.text-input-container {
+.text-input-container, .select-input-container {
   width: 80%;
 }
 
-.text-input-container input {
+.text-input-container input, .select-input-container select{
   font-family: sansationLight;
   display: block;
   font-size: 24px;
@@ -118,6 +118,6 @@ h1 {
   color: var(--secondary-element-dark);
 }
 
-.text-input-container input::placeholder {
+.text-input-container input::placeholder, .select-input-container select {
   color: var(--text-input-dark);
 }
