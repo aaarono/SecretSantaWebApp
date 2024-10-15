@@ -37,35 +37,15 @@ body {
   background-color: var(--main-bg-dark);
 }
 
-.bg-snow-inner {
-  width: 100%;
-  height: 100%;
+.main-container {
+  width: 60%;
+  height: 100vh;
+  background-color: #c5c5c5; /*Не убирать, надо видеть границы*/
   margin: auto;
-  vertical-align: middle;
-}
-
-@keyframes animatedBackground {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0px 300px;
-  }
-}
-
-.button-main {
-  background-color: var(--main-element-dark);
-  display: block;
-  color: var(--text-dark);
-  font-size: 24px;
-  height: 50px;
-  width: 180px;
-  border-radius: 10px;
-  transition: ease 0.1s;
-}
-
-.button-main:hover {
-  background-color: var(--main-bg-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .section-container {
