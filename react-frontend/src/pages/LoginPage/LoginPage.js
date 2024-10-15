@@ -1,14 +1,12 @@
 import React from 'react';
-import Button from '../components/ui/Button';
-import TextInput from '../components/ui/TextInput';
-import '../index.css';
+import Button from '../../components/ui/Button/Button';
+import TextInput from '../../components/ui/TextInput/TextInput';
+import '../../index.css';
+import { useNavigate } from 'react-router-dom';
+import Logo from '../../components/Logo';
 
 const LoginForm = () => {
-  const styles = {
-    buttonMain: {
-      margin: '10px auto',
-    }
-  };
+  const navigate = useNavigate();
 
   const validateUsername = (username) => {
     return username.length >= 3;
@@ -20,12 +18,12 @@ const LoginForm = () => {
 
   return (
     <div>
-      <h1>Secret Santa</h1>
+      <Logo/>
       <div className="section-container">
         <form>
             <TextInput name="username" placeholder={"Username"} errorCheck={validateUsername}/>
             <TextInput name="password" placeholder={"Password"} type='password' errorCheck={validatePassword}/>
-            <Button style={styles.buttonMain} text="Log In" onClick={() => console.log('Log In clicked')} />
+            <Button text="Log In" onClick={() => navigate('/main')} />
         </form>
       </div>
     </div>

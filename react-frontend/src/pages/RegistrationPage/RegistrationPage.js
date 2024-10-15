@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import Button from '../components/ui/Button';
-import TextInput from '../components/ui/TextInput';
-import SelectInput from '../components/ui/SelectInput';
-import '../index.css';
+import Button from '../../components/ui/Button/Button';
+import TextInput from '../../components/ui/TextInput/TextInput';
+import SelectInput from '../../components/ui/SelectInput/SelectInput';
+import Logo from '../../components/Logo';
+import '../../index.css';
 
 const RegistrationForm = () => {
   const [showErrors, setShowErrors] = useState(false);
@@ -15,15 +16,6 @@ const RegistrationForm = () => {
     password: '',
     passwordRepeat: '',
   });
-
-  const styles = {
-    buttonMain: {
-      margin: '10px auto',
-    },
-    selectInput : {
-      width: '110%'
-    },
-  };
 
   const validateEmail = (email) => {
     return email.includes('@');
@@ -56,10 +48,10 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div>
-    <h1>Secret Santa</h1>
-      <form className='section-container' onSubmit={handleFormSubmit}>
-        <div style={styles.centerContainer}>
+    <>
+    <Logo/>
+    <div className='section-container'>
+      <form onSubmit={handleFormSubmit}>
           <TextInput 
             name="email" 
             type='email' 
@@ -102,7 +94,7 @@ const RegistrationForm = () => {
             value={formValues.surname}
             onChange={handleInputChange}
           />
-          <SelectInput style={styles.selectInput}/>
+          <SelectInput/>
           <TextInput 
             name="password" 
             placeholder="Password" 
@@ -121,10 +113,10 @@ const RegistrationForm = () => {
             value={formValues.passwordRepeat}
             onChange={handleInputChange}
           />
-          <Button text="Register" type="submit" style={styles.buttonMain}/>
-        </div>
+          <Button text="Register" type="submit"/>
       </form>
-    </div>
+      </div>
+    </>
   );
 };
 

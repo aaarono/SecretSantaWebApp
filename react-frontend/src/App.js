@@ -1,15 +1,17 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import MainPage from './pages/MainPage'
-import LoginForm from './pages/LoginPage';
-import RegistrationForm from './pages/RegistrationPage';
+import WelcomePage from './pages/WelcomePage/WelcomePage';
+import LoginForm from './pages/LoginPage/LoginPage';
+import RegistrationForm from './pages/RegistrationPage/RegistrationPage';
+import MainPage from './pages/MainPage/MainPage';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<MainPage />} />
+      <Route path="/" element={<WelcomePage />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/registration" element={<RegistrationForm />} />
+      <Route path="/main" element={<MainPage />} />
     </Routes>
   );
 }

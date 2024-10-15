@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './App.css';
-import AnimBg from './components/AnimBg';
+import MainContainer from './components/MainContainer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <AnimBg>
+    <MainContainer>
       <App />
-    </AnimBg>
+    </MainContainer>
   </BrowserRouter>
 );
