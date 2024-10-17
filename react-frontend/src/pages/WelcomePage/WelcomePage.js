@@ -12,7 +12,7 @@ const WelcomePage = () => {
   return (
     <>
         <Logo/>
-        <div className='button-container'>
+        <div className='button-container-welcome'>
             <Button text="Log In" onClick={() => navigate('/login')} />
             <Button text="Sign Up" onClick={() => navigate('/registration')} />
         </div>

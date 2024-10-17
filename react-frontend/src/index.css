@@ -58,23 +58,3 @@ body {
   justify-content: center;
   padding: 20px 0;
 }
-
-.text-input-container, .select-input-container {
-  width: 80%;
-}
-
-.text-input-container input, .select-input-container select{
-  font-family: sansationLight;
-  display: block;
-  font-size: 24px;
-  height: 50px;
-  background-color: var(--main-element-dark);
-  border-radius: 10px;
-  margin: 20px;
-  padding: 0 20px;
-  color: var(--secondary-element-dark);
-}
-
-.text-input-container input::placeholder, .select-input-container select {
-  color: var(--text-input-dark);
-}

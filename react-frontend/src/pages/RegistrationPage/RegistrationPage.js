@@ -4,6 +4,7 @@ import TextInput from '../../components/ui/TextInput/TextInput';
 import SelectInput from '../../components/ui/SelectInput/SelectInput';
 import Logo from '../../components/Logo';
 import '../../index.css';
+import './RegistrationPage.css';
 
 const RegistrationForm = () => {
   const [showErrors, setShowErrors] = useState(false);
@@ -51,7 +52,7 @@ const RegistrationForm = () => {
     <>
     <Logo/>
     <div className='section-container'>
-      <form onSubmit={handleFormSubmit}>
+      <form className='reg-form' onSubmit={handleFormSubmit}>
           <TextInput 
             name="email" 
             type='email' 
@@ -113,7 +114,7 @@ const RegistrationForm = () => {
             value={formValues.passwordRepeat}
             onChange={handleInputChange}
           />
-          <Button text="Register" type="submit"/>
+          <div className='button-container-signup'><Button text="Sign Up" type="submit"/></div>
       </form>
       </div>
     </>

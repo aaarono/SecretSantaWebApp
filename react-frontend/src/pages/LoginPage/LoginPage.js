@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../../components/ui/Button/Button';
 import TextInput from '../../components/ui/TextInput/TextInput';
 import '../../index.css';
+import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../components/Logo';
 
@@ -23,7 +24,7 @@ const LoginForm = () => {
         <form>
             <TextInput name="username" placeholder={"Username"} errorCheck={validateUsername}/>
             <TextInput name="password" placeholder={"Password"} type='password' errorCheck={validatePassword}/>
-            <Button text="Log In" onClick={() => navigate('/main')} />
+            <div className='button-container-login'><Button text="Log In" onClick={() => navigate('/main')} /></div>
         </form>
       </div>
     </div>
