@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/api')]
 class AuthController extends AbstractController
 {
     private AuthService $authService;
@@ -17,7 +18,7 @@ class AuthController extends AbstractController
         $this->authService = $authService;
     }
 
-    #[Route('/register', name: 'app_register', methods: ['POST'])]
+    #[Route('/auth/register', name: 'app_register', methods: ['POST'])]
     public function register(Request $request): JsonResponse
     {
         // Получение данных из запроса
@@ -29,7 +30,7 @@ class AuthController extends AbstractController
         return $this->json($result);
     }
 
-    #[Route('/login', name: 'app_login', methods: ['POST'])]
+    #[Route('/auth/login', name: 'app_login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
         // Получение данных из запроса
@@ -47,7 +48,7 @@ class AuthController extends AbstractController
         return $this->json($result);
     }
 
-    #[Route('/change-password', name: 'app_change_password', methods: ['POST'])]
+    #[Route('/auth/change-password', name: 'app_change_password', methods: ['POST'])]
     public function changePassword(Request $request): JsonResponse
     {
         // Получение текущего пользователя из сессии
@@ -67,7 +68,7 @@ class AuthController extends AbstractController
         return $this->json($result);
     }
 
-    #[Route('/logout', name: 'app_logout', methods: ['POST'])]
+    #[Route('/auth/logout', name: 'app_logout', methods: ['POST'])]
     public function logout(Request $request): JsonResponse
     {
         // Удаление данных пользователя из сессии

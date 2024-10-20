@@ -5,10 +5,12 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,9 +22,6 @@ class User
 
     #[ORM\Column(type: Types::ARRAY)]
     private array $roles = [];
-
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $genders = [];
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -44,9 +43,6 @@ class User
 
     #[ORM\Column(type: Types::BLOB)]
     private $profilePhoto = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $role = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -71,42 +67,6 @@ class User
         return $this;
     }
 
-    public function getRoles(): array
-    {
-        return $this->roles;
-    }
-
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    public function getGenders(): array
-    {
-        return $this->genders;
-    }
-
-    public function setGenders(array $genders): static
-    {
-        $this->genders = $genders;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
     public function getFirstName(): ?string
     {
         return $this->first_name;
@@ -117,11 +77,6 @@ class User
         $this->first_name = $first_name;
 
         return $this;
-    }
-
-    public function getUserName(): ?string
-    {
-        return $this->user_name;
     }
 
     public function setUserName(string $user_name): static
@@ -179,18 +134,6 @@ class User
         return $this;
     }
 
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
@@ -214,4 +157,63 @@ class User
 
         return $this;
     }
+        /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->user_name;
+    }
+
+    /**
+     * Deprecated since Symfony 5.3, use getUserIdentifier instead.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->user_name;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        // Гарантируем, что каждый пользователь имеет как минимум ROLE_USER
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {  }
 }
