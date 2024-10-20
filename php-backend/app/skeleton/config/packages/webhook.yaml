@@ -1,6 +1,0 @@
-framework:
-  webhook:
-    routing:
-      LobbyWebHook:
-        service: App\Webhook\LobbyWebHookRequestParser
-        secret: your_secret_here
