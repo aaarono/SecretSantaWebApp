@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -49,6 +51,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
+
+    /**
+     * @var Collection<int, Wishlist>
+     */
+    #[ORM\OneToMany(targetEntity: Wishlist::class, mappedBy: 'user_login')]
+    private Collection $wishlists;
+
+    /**
+     * @var Collection<int, PlayerGame>
+     */
+    #[ORM\OneToMany(targetEntity: PlayerGame::class, mappedBy: 'player', orphanRemoval: true)]
+    private Collection $playerGames;
+
+    public function __construct()
+    {
+        $this->wishlists = new ArrayCollection();
+        $this->playerGames = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -189,9 +209,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): static
+    /**
+     * @return Collection<int, Wishlist>
+     */
+    public function getWishlists(): Collection
     {
-        $this->roles = $roles;
+        return $this->wishlists;
+    }
+
+    public function addWishlist(Wishlist $wishlist): static
+    {
+        if (!$this->wishlists->contains($wishlist)) {
+            $this->wishlists->add($wishlist);
+            $wishlist->setUserLogin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWishlist(Wishlist $wishlist): static
+    {
+        if ($this->wishlists->removeElement($wishlist)) {
+            // set the owning side to null (unless already changed)
+            if ($wishlist->getUserLogin() === $this) {
+                $wishlist->setUserLogin(null);
+            }
+        }
 
         return $this;
     }
@@ -210,10 +253,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    /**
+     * @return Collection<int, PlayerGame>
+     */
+    public function getPlayerGames(): Collection
+    {
+        return $this->playerGames;
+    }
+
+    public function addPlayerGame(PlayerGame $playerGame): static
+    {
+        if (!$this->playerGames->contains($playerGame)) {
+            $this->playerGames->add($playerGame);
+            $playerGame->setPlayer($this);
+        }
+
+        return $this;
+    }
 
     /**
      * @see UserInterface
      */
     public function eraseCredentials(): void
     {  }
+
+    public function removePlayerGame(PlayerGame $playerGame): static
+    {
+        if ($this->playerGames->removeElement($playerGame)) {
+            // set the owning side to null (unless already changed)
+            if ($playerGame->getPlayer() === $this) {
+                $playerGame->setPlayer(null);
+            }
+        }
+
+        return $this;
+    }
 }

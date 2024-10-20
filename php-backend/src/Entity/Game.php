@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GameRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,17 @@ class Game
 
     #[ORM\Column(length: 50)]
     private ?string $status = null;
+
+    /**
+     * @var Collection<int, Pair>
+     */
+    #[ORM\OneToMany(targetEntity: Pair::class, mappedBy: 'game', orphanRemoval: true)]
+    private Collection $pairs;
+
+    public function __construct()
+    {
+        $this->pairs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -138,4 +151,35 @@ class Game
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Pair>
+     */
+    public function getPairs(): Collection
+    {
+        return $this->pairs;
+    }
+
+    public function addPair(Pair $pair): static
+    {
+        if (!$this->pairs->contains($pair)) {
+            $this->pairs->add($pair);
+            $pair->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removePair(Pair $pair): static
+    {
+        if ($this->pairs->removeElement($pair)) {
+            // set the owning side to null (unless already changed)
+            if ($pair->getGame() === $this) {
+                $pair->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
