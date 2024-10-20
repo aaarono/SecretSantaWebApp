@@ -29,8 +29,5 @@ WORKDIR /var/www/html
 # Настройка прав доступа (при необходимости)
 RUN mkdir -p var && chown -R www-data:www-data var
 
-# Экспонирование порта PHP-FPM (опционально)
-EXPOSE 9000
-
 # Запуск PHP-FPM
-CMD ["php-fpm"]
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]

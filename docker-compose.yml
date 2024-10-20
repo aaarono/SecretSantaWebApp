@@ -8,6 +8,8 @@ services:
       - ./php-backend:/var/www/html
     depends_on:
       - db
+    ports:
+      - "8000:8000"
     networks:
       - app-network
     working_dir: 

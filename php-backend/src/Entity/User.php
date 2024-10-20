@@ -198,6 +198,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+    * @see UserInterface
+    */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+
+    /**
      * @see UserInterface
      */
     public function getRoles(): array
