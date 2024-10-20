@@ -43,8 +43,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10)]
     private ?string $gender = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    private $profilePhoto = null;
+    // #[ORM\Column(type: Types::BLOB)]
+    // private $profilePhoto = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -142,17 +142,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getProfilePhoto()
-    {
-        return $this->profilePhoto;
-    }
+    // public function getProfilePhoto()
+    // {
+    //     return $this->profilePhoto;
+    // }
 
-    public function setProfilePhoto($profilePhoto): static
-    {
-        $this->profilePhoto = $profilePhoto;
+    // public function setProfilePhoto($profilePhoto): static
+    // {
+    //     $this->profilePhoto = $profilePhoto;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {

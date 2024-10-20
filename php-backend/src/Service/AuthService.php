@@ -41,7 +41,7 @@ class AuthService
         }
 
         // Проверка уникальности email
-        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['user_name' => $data['email']]);
         if ($existingUser) {
             return ['success' => false, 'message' => 'Пользователь с таким email уже существует.'];
         }
@@ -85,12 +85,12 @@ class AuthService
     public function login(array $data): array
     {
         // Проверка наличия обязательных полей
-        if (empty($data['email']) || empty($data['password'])) {
-            return ['success' => false, 'message' => 'Email и пароль обязательны для входа.'];
+        if (empty($data['user_name']) || empty($data['password'])) {
+            return ['success' => false, 'message' => 'user_name и пароль обязательны для входа.'];
         }
 
         // Поиск пользователя по email
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['user_name' => $data['user_name']]);
         if (!$user) {
             return ['success' => false, 'message' => 'Неверные учетные данные.'];
         }
