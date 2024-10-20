@@ -4,14 +4,14 @@ services:
       context: ./php-backend
       dockerfile: Dockerfile
     container_name: php-backend
+    volumes:
+      - ./php-backend:/var/www/html
     depends_on:
       - db
     networks:
       - app-network
-    environment:
-      - DATABASE_URL=pgsql://user:password@db:5432/mydb
-      - APP_ENV=prod
-      - APP_SECRET=your_secret_key
+    working_dir: 
+      /var/www/html
 
   react-frontend:
     build: ./react-frontend
@@ -40,8 +40,8 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydb
     volumes:
-      - ./postgresql-database/db-init:/docker-entrypoint-initdb.d
-      - pgdata:/var/lib/postgresql/data
+      - ./postgresql-database/data-base-init:/docker-entrypoint-initdb.d
+      - ./postgresql-database/pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:

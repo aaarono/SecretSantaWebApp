@@ -138,3 +138,6 @@ dist
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+### Database ###
+/postgresql-database/pgdata
