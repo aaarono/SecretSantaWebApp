@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../components/ui/Button/Button';
 import TextInput from '../../components/ui/TextInput/TextInput';
 import SelectInput from '../../components/ui/SelectInput/SelectInput';
-import Logo from '../../components/Logo';
+import Logo from '../../components/Logo/Logo';
 import '../../index.css';
 import './RegistrationPage.css';
 
 const RegistrationForm = () => {
+  const navigate = useNavigate();
+
   const [showErrors, setShowErrors] = useState(false);
   const [formValues, setFormValues] = useState({
     email: '',
@@ -114,7 +117,7 @@ const RegistrationForm = () => {
             value={formValues.passwordRepeat}
             onChange={handleInputChange}
           />
-          <div className='button-container-signup'><Button text="Sign Up" type="submit"/></div>
+          <div className='button-container-signup'><Button text="Sign Up" type="submit" onClick={() => navigate('/main')}/></div>
       </form>
       </div>
     </>

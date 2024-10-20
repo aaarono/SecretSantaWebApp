@@ -1,20 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/ui/Button/Button';
+import Logo from '../../components/Logo/Logo';
+import Header from '../../components/Header/Header';
 import '../../index.css';
-import Logo from '../../components/Logo';
+import './MainPage.css';
 
 const MainPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <>
         <Logo/>
-        <div>
-            <Button text="Log In" onClick={() => navigate('/login')} />
-            <Button text="Sign Up" onClick={() => navigate('/registration')} />
-        </div>
-    </div>
+        <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'}/>
+    </>
   );
 };
 

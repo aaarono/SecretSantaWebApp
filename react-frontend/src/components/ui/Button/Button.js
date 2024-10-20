@@ -1,7 +1,8 @@
 import React from 'react';
-import '../../../index.css'; // Styles will be applied from index.css
+import '../../../index.css';
+import './Button.css';
 
-const Button = ({ text, onClick, style }) => {
+const Button = ({ text, onClick }) => {
   return (
     <button 
       className="button-main"
