@@ -27,5 +27,11 @@ services:
                 $passwordHasher: '@security.password_hasher'
                 $validator: '@validator'
 
+    App\Service\WishListService:
+            arguments:
+                $entityManager: '@doctrine.orm.entity_manager'
+                $wishlistRepository: '@App\Repository\WishlistRepository'
+                $userRepository: '@App\Repository\UserRepository'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

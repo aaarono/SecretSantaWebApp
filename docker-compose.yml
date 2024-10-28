@@ -49,6 +49,15 @@ services:
     networks:
       - app-network
 
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    networks:
+      - app-network
+
 networks:
   app-network:
 
