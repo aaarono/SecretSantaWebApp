@@ -77,4 +77,11 @@ class AuthController extends AbstractController
 
         return $this->json(['success' => true, 'message' => 'Logged out successfully']);
     }
+
+    // Новый тестовый эндпоинт
+    #[Route('/test', name: 'app_test', methods: ['GET'])]
+    public function test(): JsonResponse
+    {
+        return $this->json(['success' => true, 'message' => 'Test endpoint is working!']);
+    }
 }

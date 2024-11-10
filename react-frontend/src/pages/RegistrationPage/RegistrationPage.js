@@ -6,11 +6,12 @@ import SelectInput from '../../components/ui/SelectInput/SelectInput';
 import Logo from '../../components/Logo/Logo';
 import '../../index.css';
 import './RegistrationPage.css';
+import { register } from '../../services/api/authService';
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
-
   const [showErrors, setShowErrors] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [formValues, setFormValues] = useState({
     email: '',
     username: '',
@@ -41,9 +42,31 @@ const RegistrationForm = () => {
     return passwordRepeat === formValues.password;
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setShowErrors(true);
+    if (
+      validateEmail(formValues.email) &&
+      validateUsername(formValues.username) &&
+      validatePhone(formValues.phone) &&
+      validatePassword(formValues.password) &&
+      validateSecondPassword(formValues.passwordRepeat)
+    ) {
+      try {
+        await register(
+          formValues.username,
+          formValues.email,
+          formValues.password,
+          formValues.name,
+          formValues.surname,
+          formValues.phone,
+          "MALE" // Replace this with the actual value from SelectInput
+        );
+        navigate('/main');
+      } catch (error) {
+        setErrorMessage(error.message || 'Registration failed. Please try again.');
+      }
+    }
   };
 
   const handleInputChange = (e) => {
@@ -53,72 +76,75 @@ const RegistrationForm = () => {
 
   return (
     <>
-    <Logo/>
-    <div className='section-container'>
-      <form className='reg-form' onSubmit={handleFormSubmit}>
-          <TextInput 
-            name="email" 
-            type='email' 
-            placeholder="E-mail" 
-            errorCheck={showErrors ? validateEmail : () => true} 
-            errorText="Email must be valid" 
+      <Logo />
+      <div className='section-container'>
+        <form className='reg-form' onSubmit={handleFormSubmit}>
+          <TextInput
+            name="email"
+            type='email'
+            placeholder="E-mail"
+            errorCheck={showErrors ? validateEmail : () => true}
+            errorText="Email must be valid"
             value={formValues.email}
             onChange={handleInputChange}
           />
-          <TextInput 
-            name="username" 
-            placeholder="Username" 
-            errorCheck={showErrors ? validateUsername : () => true} 
-            errorText="Username must be at least 3 characters long" 
+          <TextInput
+            name="username"
+            placeholder="Username"
+            errorCheck={showErrors ? validateUsername : () => true}
+            errorText="Username must be at least 3 characters long"
             value={formValues.username}
             onChange={handleInputChange}
           />
-          <TextInput 
-            name="phone" 
-            type='tel' 
-            placeholder="Phone" 
-            errorCheck={showErrors ? validatePhone : () => true} 
-            errorText="Phone must be valid" 
+          <TextInput
+            name="phone"
+            type='tel'
+            placeholder="Phone"
+            errorCheck={showErrors ? validatePhone : () => true}
+            errorText="Phone must be valid"
             value={formValues.phone}
             onChange={handleInputChange}
           />
-          <TextInput 
-            name="name" 
-            placeholder="Name" 
-            errorCheck={showErrors ? validateUsername : () => true} 
-            errorText="Name must be at least 3 characters long" 
+          <TextInput
+            name="name"
+            placeholder="Name"
+            errorCheck={showErrors ? validateUsername : () => true}
+            errorText="Name must be at least 3 characters long"
             value={formValues.name}
             onChange={handleInputChange}
           />
-          <TextInput 
-            name="surname" 
-            placeholder="Surname" 
-            errorCheck={showErrors ? validateUsername : () => true} 
-            errorText="Surname must be at least 3 characters long" 
+          <TextInput
+            name="surname"
+            placeholder="Surname"
+            errorCheck={showErrors ? validateUsername : () => true}
+            errorText="Surname must be at least 3 characters long"
             value={formValues.surname}
             onChange={handleInputChange}
           />
-          <SelectInput/>
-          <TextInput 
-            name="password" 
-            placeholder="Password" 
-            type='password' 
-            errorCheck={showErrors ? validatePassword : () => true} 
+          <SelectInput />
+          <TextInput
+            name="password"
+            placeholder="Password"
+            type='password'
+            errorCheck={showErrors ? validatePassword : () => true}
             errorText="Password must be at least 6 characters long"
             value={formValues.password}
             onChange={handleInputChange}
           />
-          <TextInput 
-            name="passwordRepeat" 
-            placeholder="Repeat password" 
-            type='password' 
-            errorCheck={showErrors ? validateSecondPassword : () => true} 
-            errorText="Passwords must match" 
+          <TextInput
+            name="passwordRepeat"
+            placeholder="Repeat password"
+            type='password'
+            errorCheck={showErrors ? validateSecondPassword : () => true}
+            errorText="Passwords must match"
             value={formValues.passwordRepeat}
             onChange={handleInputChange}
           />
-          <div className='button-container-signup'><Button text="Sign Up" type="submit" onClick={() => navigate('/main')}/></div>
-      </form>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          <div className='button-container-signup'>
+            <Button text="Sign Up" type="submit"/>
+          </div>
+        </form>
       </div>
     </>
   );

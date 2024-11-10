@@ -1,6 +1,5 @@
 // src/services/authService.js
-
-const API_URL = 'http://localhost:8000/api/auth';
+import api from './api';
 
 /**
  * Отправляет данные для аутентификации на бекенд.
@@ -10,30 +9,11 @@ const API_URL = 'http://localhost:8000/api/auth';
  */
 export const login = async (loginOrEmail, password) => {
   try {
-    const response = await fetch(`${API_URL}/login`, {
-      method: 'POST', // Изменено с 'GET' на 'POST'
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include', // Для отправки куки с запросом
-      body: JSON.stringify({
-        login_or_email: loginOrEmail,
-        password: password,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      // Генерируем ошибку с сообщением от сервера
-      const error = new Error(data.message || 'Произошла ошибка при входе.');
-      error.status = response.status;
-      throw error;
-    }
-
-    return data;
+    return await api.post('/auth/login', {
+      login_or_email: loginOrEmail,
+      password: password,
+    }, { credentials: 'include' });
   } catch (error) {
-    // Пробрасываем ошибку для обработки в компоненте
     throw error;
   }
 };
@@ -43,36 +23,23 @@ export const login = async (loginOrEmail, password) => {
  * @param {string} user_name - Логин пользователя.
  * @param {string} email - Email пользователя.
  * @param {string} password - Пароль пользователя.
+ * @param {string} first_name - Имя пользователя.
+ * @param {string} last_name - Фамилия пользователя.
+ * @param {string} phone - Телефон пользователя.
+ * @param {string} gender - Пол пользователя.
  * @returns {Promise<Object>} Ответ от сервера.
  */
 export const register = async (user_name, email, password, first_name, last_name, phone, gender) => {
   try {
-    const response = await fetch(`${API_URL}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        user_name,
-        email,
-        password,
-        first_name,
-        last_name,
-        phone,
-        gender
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      const error = new Error(data.message || 'Произошла ошибка при регистрации.');
-      error.status = response.status;
-      throw error;
-    }
-
-    return data;
+    return await api.post('/auth/register', {
+      user_name,
+      email,
+      password,
+      first_name,
+      last_name,
+      phone,
+      gender
+    }, { credentials: 'include' });
   } catch (error) {
     throw error;
   }
@@ -84,23 +51,7 @@ export const register = async (user_name, email, password, first_name, last_name
  */
 export const logout = async () => {
   try {
-    const response = await fetch(`${API_URL}/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      const error = new Error(data.message || 'Произошла ошибка при выходе.');
-      error.status = response.status;
-      throw error;
-    }
-
-    return data;
+    return await api.post('/auth/logout', null, { credentials: 'include' });
   } catch (error) {
     throw error;
   }
@@ -114,27 +65,10 @@ export const logout = async () => {
  */
 export const changePassword = async (currentPassword, newPassword) => {
   try {
-    const response = await fetch(`${API_URL}/change-password`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        current_password: currentPassword,
-        new_password: newPassword,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      const error = new Error(data.message || 'Произошла ошибка при смене пароля.');
-      error.status = response.status;
-      throw error;
-    }
-
-    return data;
+    return await api.post('/auth/change-password', {
+      current_password: currentPassword,
+      new_password: newPassword,
+    }, { credentials: 'include' });
   } catch (error) {
     throw error;
   }

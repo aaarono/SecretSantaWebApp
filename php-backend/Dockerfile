@@ -30,4 +30,4 @@ WORKDIR /var/www/html
 RUN mkdir -p var && chown -R www-data:www-data var
 
 # Запуск PHP-FPM
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
