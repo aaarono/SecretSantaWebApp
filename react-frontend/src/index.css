@@ -40,7 +40,9 @@ body {
 .main-container {
   width: 60%;
   height: 100vh;
-  background-color: #c5c5c5; /* Не убирать, надо видеть границы */
+  /* Не убирать, надо видеть границы */
+  /* background-color: #c5c5c5; */
+  /* Не убирать, надо видеть границы */
   margin: auto;
   display: flex;
   flex-direction: column;

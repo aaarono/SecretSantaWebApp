@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../index.css';
 import './Header.css';
+import { Link } from 'react-router-dom';
 import defaultAvatar from '../../assets/avatar.png';
 import gameHistoryIco from '../../assets/gameHistory.svg';
 import wishlistIco from '../../assets/wishlist.svg';
@@ -17,9 +18,7 @@ const Header = ({ username, email }) => {
                 <p>{email}</p>
             </div>
             <div className='links-header'>
-                {/* <a href='#'><img className='gameHistory' src={gameHistoryIco} alt="Games History" /></a>
-                <a href='#'><img className='wishlist' src={wishlistIco} alt="Wishlist" /></a> */}
-                <a href='#'><img className='settings' src={settingsIco} alt="Settings" /></a>
+                <Link to="/settings" className="logo-link"><img className='settings' src={settingsIco} alt="Settings" /></Link>
             </div>
         </div>
         <div className='button-container-header'>
