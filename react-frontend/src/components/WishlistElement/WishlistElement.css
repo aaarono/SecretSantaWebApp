@@ -1,0 +1,31 @@
+.wishlist-element-container {
+    background-color: var(--main-element-dark);
+    width: 300px;
+    height: 180px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.wishlist-element-container h3 {
+    font-size: 26px;
+    padding: 10px 0;
+}
+
+.wishlist-element-container p {
+    font-family: sansationLight;
+    font-size: 18px;
+    padding: 0 5px;
+    text-align: center;
+}
+
+.wishlist-links {
+    margin-top: 10px;
+}
+
+.wishlist-links img {
+    height: 30px;
+    margin: 0 5px;
+}

@@ -5,6 +5,7 @@ import Logo from '../../components/Logo/Logo';
 import Header from '../../components/Header/Header';
 import '../../index.css';
 import './MainPage.css';
+import MainSection from '../../components/MainSection/MainSection';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const MainPage = () => {
     <>
         <Logo/>
         <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'}/>
+        <MainSection />
     </>
   );
 };
