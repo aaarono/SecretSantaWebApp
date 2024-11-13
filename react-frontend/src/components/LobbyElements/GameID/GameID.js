@@ -5,7 +5,8 @@ import '../../../index.css';
 const GameID = () => {
   return (
     <div className="game-id">
-      <h3>GameID: QF4PT</h3>
+      <h3>GameID</h3>
+      <p>QF4PT</p>
     </div>
   );
 };

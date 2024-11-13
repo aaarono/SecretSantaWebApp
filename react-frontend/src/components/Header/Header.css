@@ -1,16 +1,17 @@
 .header-container {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-areas: "section-container-header button-container-header";
+    grid-template-columns: 5fr 1fr;
+    gap: 10px;
     align-items: center;
     justify-content: space-between;
-    width: 95%;
 }
 
 .section-container-header {
     display: flex;
     align-items: center;
     background-color: var(--secondary-bg-dark);
-    width: 81%;
     height: 85px;
     padding: 10px;
     border-radius: 20px;

@@ -5,7 +5,7 @@ import '../../../index.css';
 const WaitingGameWindow = () => {
   return (
     <div className="game-window">
-      <button className="start-game-button">Waiting for players...</button>
+      <h2>Waiting for players...</h2>
     </div>
   );
 };

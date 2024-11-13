@@ -4,8 +4,6 @@ import '../../index.css';
 import './Header.css';
 import { Link } from 'react-router-dom';
 import defaultAvatar from '../../assets/avatar.png';
-import gameHistoryIco from '../../assets/gameHistory.svg';
-import wishlistIco from '../../assets/wishlist.svg';
 import settingsIco from '../../assets/settings.svg';
 import Button from '../ui/Button/Button';
 

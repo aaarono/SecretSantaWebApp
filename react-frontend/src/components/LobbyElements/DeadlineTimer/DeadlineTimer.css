@@ -1,16 +1,15 @@
 .deadline-timer {
-    padding: 10px;
-    background-color: #384376;
-    border-radius: 5px;
-    color: white;
+    padding: 25px;
+    background-color: var(--secondary-bg-dark);
     text-align: center;
   }
   
   .deadline-timer h4 {
-    margin: 0 0 5px 0;
+    font-size: 24px;
+    margin-bottom: 5px;
   }
   
   .deadline-timer p {
-    font-size: 20px;
+    font-size: 36px;
   }
   

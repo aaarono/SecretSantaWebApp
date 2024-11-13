@@ -1,7 +1,13 @@
 .game-id {
     padding: 10px;
-    background-color: #384376;
-    border-radius: 5px;
-    color: white;
-  }
-  
+    background-color: var(--secondary-bg-dark);
+    text-align: center;
+}
+
+.game-id h3 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+.game-id p {
+    font-size: 36px;
+}

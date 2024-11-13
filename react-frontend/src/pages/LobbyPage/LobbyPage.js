@@ -18,10 +18,8 @@ const LobbyPage = () => {
         <Logo/>
         <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'}/>
         <div className="lobby-page-container">
-            <div className="lobby-game-info">
                 <GameID />
                 <GameBanner />
-            </div>
                 <PlayersList />
                 <DeadlineTimer />
                 {/* <WaitingGameWindow /> */}
