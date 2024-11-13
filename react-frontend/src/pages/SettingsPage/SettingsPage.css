@@ -1,0 +1,76 @@
+.settings-container {
+    background-color: var(--secondary-bg-dark);
+    border-radius: 20px;
+    width: 95%;
+    margin-top: 20px;
+}
+
+.settings-container h2 {
+    text-align: center;
+    font-size: 36px;
+    color: var(--text-dark);
+    margin-top: 20px;
+}
+
+.settings-inputs, .settings-img-change {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Две колонки равной ширины */
+    gap: 20px; /* Расстояние между элементами */
+    justify-items: center; /* Центрирование элементов по горизонтали */
+}
+
+.settings-inputs {
+    width: 80%;
+    justify-content: center;
+    margin: auto;
+}
+
+.settings-inputs .text-input-container,
+.settings-inputs .select-input-container,
+.settings-inputs select,
+.settings-inputs input,
+.settings-inputs button {
+    width: 50vh;
+    margin: 0;
+    display: flex;
+}
+
+.settings-inputs button {
+    padding-left: 20px;
+    padding-top: 10px;
+}
+
+.settings-button {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.settings-img {
+    background-color: var(--main-element-dark);
+    border-radius: 10px;
+    padding: 15px 0;
+    margin: 20px auto;
+    width: 50%;
+    text-align: center;
+}
+
+.settings-img p {
+    color: var(--text-dark);
+    font-size: 24px;
+}
+
+.settings-img button {
+    height: 30px;
+    font-size: 18px;
+    background-color: var(--secondary-bg-dark);
+}
+
+.settings-img img {
+    height: 150px;
+    margin: 10px;
+    border: 2px solid var(--text-dark);
+    border-radius: 100%;
+}
+
+

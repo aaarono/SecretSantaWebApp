@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../index.css';
 import './Header.css';
 import { Link } from 'react-router-dom';
@@ -9,6 +10,7 @@ import settingsIco from '../../assets/settings.svg';
 import Button from '../ui/Button/Button';
 
 const Header = ({ username, email }) => {
+    const navigate = useNavigate();
   return (
     <div className='header-container'>
         <div className='section-container-header'>
@@ -22,8 +24,8 @@ const Header = ({ username, email }) => {
             </div>
         </div>
         <div className='button-container-header'>
-            <Button text={'New Game'} />
-            <Button text={'Connect'} />
+            <Button text={'New Game'} onClick={() => navigate('/new')}/>
+            <Button text={'Connect'} onClick={() => navigate('/connect')}/>
         </div>
     </div>
   );
