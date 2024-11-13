@@ -14,9 +14,9 @@
 
 .settings-inputs, .settings-img-change {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Две колонки равной ширины */
-    gap: 20px; /* Расстояние между элементами */
-    justify-items: center; /* Центрирование элементов по горизонтали */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    justify-items: center;
 }
 
 .settings-inputs {

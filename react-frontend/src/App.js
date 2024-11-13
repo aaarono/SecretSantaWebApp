@@ -7,6 +7,7 @@ import MainPage from './pages/MainPage/MainPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import NewGamePage from './pages/NewGamePage/NewGamePage';
 import ConnectPage from './pages/ConnectPage/ConnectPage';
+import LobbyPage from './pages/LobbyPage/LobbyPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/new" element={<NewGamePage />} />
       <Route path="/connect" element={<ConnectPage />} />
+      <Route path="/lobby" element={<LobbyPage />} />
     </Routes>
   );
 }
