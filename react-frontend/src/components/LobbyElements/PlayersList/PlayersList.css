@@ -1,0 +1,21 @@
+.players-list {
+    padding: 10px;
+    background-color: #384376;
+    border-radius: 5px;
+    color: white;
+  }
+  
+  .players-list h3 {
+    margin-bottom: 10px;
+  }
+  
+  .players-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .players-list li {
+    margin: 5px 0;
+  }
+  

@@ -1,0 +1,10 @@
+.game-banner {
+    padding: 10px;
+    background-color: #384376;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
