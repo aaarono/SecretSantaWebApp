@@ -43,8 +43,11 @@
     margin-right: 10px;
 }
 
-.links-header > a {
+.settings-link {
     margin-right: 10px;
+    width: 35px;
+    height: 35px;
+    color: var(--text-dark);
 }
 
 .button-container-header {

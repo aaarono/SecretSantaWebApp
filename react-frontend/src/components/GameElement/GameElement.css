@@ -11,7 +11,7 @@
 
 .game-element-container h3 {
     font-size: 26px;
-    padding: 10px 0;
+    padding: 13px 0;
 }
 
 .game-element-container p {
@@ -19,11 +19,10 @@
     font-size: 18px;
 }
 
-.game-links {
-    margin-top: 10px;
-}
-
-.game-links img {
+.game-links * {
+    cursor: pointer;
     height: 30px;
-    margin: 0 5px;
+    width: 30px;
+    margin: 0 1em;
+    color: var(--text-dark);
 }

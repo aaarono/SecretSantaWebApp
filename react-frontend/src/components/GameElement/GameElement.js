@@ -3,6 +3,8 @@ import '../../index.css';
 import './GameElement.css';
 import showMore from '../../assets/showMore.svg';
 import closeCircle from '../../assets/closeCircle.svg';
+import { SlClose } from "react-icons/sl";
+import { SlArrowRightCircle } from "react-icons/sl";
 
 
 const GameElement = ({ gameName, gameStatus, playersCount, playersMax, gameEnds }) => {
@@ -13,8 +15,8 @@ const GameElement = ({ gameName, gameStatus, playersCount, playersMax, gameEnds 
         <p className='players-count'>Players: {playersCount}/{playersMax}</p>
         <p className='game-ends'>Ends in: {gameEnds}</p>
         <div className='game-links'>
-            <a href='#'><img src={showMore} alt='Show more'/></a>
-            <a href='#'><img src={closeCircle} alt='Delete'/></a>
+            <SlArrowRightCircle />
+            <SlClose />
         </div>
     </div>
   );

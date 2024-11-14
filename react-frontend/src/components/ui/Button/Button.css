@@ -7,8 +7,9 @@
     width: 180px;
     border-radius: 10px;
     transition: ease 0.1s;
+    cursor: pointer;
   }
   
   .button-main:hover {
-    background-color: var(--main-bg-light);
+    background-color: var(--btn_hover);
   }

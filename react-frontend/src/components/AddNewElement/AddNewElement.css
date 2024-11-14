@@ -9,6 +9,9 @@
     align-items: center;
 }
 
-.add-new-element-container img {
+.add-new-element-container * {
+    cursor: pointer;
     height: 30px;
+    width: 30px;
+    color: var(--text-dark);
 }

@@ -3,6 +3,8 @@ import '../../index.css';
 import './WishlistElement.css';
 import showMore from '../../assets/showMore.svg';
 import closeCircle from '../../assets/closeCircle.svg';
+import { SlClose } from "react-icons/sl";
+import { SlArrowRightCircle } from "react-icons/sl";
 
 const WishlistElement = ({ wishName, description }) => {
   return (
@@ -10,8 +12,8 @@ const WishlistElement = ({ wishName, description }) => {
         <h3>{wishName}</h3>
         <p>{description}</p>
         <div className='wishlist-links'>
-            <a href='#'><img src={showMore} alt='Edit'/></a>
-            <a href='#'><img src={closeCircle} alt='Delete'/></a>
+            <SlArrowRightCircle />
+            <SlClose />
         </div>
     </div>
   );
