@@ -1,0 +1,30 @@
+.players-list {
+    background-color: var(--secondary-bg-dark);
+  }
+  
+.players-list h3 {
+    font-size: 24px;
+    margin-top: 5px;
+    padding: 10px;
+    text-align: center;
+}
+  
+.players-list ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+  
+.players-list li {
+    padding: 7px 20px;
+}
+
+.players-list li:nth-child(odd) {
+    background-color: var(--main-element-dark);
+}
+
+.players-list li:nth-child(even):last-child {
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+

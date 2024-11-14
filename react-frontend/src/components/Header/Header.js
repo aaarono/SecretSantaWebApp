@@ -1,28 +1,35 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../index.css';
 import './Header.css';
+import { Link } from 'react-router-dom';
 import defaultAvatar from '../../assets/avatar.png';
-import gameHistoryIco from '../../assets/gameHistory.svg';
-import wishlistIco from '../../assets/wishlist.svg';
 import settingsIco from '../../assets/settings.svg';
 import Button from '../ui/Button/Button';
+import Toggle from '../ui/Toggle/Toggle';
+import { ThemeContext } from '../ThemeContext';
+import { IoSettingsOutline } from "react-icons/io5";
 
 const Header = ({ username, email }) => {
+    const navigate = useNavigate();
+    const { isLight, toggleTheme } = useContext(ThemeContext);
   return (
     <div className='header-container'>
-        <div className='section-container'>
-        <img className='avatar' src={defaultAvatar} alt="Avatar" />
-        <div className='header-user-info'>
-            <h3>{username}</h3>
-            <p>{email}</p>
-        </div>
-        <img className='gameHistory' src={gameHistoryIco} alt="Games History" />
-        <img className='wishlist' src={wishlistIco} alt="Wishlist" />
-        <img className='settings' src={settingsIco} alt="Settings" />
+        <div className='section-container-header'>
+            <img className='avatar' src={defaultAvatar} alt="Avatar" />
+            <div className='header-user-info'>
+                <h3>{username}</h3>
+                <p>{email}</p>
+            </div>
+            <div className='links-header'>
+                <Toggle isChecked={isLight} handleChange={toggleTheme} />
+                <Link to="/settings"><IoSettingsOutline className="settings-link"/></Link>
+            </div>
         </div>
         <div className='button-container-header'>
-            <Button text={'New Game'} />
-            <Button text={'Connect'} />
+            <Button text={'New Game'} onClick={() => navigate('/new')}/>
+            <Button text={'Connect'} onClick={() => navigate('/connect')}/>
         </div>
     </div>
   );

@@ -17,30 +17,41 @@
   border: 0;
   margin: 0;
   font-family: sansationBold;
+}
 
+:root {
   --main-bg-dark: #222B5A;
   --secondary-bg-dark: #243D6D;
   --main-element-dark: #2A5B80;
   --secondary-element-dark: #fff;
   --text-dark: #fff;
   --text-input-dark: #A3B3C1;
-
-  --main-bg-light: #3C7FA5;
-  --secondary-bg-light: #96CED6;
-  --main-element-light: #CFDBDC;
-  --secondary-element-light: #143248;
-  --text-light: #143248;
-  --text-input-light: #A3B3C1;
+  --toggle-bg: #283452;
+  --toggle-fg: #00a6ff;
+  --btn_hover: #3C7FA5;
 }
 
-body {
+[data-theme = "light"] {
+  --main-bg-dark: #3C7FA5;
+  --secondary-bg-dark: #69c2d0;
+  --main-element-dark: #acf5fa;
+  --secondary-element-dark: #143248;
+  --text-dark: #112a3b;
+  --text-input-dark: #A3B3C1;
+  --toggle-bg: #f0eb9d;
+  --toggle-fg: #ffd000;
+  --btn_hover: #e2feff;
+}
+
+.theme-switch {
+  width: 100%;
+  height: 100%;
   background-color: var(--main-bg-dark);
 }
 
 .main-container {
   width: 60%;
   height: 100vh;
-  background-color: #c5c5c5; /*Не убирать, надо видеть границы*/
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -55,3 +66,4 @@ body {
   justify-content: center;
   padding: 20px 35px;
 }
+

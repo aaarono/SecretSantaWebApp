@@ -142,7 +142,7 @@ const RegistrationForm = () => {
           />
           {errorMessage && <div className="error-message">{errorMessage}</div>}
           <div className='button-container-signup'>
-            <Button text="Sign Up" type="submit"/>
+            <Button text="Sign Up" type="submit" onClick={() => navigate('/main')}/>
           </div>
         </form>
       </div>

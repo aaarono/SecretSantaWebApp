@@ -67,7 +67,7 @@ const LoginForm = () => {
           />
           {errorMessage && <div className="error-message">{errorMessage}</div>}
           <div className='button-container-login'>
-            <Button text="Log In" type="submit" />
+            <Button text="Log In" type="submit" onClick={() => navigate('/main')}/>
           </div>
         </form>
       </div>
