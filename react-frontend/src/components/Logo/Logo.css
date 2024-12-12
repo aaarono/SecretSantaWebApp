@@ -11,3 +11,15 @@
   .logo-link {
     text-decoration: none;
 }
+
+@media only screen and (max-width: 992px) {
+  .logo {
+    font-size: 90px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .logo {
+    font-size: 72px;
+  }
+}

@@ -56,3 +56,50 @@
     gap: 5px;
 }
 
+@media only screen and (max-width: 992px) {
+    .header-user-info h3 {
+        font-size: 18px;
+    }
+    
+    .header-user-info p {
+        font-size: 12px;
+    }
+
+    .avatar {
+        width: 45px;
+    }
+
+    .section-container-header {
+        height: 65px;
+    }
+
+    .button-container-header {
+        height: 85px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+
+    .avatar {
+        width: 45px;
+    }
+
+    .section-container-header {
+        height: 65px;
+        margin-bottom: 5px;
+    }
+
+    .button-container-header {
+        height: 85px;
+    }
+    .button-container-header button {
+        width: 100%;
+        margin-top: 1px;
+    }
+
+    .header-container {
+        width: 100%;
+        display: block;
+        gap: 10px;
+    }
+}
