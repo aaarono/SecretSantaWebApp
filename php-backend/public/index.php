@@ -31,8 +31,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json');
 
-// Проверка и настройка сессии
-function checkSession() {
+// Проверка сессии с логированием и установкой параметров
+function checkSession()
+{
+    // Установка пути для сохранения сессий
+    if (defined('PHP_OS_FAMILY')) {
+        switch (PHP_OS_FAMILY) {
+            case 'Windows':
+                $path = 'C:\\Windows\\Temp';
+                break;
+            case 'Linux':
+            case 'Darwin':
+            default:
+                $path = '/tmp';
+                break;
+        }
+    } else {
+        $path = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? 'C:\\Windows\\Temp' : '/tmp';
+    }
+
+    if (!is_dir($path)) {
+        if (!mkdir($path, 0777, true)) {
+            error_log("Не удалось создать директорию для сессий: $path");
+            $path = sys_get_temp_dir();
+        }
+    }
+    session_save_path($path);
+
+    // Установка параметров куки сессии
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'secure' => false, // Установите true, если используете HTTPS
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+
+    // Запуск сессии
     session_start();
 
     if (!isset($_SESSION['user'])) {
@@ -86,6 +121,26 @@ switch ($firstLayerRoute) {
                     echo json_encode(['message' => 'Invalid request method']);
                 }
                 break;
+
+            case 'change-password':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $authController->changePassword($input);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'check':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $authController->check();
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
 
             default:
                 http_response_code(404);
