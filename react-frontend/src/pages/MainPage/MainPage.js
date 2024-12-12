@@ -12,8 +12,6 @@ const MainPage = () => {
 
   return (
     <>
-        <Logo/>
-        <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'}/>
         <MainSection />
     </>
   );

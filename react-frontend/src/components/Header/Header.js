@@ -1,43 +1,34 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../index.css';
 import './Header.css';
 import { Link } from 'react-router-dom';
-import defaultAvatar from '../../assets/avatar.png';
 import { IoSettingsOutline } from "react-icons/io5";
 import Button from '../ui/Button/Button';
 import Toggle from '../ui/Toggle/Toggle';
 import { ThemeContext } from '../ThemeContext';
+import { AvatarContext } from '../contexts/AvatarContext'; // Подключаем контекст
 import api from '../../services/api/api';
 
 const Header = ({ username, email }) => {
     const navigate = useNavigate();
     const { isLight, toggleTheme } = useContext(ThemeContext);
-    const [avatar, setAvatar] = useState(defaultAvatar);
-    const [loading, setLoading] = useState(true);
+    const { avatar, setAvatar } = useContext(AvatarContext); // Получаем аватар из контекста
 
-    // Функция для получения аватарки пользователя
-    const fetchUserImage = async () => {
-        try {
-            const response = await api.get('/user/get-image');
-            console.log('Response from server:', response);
-
-            if (response.status === 'success' && response.image) {
-                setAvatar(response.image); // Устанавливаем Base64 изображение как аватар
-            } else {
-                console.error('Failed to fetch user image:', response.message);
-            }
-        } catch (error) {
-            console.error('Failed to fetch user image:', error);
-        } finally {
-            setLoading(false); // Сбрасываем состояние загрузки
-        }
-    };
-
-    // Получение аватарки при загрузке компонента
     useEffect(() => {
+        const fetchUserImage = async () => {
+            try {
+                const response = await api.get('/user/get-image');
+                if (response.status === 'success' && response.image) {
+                    setAvatar(response.image); // Обновляем аватар в контексте
+                }
+            } catch (error) {
+                console.error('Failed to fetch user image:', error);
+            }
+        };
+
         fetchUserImage();
-    }, []);
+    }, [setAvatar]);
 
     return (
         <div className='header-container'>

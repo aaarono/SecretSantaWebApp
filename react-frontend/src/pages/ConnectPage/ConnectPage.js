@@ -21,8 +21,6 @@ const ConnectPage = () => {
 
   return (
     <>
-        <Logo/>
-        <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'}/>
         <div className='connect-game-container'>
             <h2>Connect Game</h2>
             <div className='connect-game-inputs'>

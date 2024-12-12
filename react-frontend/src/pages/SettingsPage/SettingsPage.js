@@ -10,6 +10,9 @@ import Button from '../../components/ui/Button/Button';
 import SelectInput from '../../components/ui/SelectInput/SelectInput';
 import { logout } from '../../services/api/authService';
 import api from '../../services/api/api';
+import { useContext } from 'react';
+import { AvatarContext } from '../../components/contexts/AvatarContext'; // Подключаем контекст
+
 
 const uploadUserImage = async (file) => {
   const formData = new FormData();
@@ -65,7 +68,7 @@ const SettingsPage = () => {
     email: '',
   });
 
-  const [avatar, setAvatar] = useState(defaultAvatar);
+  const { avatar, setAvatar } = useContext(AvatarContext);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -136,8 +139,6 @@ const SettingsPage = () => {
 
   return (
     <>
-      <Logo />
-      <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'} />
       <div className='settings-container'>
         <h2>Settings</h2>
         <div className='settings-img'>

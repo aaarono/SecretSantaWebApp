@@ -11,9 +11,9 @@ const NewGamePage = () => {
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
-    gameName: '',
-    maxPlayersCount: '',
-    gameDeadline: ''
+    name: '',
+    budget: '',
+    endsat: ''
   });
 
   const handleInputChange = (e) => {
@@ -23,38 +23,45 @@ const NewGamePage = () => {
 
   return (
     <>
-        <Logo/>
-        <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'}/>
         <div className='new-game-container'>
             <h2>New Game</h2>
             <div className='new-game-inputs'>
 
                 <TextInput
-                name="gameName"
+                name="name"
                 type='text'
                 placeholder="Game Name"
-                value={formValues.gameName}
+                value={formValues.name}
                 onChange={handleInputChange}
                 disabled
               />
 
-              <TextInput
+              {/* <TextInput
                 name="maxPlayersCount"
                 type='number'
                 placeholder="Players"
                 value={formValues.maxPlayersCount}
                 onChange={handleInputChange}
                 disabled
-              />
+              /> */}
+
               <TextInput
-                  name="gameDeadline"
+                  name="endsat"
                   type='date'
                   placeholder="Deadline"
-                  value={formValues.gameDeadline}
+                  value={formValues.endsat}
                   onChange={handleInputChange}
                   disabled
               />
 
+              <TextInput
+                name="budget"
+                type='number'
+                placeholder="Budget"
+                value={formValues.budget}
+                onChange={handleInputChange}
+                disabled
+              />
             </div>
             <div className='new-game-button'>
               <Button text="Create" type="submit" onClick={() => navigate('/lobby')} />

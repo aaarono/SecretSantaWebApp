@@ -15,16 +15,14 @@ const LobbyPage = () => {
 
   return (
     <>
-        <Logo/>
-        <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'}/>
         <div className="lobby-page-container">
                 <GameID />
                 <GameBanner />
                 <PlayersList />
                 <DeadlineTimer />
-                {/* <WaitingGameWindow /> */}
-                {/* <StartGameWindow /> */}
-                <ActiveGameWindow />
+                <WaitingGameWindow /> 
+                {/* <StartGameWindow />
+                <ActiveGameWindow /> */}
         </div>
     </>
   );
