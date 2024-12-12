@@ -34,22 +34,33 @@ class GameController {
         }
     }
 
-    public function createGame($uuid, $name, $description, $budget, $endsAt) {
+    private function generateUuid() {
+        $data = random_bytes(16);
+
+        $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
+        $data[8] = chr((ord($data[8]) & 0x3f) | 0x80);
+
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
+    public function createGame($name, $description, $budget, $endsAt) {
         $userId = $this->getUserIdFromSession();
         if (!$userId) {
-            return json_encode(['status' => 'error', 'message' => 'Користувач не автентифікований']);
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
         }
+
+        $uuid = $this->generateUuid();
 
         $success = $this->model->createGame($uuid, $name, $description, $budget, $endsAt);
         if ($success) {
             $playerSuccess = $this->playerGameController->addPlayerToGame($userId, $uuid, $userId);
             if ($playerSuccess) {
-                return json_encode(['status' => 'success', 'message' => 'Гру створено та додано автора']);
+                return json_encode(['status' => 'success', 'message' => 'Game created and author added', 'uuid' => $uuid]);
             } else {
-                return json_encode(['status' => 'error', 'message' => 'Гру створено, але не вдалося додати автора до Player_Game']);
+                return json_encode(['status' => 'error', 'message' => 'Game created, but failed to add author to Player_Game']);
             }
         } else {
-            return json_encode(['status' => 'error', 'message' => 'Не вдалося створити гру']);
+            return json_encode(['status' => 'error', 'message' => 'Failed to create game']);
         }
     }
 
@@ -70,4 +81,28 @@ class GameController {
             return json_encode(['status' => 'error', 'message' => 'Failed to delete game']);
         }
     }
+
+    public function startGame($uuid) {
+        $userId = $this->getUserIdFromSession();
+        if (!$userId) {
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+        
+        $game = $this->model->getGameById($uuid);
+        if (!$game) {
+            return json_encode(['status' => 'error', 'message' => 'Game not found']);
+        }
+
+        if (!$this->playerGameController->isUserCreator($uuid, $userId)) {
+            return json_encode(['status' => 'error', 'message' => 'Only the creator can start the game']);
+        }
+
+        $success = $this->model->startGame($uuid);
+        if ($success) {
+            return json_encode(['status' => 'success', 'message' => 'Game started successfully']);
+        } else {
+            return json_encode(['status' => 'error', 'message' => 'Failed to start game']);
+        }
+    }
+
 }

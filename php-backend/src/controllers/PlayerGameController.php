@@ -25,4 +25,7 @@ class PlayerGameController {
         return json_encode(['status' => 'success', 'players' => $players]);
     }
 
+    public function isUserCreator($uuid, $userId) {
+        return $this->model->isUserCreator($uuid, $userId);
+    }
 }

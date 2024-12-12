@@ -33,5 +33,15 @@ class PlayerGameModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
+    public function isUserCreator($uuid, $userId)
+    {
+        $query = 'SELECT 1 FROM "Player_Game" WHERE UUID = :uuid AND login = :userId AND is_creator = :userId LIMIT 1';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':uuid', $uuid);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+        return $stmt->fetchColumn() !== false;
+    }
+
 }

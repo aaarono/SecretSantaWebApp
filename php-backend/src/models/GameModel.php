@@ -65,4 +65,14 @@ class GameModel
         $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
         return $stmt->execute();
     }
+
+    public function startGame($uuid)
+    {
+        $query = 'UPDATE "Game" SET Status = :status WHERE UUID = :uuid';
+        $stmt = $this->conn->prepare($query);
+        $status = 'running';
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+        return $stmt->execute();
+    }
 }
