@@ -23,7 +23,7 @@ CREATE TABLE "Game" (
     Budget NUMERIC(10, 2),
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     EndsAt TIMESTAMP NOT NULL,
-    Status VARCHAR(20) CHECK (Status IN ('running', 'ended')) DEFAULT 'running'
+    Status VARCHAR(20) CHECK (Status IN ('running', 'ended', 'pending')) DEFAULT 'pending'
 );
 
 CREATE TABLE "Wishlist" (
@@ -36,11 +36,13 @@ CREATE TABLE "Wishlist" (
 );
 
 CREATE TABLE "Player_Game" (
-    login VARCHAR(255),
-    UUID UUID,
-    is_gifted BOOLEAN DEFAULT FALSE,
+    login VARCHAR(255) NOT NULL,
+    UUID UUID NOT NULL,
+    is_gifted BOOLEAN DEFAULT FALSE NOT NULL,
+    is_creator VARCHAR(255) NULL,
     PRIMARY KEY (login, UUID),
     FOREIGN KEY (login) REFERENCES "User"(login),
+    FOREIGN KEY (is_creator) REFERENCES "User"(login),
     FOREIGN KEY (UUID) REFERENCES "Game"(UUID)
 );
 
