@@ -15,9 +15,10 @@ class WishlistController
 
     private function getUserIdFromSession()
     {
+        error_log("Received data for 'create' endpoint: " . print_r($_SESSION, true));
         session_start();
-        if (isset($_SESSION['user']['id'])) {
-            return $_SESSION['user']['id'];
+        if (isset($_SESSION['user']['username'])) {
+            return $_SESSION['user']['username'];
         }
         return null;
     }
@@ -39,16 +40,33 @@ class WishlistController
 
     public function createWishlist($name, $description, $url, $login)
     {
-        $success = $this->model->createWishlist($name, $description, $url, $login);
-        if ($success) {
-            return json_encode(['status' => 'success', 'message' => 'Wishlist created successfully']);
+        if ($login === null) {
+            $login = $this->getUserIdFromSession();
+        }
+    
+        if ($login === null) {
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+    
+        $id = $this->model->createWishlist($name, $description, $url, $login);
+        if ($id) {
+            return json_encode(['status' => 'success', 'message' => 'Wishlist created successfully', 'id' => $id]);
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to create wishlist']);
         }
     }
+    
 
     public function updateWishlist($id, $name, $description, $url, $login)
     {
+        if ($login === null) {
+            $login = $this->getUserIdFromSession();
+        }
+
+        if ($login === null) {
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+
         $success = $this->model->updateWishlist($id, $name, $description, $url, $login);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Wishlist updated successfully']);

@@ -41,9 +41,14 @@ class WishlistModel
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':url', $url);
         $stmt->bindParam(':login', $login);
-        return $stmt->execute();
+        
+        if ($stmt->execute()) {
+            return $this->conn->lastInsertId(); // Возвращаем ID последней вставленной записи
+        } else {
+            return false;
+        }
     }
-
+    
     public function updateWishlist($id, $name, $description, $url, $login)
     {
         $query = 'UPDATE "Wishlist" SET Name = :name, Description = :description, URL = :url, Login = :login WHERE id = :id';

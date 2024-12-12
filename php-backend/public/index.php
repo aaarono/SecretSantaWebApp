@@ -21,7 +21,7 @@ if (in_array($origin, $allowed_origins)) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Methods: DELETE, GET, POST, OPTIONS");
     }
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
@@ -193,7 +193,7 @@ switch ($firstLayerRoute) {
                 switch ($thirdLayerRoute) {
                     case 'user':
                         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                            $userId = $_GET['user_id'] ?? null;
+                            $userId = $_GET['login'] ?? null;
                             echo $wishlistController->getUserWishlists($userId);
                         } else {
                             http_response_code(405);
@@ -223,6 +223,7 @@ switch ($firstLayerRoute) {
                     case 'create':
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $input = json_decode(file_get_contents('php://input'), true);
+                            error_log("Received data for 'create' endpoint: " . print_r($input, true));
                             echo $wishlistController->createWishlist($input['name'], $input['description'], $input['url'], $input['login']);
                         } else {
                             http_response_code(405);
