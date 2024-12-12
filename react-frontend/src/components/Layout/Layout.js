@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <Logo />
-      <Header username={'VasyaPupkin228'} email={'vasyapupkin228@gmail.com'} />
+      <Header/>
       <>
         <Outlet />
       </>
