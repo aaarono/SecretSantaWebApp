@@ -71,9 +71,6 @@ const MainSection = () => {
               gameEnds='14.04.2024 | 14:44'
             />
           </div>
-          <div>
-            <AddNewElement />
-          </div>
         </Slider>
       </div>
       <div className='main-section-wishlist'>
