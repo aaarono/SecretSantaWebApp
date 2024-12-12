@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../../index.css';
 import './TextInput.css';
 
@@ -10,31 +10,25 @@ const TextInput = ({
   errorCheck,
   errorText,
   style,
+  value,
+  onChange,
+  showErrors, // Добавляем проп для контроля отображения ошибок
 }) => {
-  const [value, setValue] = useState('');
-  const [error, setError] = useState(false);
-
-  const handleChange = (e) => {
-    const inputValue = e.target.value;
-    setValue(inputValue);
-    if (errorCheck) {
-      setError(!errorCheck(inputValue));
-    }
-  };
+  const isValid = errorCheck ? errorCheck(value) : true;
 
   return (
     <div className="text-input-container">
       {label && <label className="text-input-label">{label}</label>}
       <input
-        name={name} 
+        name={name}
         type={type}
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
         placeholder={placeholder}
-        style={{ ...{}, ...style }}
-        className="text-input"
+        style={{ ...style }}
+        className={`text-input ${!isValid && showErrors ? 'text-input-error' : ''}`}
       />
-      {error && errorText && <div className="error-tooltip">{errorText}</div>}
+      {!isValid && showErrors && errorText && <div className="error-tooltip">{errorText}</div>}
     </div>
   );
 };

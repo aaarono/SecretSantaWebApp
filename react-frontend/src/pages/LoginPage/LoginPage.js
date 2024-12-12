@@ -15,6 +15,7 @@ const LoginForm = () => {
   });
   const [showErrors, setShowErrors] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
 
   const validateUsername = (username) => {
     return username.length >= 3;
@@ -26,19 +27,35 @@ const LoginForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const isFormValid = () => {
+    return validateUsername(formValues.username) && validatePassword(formValues.password);
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setShowErrors(true);
+    setErrorMessage('');
 
-    if (validateUsername(formValues.username) && validatePassword(formValues.password)) {
+    if (isFormValid()) {
+      setIsLoading(true);
       try {
-        await login(formValues.username, formValues.password);
-        navigate('/main');
+        const response = await login(formValues.username, formValues.password);
+        console.log(response)
+        if (response.status === 'success') {
+          navigate('/');
+        } else {
+          setErrorMessage(response.message || 'Login failed. Please try again.');
+        }
       } catch (error) {
-        setErrorMessage(error.message || 'Login failed. Please try again.');
+        // Обработка ошибок, полученных от сервера
+        setErrorMessage(
+          error.response?.message || 'Login failed. Please try again.'
+        );
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -55,6 +72,7 @@ const LoginForm = () => {
             errorText="Username must be at least 3 characters long"
             value={formValues.username}
             onChange={handleInputChange}
+            showErrors={showErrors}
           />
           <TextInput
             name="password"
@@ -64,10 +82,11 @@ const LoginForm = () => {
             errorText="Password must be at least 6 characters long"
             value={formValues.password}
             onChange={handleInputChange}
+            showErrors={showErrors}
           />
           {errorMessage && <div className="error-message">{errorMessage}</div>}
           <div className='button-container-login'>
-            <Button text="Log In" type="submit" onClick={() => navigate('/main')}/>
+            <Button text={isLoading ? "Logging In..." : "Log In"} type="submit" disabled={isLoading} />
           </div>
         </form>
       </div>

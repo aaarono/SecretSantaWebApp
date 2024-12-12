@@ -1,9 +1,212 @@
 <?php
 
-use App\Kernel;
+require_once __DIR__ . '/../vendor/autoload.php';
 
-require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+use Secret\Santa\Controllers\AuthController;
+use Secret\Santa\Controllers\UserController;
 
-return function (array $context) {
-    return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
-};
+$allowed_origins = [
+    "http://localhost:3000",
+    // Добавьте другие разрешённые домены, если необходимо
+];
+
+// Получение Origin запроса
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+
+// Проверка, разрешён ли Origin
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin");
+    header("Access-Control-Max-Age: 86400");
+}
+
+// Access-Control headers are received during OPTIONS requests
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+    exit(0);
+}
+
+header('Content-Type: application/json');
+
+// Проверка сессии с логированием и установкой параметров
+function checkSession() {
+    // Установка пути для сохранения сессий
+    if (defined('PHP_OS_FAMILY')) {
+        switch (PHP_OS_FAMILY) {
+            case 'Windows':
+                $path = 'C:\\Windows\\Temp';
+                break;
+            case 'Linux':
+            case 'Darwin':
+            default:
+                $path = '/tmp';
+                break;
+        }
+    } else {
+        $path = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? 'C:\\Windows\\Temp' : '/tmp';
+    }
+
+    if (!is_dir($path)) {
+        if (!mkdir($path, 0777, true)) {
+            error_log("Не удалось создать директорию для сессий: $path");
+            $path = sys_get_temp_dir();
+        }
+    }
+    session_save_path($path);
+
+    // Установка параметров куки сессии
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'secure' => false, // Установите true, если используете HTTPS
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+
+    // Запуск сессии
+    session_start();
+
+    // Проверка наличия пользователя в сессии
+    if (!isset($_SESSION['user'])) {
+        error_log("Сессия отсутствует или не авторизована.");
+        echo json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        http_response_code(401);
+        exit();
+    }
+
+    error_log("Сессия пользователя активна: " . json_encode($_SESSION['user']));
+}
+
+
+// Парсим URI
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = explode('/', trim($uri, '/'));
+$route = isset($uri[0]) ? $uri[0] : '';
+$subRoute = isset($uri[1]) ? $uri[1] : '';
+
+$authController = new AuthController();
+$userController = new UserController();
+
+// Обрабатываем маршруты через switch
+switch ($route) {
+    case 'auth':
+        switch ($subRoute) {
+            case 'login':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $authController->login($input);
+                } else {
+                    http_response_code(405); // Method Not Allowed
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'register':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $authController->register($input);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'logout':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    echo $authController->logout();
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'change-password':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $authController->changePassword($input);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'check':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $authController->check();
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            default:
+                http_response_code(404);
+                echo json_encode(['message' => 'Auth route not found']);
+                break;
+        }
+        break;
+
+    case 'user':
+        // Все маршруты user требуют авторизации
+        // ТАК ВЫГЛЯДИТ ОБЕСПЕЧЕНИЕ БЕЗОПАСНОСТИ НА БЭКЕ
+        checkSession();
+        switch ($subRoute) {
+            case 'update-image':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {    
+                    $userId = $_POST['user_id'] ?? null; // Или взять из сессии
+                    $file = $_FILES['image'] ?? null;
+            
+                    if (!$file) {
+                        echo json_encode(['status' => 'error', 'message' => 'No file uploaded']);
+                        break;
+                    }
+            
+                    echo $userController->updateUserImage($userId, $file);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+            
+
+            case 'get-image':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $userId = $_GET['user_id'] ?? null;
+                    echo $userController->getUserImage($userId); // Вывод изображения напрямую
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'delete-image':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $userId = $_POST['user_id'] ?? null;
+                    echo $userController->deleteUserImage($userId);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            default:
+                http_response_code(404);
+                echo json_encode(['message' => 'User route not found']);
+                break;
+        }
+        break;
+
+    default:
+        http_response_code(404);
+        echo json_encode(['message' => 'Route not found']);
+        break;
+    }
+?>

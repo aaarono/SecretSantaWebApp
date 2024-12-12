@@ -1,6 +1,6 @@
-// api.js
 import ApiService from './ApiService';
 
-const api = new ApiService('http://localhost:80/api');
+// Установите базовый URL для API
+const api = new ApiService('http://localhost:8000');
 
 export default api;
