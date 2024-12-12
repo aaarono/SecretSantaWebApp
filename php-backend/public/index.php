@@ -89,16 +89,17 @@ function checkSession() {
 // Парсим URI
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', trim($uri, '/'));
-$route = isset($uri[0]) ? $uri[0] : '';
-$subRoute = isset($uri[1]) ? $uri[1] : '';
+$firstLayerRoute = isset($uri[0]) ? $uri[0] : '';
+$secondLayerRoute = isset($uri[1]) ? $uri[1] : '';
+$thirdLayerRoute = isset($uri[2]) ? $uri[2] : '';
 
 $authController = new AuthController();
 $userController = new UserController();
 
 // Обрабатываем маршруты через switch
-switch ($route) {
+switch ($firstLayerRoute) {
     case 'auth':
-        switch ($subRoute) {
+        switch ($secondLayerRoute) {
             case 'login':
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $input = json_decode(file_get_contents('php://input'), true);
@@ -146,6 +147,7 @@ switch ($route) {
                     echo json_encode(['message' => 'Invalid request method']);
                 }
                 break;
+                
 
             default:
                 http_response_code(404);
@@ -158,7 +160,7 @@ switch ($route) {
         // Все маршруты user требуют авторизации
         // ТАК ВЫГЛЯДИТ ОБЕСПЕЧЕНИЕ БЕЗОПАСНОСТИ НА БЭКЕ
         checkSession();
-        switch ($subRoute) {
+        switch ($secondLayerRoute) {
             case 'update-image':
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {    
                     $userId = $_POST['user_id'] ?? null; // Или взять из сессии
@@ -196,6 +198,63 @@ switch ($route) {
                     echo json_encode(['message' => 'Invalid request method']);
                 }
                 break;
+            
+            case 'wishlist':
+                switch ($thirdLayerRoute) {
+                    case 'all':
+                        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                            echo $wishlistController->getAllWishlists();
+                        } else {
+                            http_response_code(405);
+                            echo json_encode(['message' => 'Invalid request method']);
+                        }
+                        break;
+        
+                    case 'get':
+                    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                        $id = $_GET['id'] ?? null;
+                        echo $wishlistController->getWishlistById($id);
+                    } else {
+                        http_response_code(405);
+                        echo json_encode(['message' => 'Invalid request method']);
+                    }
+                    break;
+        
+                    case 'create':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $input = json_decode(file_get_contents('php://input'), true);
+                        echo $wishlistController->createWishlist($input['name'], $input['description'], $input['url'], $input['login']);
+                    } else {
+                        http_response_code(405);
+                        echo json_encode(['message' => 'Invalid request method']);
+                    }
+                    break;
+        
+                    case 'update':
+                    if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                        $input = json_decode(file_get_contents('php://input'), true);
+                        echo $wishlistController->updateWishlist($input['id'], $input['name'], $input['description'], $input['url'], $input['login']);
+                    } else {
+                        http_response_code(405);
+                        echo json_encode(['message' => 'Invalid request method']);
+                    }
+                    break;
+        
+                    case 'delete':
+                    if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                        $input = json_decode(file_get_contents('php://input'), true);
+                        echo $wishlistController->deleteWishlist($input['id']);
+                    } else {
+                        http_response_code(405);
+                        echo json_encode(['message' => 'Invalid request method']);
+                    }
+                    break;
+
+                    default:
+                    http_response_code(404);
+                    echo json_encode(['message' => 'Wishlist route not found']);
+                    break;
+                }
 
             default:
                 http_response_code(404);
@@ -209,4 +268,5 @@ switch ($route) {
         echo json_encode(['message' => 'Route not found']);
         break;
     }
+
 ?>
