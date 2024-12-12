@@ -1,4 +1,5 @@
-.game-window, .active-game-window {
+.game-window,
+.active-game-window {
     padding: 20px;
     background-color: var(--secondary-bg-dark);
 }
@@ -30,7 +31,7 @@
     font-size: 20px;
     margin-bottom: 20px;
 }
-  
+
 .gift-card {
     flex: 1;
     padding: 20px;
@@ -48,4 +49,24 @@
 
 .active-game-buttons button {
     width: 250px;
+}
+
+@media only screen and (max-width: 600px) {
+    .gift-cards h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .gift-cards p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .active-game-buttons {
+        display: none;
+    }
+
+    .active-game-window h2 {
+        font-size: 24px;
+    }
 }

@@ -12,7 +12,8 @@
     margin-top: 20px;
 }
 
-.settings-inputs, .settings-img-change {
+.settings-inputs,
+.settings-img-change {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
@@ -71,4 +72,35 @@
     margin: 10px;
     border: 2px solid var(--text-dark);
     border-radius: 100%;
+}
+
+@media only screen and (max-width: 992px) {
+
+    .settings-inputs .text-input-container,
+    .settings-inputs .select-input-container,
+    .settings-inputs select,
+    .settings-inputs input,
+    .settings-inputs button {
+        width: 33vh;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+
+    .settings-inputs,
+    .settings-img-change {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        justify-items: center;
+    }
+
+    .settings-img img {
+        height: 70px;
+    }
+    
+    .settings-img p {
+        color: var(--text-dark);
+        font-size: 18px;
+    }
 }
