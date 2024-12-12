@@ -14,7 +14,7 @@ import api from '../../services/api/api';
 const uploadUserImage = async (file) => {
   const formData = new FormData();
   formData.append('image', file);
-  console.log(formData.get('image'))
+  console.log(formData.get('image'));
 
   try {
     const response = await api.post('/user/update-image', formData, {
@@ -22,7 +22,7 @@ const uploadUserImage = async (file) => {
           'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(response)
+    console.log(response);
     return response;
   } catch (error) {
     console.error('Failed to upload user image:', error);
@@ -46,8 +46,6 @@ const getUserImage = async () => {
   }
 };
 
-
-
 const deleteUserImage = async () => {
   try {
     const response = await api.post('/user/delete-image');
@@ -68,22 +66,25 @@ const SettingsPage = () => {
   });
 
   const [avatar, setAvatar] = useState(defaultAvatar);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
+        setIsLoading(true);
         const base64Image = await getUserImage();
         if (base64Image) {
           setAvatar(base64Image);
         }
       } catch (error) {
         console.error('Failed to fetch user image:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
   
     fetchImage();
   }, []);
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -102,23 +103,29 @@ const SettingsPage = () => {
     }
 
     try {
+      setIsLoading(true);
       const response = await uploadUserImage(file); // Функция для загрузки изображения
       if (response.status === 'success') {
         setAvatar(response.image);
       }
     } catch (error) {
       console.error('Failed to upload image:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleImageDelete = async () => {
     try {
+      setIsLoading(true);
       const response = await deleteUserImage(); // Функция для удаления фотографии
       if (response.status === 'success') {
         setAvatar(defaultAvatar);
       }
     } catch (error) {
       console.error('Failed to delete image:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -134,11 +141,15 @@ const SettingsPage = () => {
       <div className='settings-container'>
         <h2>Settings</h2>
         <div className='settings-img'>
-          <img src={avatar} alt="Avatar" />
+          {isLoading ? (
+            <div className="spinner">Loading...</div>
+          ) : (
+            <img src={avatar} alt="Avatar" />
+          )}
           <div className='settings-img-change'>
             <p>Change Avatar:</p>
-            <input type='file' accept='image/jpeg, image/png, image/gif' onChange={handleImageUpload} />
-            <Button text='Delete' type='button' onClick={handleImageDelete} />
+            <input type='file' accept='image/jpeg, image/png, image/gif' onChange={handleImageUpload} disabled={isLoading} />
+            <Button text='Delete' type='button' onClick={handleImageDelete} disabled={isLoading} />
           </div>
         </div>
         <div className='settings-inputs'>
@@ -180,14 +191,26 @@ const SettingsPage = () => {
             onChange={handleInputChange}
           />
           <div>
-            <SelectInput />
+          <div className="select-input-container; margin:0px;" class="">
+            <select
+              name="gender"
+              value={formValues.gender}
+              onChange={handleInputChange}
+            >
+              <option value="" disabled>
+                Gender
+              </option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
           </div>
           <div>
             <Button text="Log Out" type="submit" onClick={fetchOnLogout} />
           </div>
         </div>
         <div className='settings-button'>
-          <Button text="Save" type="submit" />
+          <Button text="Save" type="submit" disabled={isLoading} />
         </div>
       </div>
     </>

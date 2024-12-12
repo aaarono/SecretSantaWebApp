@@ -135,8 +135,8 @@ dist
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-/var/
-/vendor/
+/php-backend/var/
+/php-backend/vendor/
 ###< symfony/framework-bundle ###
 
 ### Database ###
