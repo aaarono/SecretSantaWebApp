@@ -57,14 +57,14 @@ const RegistrationForm = () => {
 
   const isFormValid = () => {
     return (
-      validateEmail(formValues.email) &&
-      validateUsername(formValues.username) &&
-      validatePhone(formValues.phone) &&
-      validateName(formValues.name) &&
-      validateSurname(formValues.surname) &&
-      validateGender(formValues.gender) &&
-      validatePassword(formValues.password) &&
-      validateSecondPassword(formValues.passwordRepeat)
+      validateEmail(formValues.email)
+      //validateUsername(formValues.username) &&
+      //validatePhone(formValues.phone) &&
+      //validateName(formValues.name) &&
+      //validateSurname(formValues.surname) &&
+      //validateGender(formValues.gender) &&
+      //validatePassword(formValues.password) 
+      //validateSecondPassword(formValues.passwordRepeat)
     );
   };
 
@@ -87,7 +87,9 @@ const RegistrationForm = () => {
       try {
         await register(userData);
         navigate('/login');
+        console.log(userData);
       } catch (error) {
+        console.log(error);
         console.error(error);
         setErrorMessage(error.message || 'Registration failed. Please try again.');
       }
