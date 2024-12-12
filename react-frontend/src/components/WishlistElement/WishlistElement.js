@@ -7,10 +7,11 @@ import closeCircle from '../../assets/closeCircle.svg';
 import { SlClose } from "react-icons/sl";
 import { SlArrowRightCircle } from "react-icons/sl";
 
-const WishlistElement = ({ wishName, description }) => {
+const WishlistElement = ({ wishName, description, url }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newWishName, setNewWishName] = useState(wishName);
   const [newDescription, setNewDescription] = useState(description);
+  const [newUrl, setNewUrl] = useState(url);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -24,6 +25,7 @@ const WishlistElement = ({ wishName, description }) => {
   const handleCancel = () => {
     setNewWishName(wishName);
     setNewDescription(description);
+    setNewUrl(url);
     setIsEditing(false);
   };
 
@@ -46,6 +48,10 @@ const WishlistElement = ({ wishName, description }) => {
             <textarea
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
+            />
+            <textarea
+              value={newUrl}
+              onChange={(e) => setNewUrl(e.target.value)}
             />
             <button onClick={handleSave}>Сохранить</button>
             <button onClick={handleCancel}>Отмена</button>

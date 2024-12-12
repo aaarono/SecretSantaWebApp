@@ -7,19 +7,20 @@ const AddNewElement = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [wishName, setWishName] = useState('');
   const [description, setDescription] = useState('');
+  const [url, setUrl] = useState('');
 
   const handleAddClick = () => {
     setIsOpen(true);
   };
 
   const handleSave = () => {
-    // Логика сохранения нового элемента
     setIsOpen(false);
   };
 
   const handleCancel = () => {
     setWishName('');
     setDescription('');
+    setUrl('');
     setIsOpen(false);
   };
 
@@ -31,17 +32,22 @@ const AddNewElement = () => {
           <div className='dialog'>
             <input
               type='text'
-              placeholder='Название'
+              placeholder='Name'
               value={wishName}
               onChange={(e) => setWishName(e.target.value)}
             />
             <textarea
-              placeholder='Описание'
+              placeholder='Description'
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <button onClick={handleSave}>Добавить</button>
-            <button onClick={handleCancel}>Отмена</button>
+            <textarea
+              placeholder='Url'
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+            />
+            <button onClick={handleSave}>Save</button>
+            <button onClick={handleCancel}>Cancel</button>
           </div>
         </div>
       )}
