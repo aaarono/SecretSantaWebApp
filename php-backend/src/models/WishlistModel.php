@@ -63,4 +63,13 @@ class WishlistModel
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    public function getAllWishlistsByUserId($userId)
+    {
+        $query = 'SELECT * FROM "Wishlist" WHERE Login = :login';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':login', $userId, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

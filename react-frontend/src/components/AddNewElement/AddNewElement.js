@@ -26,32 +26,32 @@ const AddNewElement = () => {
 
   return (
     <div className='add-new-element-container'>
-      <SlPlus onClick={handleAddClick} />
-      {isOpen && (
-        <div className='overlay'>
-          <div className='dialog'>
-            <input
-              type='text'
-              placeholder='Name'
-              value={wishName}
-              onChange={(e) => setWishName(e.target.value)}
-            />
-            <textarea
-              placeholder='Description'
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <textarea
-              placeholder='Url'
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-            <button onClick={handleSave}>Save</button>
-            <button onClick={handleCancel}>Cancel</button>
-          </div>
+    <SlPlus onClick={handleAddClick} />
+    {isOpen && (
+      <div className='overlay'>
+        <div className='dialog'>
+          <input
+            type='text'
+            placeholder='Name'
+            value={wishName}
+            onChange={(e) => setWishName(e.target.value)}
+          />
+          <textarea
+            placeholder='Description'
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <textarea
+            placeholder='Url'
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+          <button onClick={handleSave}>Save</button>
+          <button onClick={handleCancel}>Cancel</button>
         </div>
-      )}
-    </div>
+      </div>
+    )}
+  </div>
   );
 };
 

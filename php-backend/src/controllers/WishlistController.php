@@ -4,29 +4,31 @@ namespace Secret\Santa\Controllers;
 
 use Secret\Santa\Models\WishlistModel;
 
-class WishlistController {
+class WishlistController
+{
     private $model;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->model = new WishlistModel();
     }
 
-    private function getUserIdFromSession($userId) {
-        if (empty($userId)) {
-            session_start();
-            if (!isset($_SESSION['user']['username'])) {
-                return null;
-            }
-            $userId = $_SESSION['user']['username'];
+    private function getUserIdFromSession()
+    {
+        session_start();
+        if (isset($_SESSION['user']['id'])) {
+            return $_SESSION['user']['id'];
         }
-        return $userId;
+        return null;
     }
 
-    public function getAllWishlists() {
+    public function getAllWishlists()
+    {
         return json_encode($this->model->getAllWishlists());
     }
 
-    public function getWishlistById($id) {
+    public function getWishlistById($id)
+    {
         $wishlist = $this->model->getWishlistById($id);
         if ($wishlist) {
             return json_encode(['status' => 'success', 'wishlist' => $wishlist]);
@@ -35,7 +37,8 @@ class WishlistController {
         }
     }
 
-    public function createWishlist($name, $description, $url, $login) {
+    public function createWishlist($name, $description, $url, $login)
+    {
         $success = $this->model->createWishlist($name, $description, $url, $login);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Wishlist created successfully']);
@@ -44,7 +47,8 @@ class WishlistController {
         }
     }
 
-    public function updateWishlist($id, $name, $description, $url, $login) {
+    public function updateWishlist($id, $name, $description, $url, $login)
+    {
         $success = $this->model->updateWishlist($id, $name, $description, $url, $login);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Wishlist updated successfully']);
@@ -53,12 +57,34 @@ class WishlistController {
         }
     }
 
-    public function deleteWishlist($id) {
+    public function deleteWishlist($id)
+    {
         $success = $this->model->deleteWishlist($id);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Wishlist deleted successfully']);
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to delete wishlist']);
+        }
+    }
+
+    public function getUserWishlists($userId = null)
+    {
+        // Если ID не передан, получаем его из сессии
+        if ($userId === null) {
+            $userId = $this->getUserIdFromSession();
+        }
+
+        // Проверка, есть ли ID пользователя
+        if ($userId === null) {
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+
+        // Получение желаний пользователя
+        $wishlists = $this->model->getAllWishlistsByUserId($userId);
+        if ($wishlists) {
+            return json_encode(['status' => 'success', 'wishlists' => $wishlists]);
+        } else {
+            return json_encode(['status' => 'error', 'message' => 'No wishlists found for this user']);
         }
     }
 }
