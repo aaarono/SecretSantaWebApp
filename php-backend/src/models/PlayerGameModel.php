@@ -15,6 +15,17 @@ class PlayerGameModel
         $this->conn = $db->getConnection();
     }
 
+        
+    public function getGamesByLogin($login) {
+        $query = 'SELECT g.* FROM "Player_Game" pg 
+                  JOIN "Game" g ON pg.uuid = g.uuid
+                  WHERE pg.login = :login';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function addPlayerToGame($login, $uuid)
     {
         $query = 'INSERT INTO "Player_Game" (login, UUID) VALUES (:login, :uuid)';

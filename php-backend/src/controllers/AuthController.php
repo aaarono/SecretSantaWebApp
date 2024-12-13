@@ -135,30 +135,28 @@ class AuthController {
     }
 
     public function check() {
-        // Установка пути для сохранения сессий
         $this->setSessionSavePath();
-
-        // Настройка параметров куки сессии
         session_set_cookie_params([
             'lifetime' => 0,
             'path' => '/',
-            // 'domain' => 'localhost', // Удалено или заменено на корректный домен
-            'secure' => false, // Установите true, если используете HTTPS
+            'secure' => false,
             'httponly' => true,
-            'samesite' => 'Lax' // Или 'Strict', если необходимо
+            'samesite' => 'Lax'
         ]);
-
-        // Запуск сессии
+    
         session_start();
-
+    
         if (isset($_SESSION['user'])) {
-            error_log("Auth check successful for user '{$_SESSION['user']['username']}'");
-            return json_encode(['status' => 'success', 'user' => $_SESSION['user']]);
+            return json_encode([
+                'status' => 'success',
+                'user' => $_SESSION['user'],
+                'sessionId' => session_id() // Добавляем ID сессии
+            ]);
         } else {
-            error_log("Auth check failed: Not authenticated");
             return json_encode(['status' => 'error', 'message' => 'Not authenticated']);
         }
     }
+    
 
     public function logout() {
         // Установка пути для сохранения сессий

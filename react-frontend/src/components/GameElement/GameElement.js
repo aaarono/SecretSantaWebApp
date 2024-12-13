@@ -7,7 +7,7 @@ import { SlClose } from "react-icons/sl";
 import { SlArrowRightCircle } from "react-icons/sl";
 
 
-const GameElement = ({ gameName, gameStatus, playersCount, playersMax, gameEnds }) => {
+const GameElement = ({uuid, gameName, gameStatus, playersCount, playersMax, gameEnds }) => {
   return (
     <div className='game-element-container'>
         <h3 className='game-name'>{gameName}</h3>

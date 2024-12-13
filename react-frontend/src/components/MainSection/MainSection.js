@@ -11,8 +11,9 @@ import 'slick-carousel/slick/slick-theme.css';
 import api from '../../services/api/api'; // Подключение API
 
 const MainSection = () => {
-  const [wishlist, setWishlist] = useState([]); // Состояние для списка желаний
-  const [loading, setLoading] = useState(true); // Состояние загрузки
+  const [wishlist, setWishlist] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [games, setGames] = useState([]); // Список игр пользователя
 
   const sliderSettings = {
     dots: false,
@@ -50,12 +51,11 @@ const MainSection = () => {
     setWishlist((prevWishlist) => [...prevWishlist, newItem]);
   };
 
-  // Загрузка данных о списке желаний
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/user/wishlist/user');
+        const response = await api.get('/user/wishlist/user'); 
         setWishlist(response.wishlists || []);
       } catch (error) {
         console.error('Ошибка загрузки списка желаний:', error);
@@ -67,38 +67,42 @@ const MainSection = () => {
     fetchWishlist();
   }, []);
 
+  // Загружаем игры пользователя
+  useEffect(() => {
+    const fetchUserGames = async () => {
+      try {
+        const response = await api.get('/game/usergames');
+        console.log(response)
+        if (response.status === 'success') {
+          setGames(response.games || []);
+        } else {
+          console.error('Ошибка загрузки игр пользователя:', response.data.message);
+        }
+      } catch (error) {
+        console.error('Ошибка при запросе игр пользователя:', error);
+      }
+    };
+
+    fetchUserGames();
+  }, []);
+
   return (
     <div className="main-section-container">
       <div className="main-section-games">
         <h2>Active Games</h2>
         <Slider {...sliderSettings} className="main-section-game-elements">
-          <div>
-            <GameElement
-              gameName="UPCE"
-              gameStatus="Active"
-              playersCount="8"
-              playersMax="10"
-              gameEnds="14.04.2024 | 14:44"
-            />
-          </div>
-          <div>
-            <GameElement
-              gameName="UPCE"
-              gameStatus="Active"
-              playersCount="8"
-              playersMax="10"
-              gameEnds="14.04.2024 | 14:44"
-            />
-          </div>
-          <div>
-            <GameElement
-              gameName="UPCE"
-              gameStatus="Active"
-              playersCount="8"
-              playersMax="10"
-              gameEnds="14.04.2024 | 14:44"
-            />
-          </div>
+          {games.map((game) => (
+            <div key={game.UUID}>
+              <GameElement
+                uuid={game.uuid}
+                gameName={game.name}
+                gameStatus={game.status}
+                playersCount="..." // Можно дополнительно грузить количество игроков через другой запрос
+                playersMax="..."   // Или хранить в самой игре
+                gameEnds={game.endsat}
+              />
+            </div>
+          ))}
         </Slider>
       </div>
       <div className="main-section-wishlist">
@@ -120,13 +124,12 @@ const MainSection = () => {
             ))}
             <div>
               <AddNewElement onAdd={handleAddToWishlist} />
-              
             </div>
             <div>
-            {wishlist.length <= 1 ? <AddNewElement onAdd={handleAddToWishlist} /> : null}
+              {wishlist.length <= 1 ? <AddNewElement onAdd={handleAddToWishlist} /> : null}
             </div>
             <div>
-            {wishlist.length === 0 ? <AddNewElement onAdd={handleAddToWishlist} /> : null}
+              {wishlist.length === 0 ? <AddNewElement onAdd={handleAddToWishlist} /> : null}
             </div>
           </Slider>
         )}

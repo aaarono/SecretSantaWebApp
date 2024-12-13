@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GameContext } from '../../components/contexts/GameContext'; // Подключаем контекст
+import { GameContext } from '../../components/contexts/GameContext';
 import api from '../../services/api/api';
+import useWebSocket from '../../hooks/useWebSocket';
 import '../../index.css';
 import './NewGamePage.css';
 import TextInput from '../../components/ui/TextInput/TextInput';
@@ -9,16 +10,23 @@ import Button from '../../components/ui/Button/Button';
 
 const NewGamePage = () => {
   const navigate = useNavigate();
-  const { setGameId } = useContext(GameContext); // Используем функцию для обновления gameId
-
+  const { setGameId } = useContext(GameContext);
   const [formValues, setFormValues] = useState({
     name: '',
     budget: '',
     endsat: '',
     description: '',
   });
-
   const [isLoading, setIsLoading] = useState(false);
+
+  const sendMessage = useWebSocket(
+    (message) => {
+      console.log('WebSocket message:', message);
+    },
+    (socket) => {
+      console.log('WebSocket connected for game creation');
+    }
+  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -43,9 +51,12 @@ const NewGamePage = () => {
       const response = await api.post('/game/create', data);
 
       if (response.status === 'success') {
-        setGameId(response.uuid); // Обновляем gameId в контексте
+        setGameId(response.uuid);
         alert('Game created successfully!');
         navigate('/lobby');
+
+        // Use the existing sendMessage to send a WebSocket message
+        sendMessage({ type: 'join_game', uuid: response.uuid });
       } else {
         alert(response.message || 'Failed to create game');
       }

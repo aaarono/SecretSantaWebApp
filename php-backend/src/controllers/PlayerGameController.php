@@ -3,6 +3,7 @@
 namespace Secret\Santa\Controllers;
 
 use Secret\Santa\Models\PlayerGameModel;
+use Secret\Santa\websockets\WebSocketBroadcaster;
 
 class PlayerGameController {
     private $model;
@@ -21,6 +22,21 @@ class PlayerGameController {
         return $_SESSION['user']['username'];
     }
 
+    public function getUserGames($login = null) {
+        if ($login === null) {
+            $login = $this->getUserIdFromSession();
+        }
+        
+        if (!$login) {
+            http_response_code(401);
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+    
+        $games = $this->model->getGamesByLogin($login);
+    
+        return json_encode(['status' => 'success', 'games' => $games]);
+    }    
+
     public function addPlayerToGame($login, $uuid) {
         if ($login === null) {
             $login = $this->getUserIdFromSession();
@@ -29,14 +45,21 @@ class PlayerGameController {
         if ($login === null) {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
         }
-
+    
         $success = $this->model->addPlayerToGame($login, $uuid);
         if ($success) {
+            // // Оповестим всех в данном лобби
+            // WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
+            //     'type' => 'player_joined',
+            //     'game_uuid' => $uuid,
+            //     'login' => $login
+            // ]);
+    
             return json_encode(['status' => 'success', 'message' => 'Player added to the game']);
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to add player to the game']);
         }
-    }
+    }    
 
     public function getPlayersByGameId($uuid) {
         $players = $this->model->getPlayersByGameId($uuid);
@@ -63,9 +86,16 @@ class PlayerGameController {
         if ($login === null) {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
         }
-
+    
         $success = $this->model->removePlayerFromGame($uuid, $login);
         if ($success) {
+            // // Оповестим всех в данном лобби
+            // WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
+            //     'type' => 'player_left',
+            //     'game_uuid' => $uuid,
+            //     'login' => $login
+            // ]);
+    
             return json_encode(['status' => 'success', 'message' => 'Player removed from the game']);
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to remove player from the game']);
