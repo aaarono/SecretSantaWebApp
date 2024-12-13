@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../services/api/api'; // Подключаем API
+import { GameContext } from '../../components/contexts/GameContext'; // Подключаем контекст
+import api from '../../services/api/api';
 import '../../index.css';
 import './NewGamePage.css';
 import TextInput from '../../components/ui/TextInput/TextInput';
@@ -8,6 +9,7 @@ import Button from '../../components/ui/Button/Button';
 
 const NewGamePage = () => {
   const navigate = useNavigate();
+  const { setGameId } = useContext(GameContext); // Используем функцию для обновления gameId
 
   const [formValues, setFormValues] = useState({
     name: '',
@@ -35,14 +37,15 @@ const NewGamePage = () => {
         name: formValues.name,
         budget: formValues.budget,
         endsAt: formValues.endsat,
-        description: formValues.description, // Если нужно описание, добавьте его в форму
+        description: formValues.description,
       };
 
       const response = await api.post('/game/create', data);
 
       if (response.status === 'success') {
+        setGameId(response.uuid); // Обновляем gameId в контексте
         alert('Game created successfully!');
-        navigate('/lobby'); // Перенаправляем пользователя на страницу лобби
+        navigate('/lobby');
       } else {
         alert(response.message || 'Failed to create game');
       }
@@ -65,7 +68,6 @@ const NewGamePage = () => {
           value={formValues.name}
           onChange={handleInputChange}
         />
-
         <TextInput
           name="endsat"
           type="date"
@@ -73,7 +75,6 @@ const NewGamePage = () => {
           value={formValues.endsat}
           onChange={handleInputChange}
         />
-
         <TextInput
           name="description"
           type="text"
@@ -81,8 +82,6 @@ const NewGamePage = () => {
           value={formValues.description}
           onChange={handleInputChange}
         />
-
-
         <TextInput
           name="budget"
           type="number"

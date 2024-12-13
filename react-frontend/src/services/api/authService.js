@@ -6,9 +6,9 @@ import api from './api';
  * @param {string} password - Пароль пользователя.
  * @returns {Promise<Object>} Ответ от сервера.
  */
-export const login = async (loginOrEmail, password) => {
+export const login = (loginOrEmail, password) => {
     try {
-        return await api.post('/auth/login', { username: loginOrEmail, password });
+        return api.post('/auth/login', { username: loginOrEmail, password });
     } catch (error) {
         console.error('Login error:', error);
         throw error;

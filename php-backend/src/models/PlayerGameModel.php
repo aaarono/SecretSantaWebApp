@@ -44,4 +44,12 @@ class PlayerGameModel
         return $stmt->fetchColumn() !== false;
     }
 
+    public function removePlayerFromGame($uuid, $login)
+    {
+        $query = 'DELETE FROM "Player_Game" WHERE login = :login AND UUID = :uuid';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':login', $login);
+        $stmt->bindParam(':uuid', $uuid);
+        return $stmt->execute();
+    }
 }

@@ -11,25 +11,28 @@ class UserController {
         $this->model = new UserModel();
     }
 
-    private function getUserIdFromSession($userId) {
-        // Если userId не передан, берём из сессии
-        if (empty($userId)) {
+    private function getUserIdFromSession() {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
-            if (!isset($_SESSION['user']['username'])) {
-                return null;
-            }
-            $userId = $_SESSION['user']['username'];
         }
-        return $userId;
+        if (!isset($_SESSION['user']['username'])) {
+            return null;
+        }
+        return $_SESSION['user']['username'];
     }
+    
 
     public function getAllUsers() {
         return json_encode($this->model->getAllUsers());
     }
 
-    public function updateUserImage($userId, $file) {
-        $userId = $this->getUserIdFromSession($userId);
-        if (!$userId) {
+    public function updateUserImage($login, $file) {
+
+        if ($login === null) {
+            $login = $this->getUserIdFromSession();
+        }
+
+        if (!$login) {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
         }
     
@@ -48,7 +51,7 @@ class UserController {
         $fileData = file_get_contents($file['tmp_name']);
     
         // Обновление изображения в базе данных
-        $imageData = $this->model->updateUserImage($userId, $fileData);
+        $imageData = $this->model->updateUserImage($login, $fileData);
     
         if ($imageData) {
             if (is_resource($imageData)) {
@@ -67,13 +70,16 @@ class UserController {
     }
     
 
-    public function getUserImage($userId) {
-        $userId = $this->getUserIdFromSession($userId);
-        if (!$userId) {
+    public function getUserImage($login) {
+         if ($login === null) {
+            $login = $this->getUserIdFromSession();
+        }
+
+        if (!$login) {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
         }
     
-        $imageData = $this->model->getUserImage($userId);
+        $imageData = $this->model->getUserImage($login);
     
         if ($imageData) {
             // Преобразование изображения в Base64
@@ -92,13 +98,16 @@ class UserController {
     }    
     
 
-    public function deleteUserImage($userId) {
-        $userId = $this->getUserIdFromSession($userId);
-        if (!$userId) {
+    public function deleteUserImage($login) {
+        if ($login === null) {
+            $login = $this->getUserIdFromSession();
+        }
+
+        if (!$login) {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
         }
 
-        $deleteSuccess = $this->model->deleteUserImage($userId);
+        $deleteSuccess = $this->model->deleteUserImage($login);
 
         if ($deleteSuccess) {
             return json_encode(['status' => 'success', 'message' => 'Image deleted successfully']);

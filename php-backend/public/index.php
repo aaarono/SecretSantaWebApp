@@ -6,6 +6,7 @@ use Secret\Santa\Controllers\AuthController;
 use Secret\Santa\Controllers\UserController;
 use Secret\Santa\Controllers\GameController;
 use Secret\Santa\Controllers\WishlistController;
+use Secret\Santa\Controllers\PlayerGameController;
 
 // Настройка CORS
 $allowed_origins = ["http://localhost:3000"];
@@ -88,6 +89,7 @@ $authController = new AuthController();
 $userController = new UserController();
 $gameController = new GameController();
 $wishlistController = new WishlistController();
+$playerGameController = new PlayerGameController();
 
 // Обработка маршрутов
 switch ($firstLayerRoute) {
@@ -343,14 +345,76 @@ switch ($firstLayerRoute) {
                     echo json_encode(['message' => 'Invalid request method']);
                 }
                 break;
-
+            case 'player':
+                    switch ($thirdLayerRoute) {
+                        case 'add':
+                            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                                $input = json_decode(file_get_contents('php://input'), true);
+                                $login = $input['login'] ?? null;
+                                $uuid = $input['uuid'] ?? null;
+                
+                                if (!$uuid) {
+                                    http_response_code(400);
+                                    echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                                    break;
+                                }
+                
+                                echo $playerGameController->addPlayerToGame($login, $uuid, null);
+                            } else {
+                                http_response_code(405);
+                                echo json_encode(['message' => 'Invalid request method']);
+                            }
+                            break;
+                
+                        case 'remove':
+                            if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                                $input = json_decode(file_get_contents('php://input'), true);
+                                $login = $input['login'] ?? null;
+                                $uuid = $input['uuid'] ?? null;
+                
+                                if (!$uuid) {
+                                    http_response_code(400);
+                                    echo json_encode(['status' => 'error', 'message' => 'UUID are required']);
+                                    break;
+                                }
+                
+                                echo $playerGameController->removePlayerFromGame($uuid, $login);
+                            } else {
+                                http_response_code(405);
+                                echo json_encode(['message' => 'Invalid request method']);
+                            }
+                            break;
+                
+                        case 'list':
+                            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                                $uuid = $_GET['uuid'] ?? null;
+                
+                                if (!$uuid) {
+                                    http_response_code(400);
+                                    echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                                    break;
+                                }
+                
+                                echo $playerGameController->getPlayersByGameId($uuid);
+                            } else {
+                                http_response_code(405);
+                                echo json_encode(['message' => 'Invalid request method']);
+                            }
+                            break;
+                
+                        default:
+                            http_response_code(404);
+                            echo json_encode(['message' => 'Player route not found']);
+                            break;
+                    }
+                    break;
+                
             default:
                 http_response_code(404);
                 echo json_encode(['message' => 'Game route not found']);
                 break;
         }
         break;
-
     default:
         http_response_code(404);
         echo json_encode(['message' => 'Route not found']);

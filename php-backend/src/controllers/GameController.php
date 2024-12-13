@@ -14,7 +14,9 @@ class GameController {
     }
 
     private function getUserIdFromSession() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         if (!isset($_SESSION['user']['username'])) {
             return null;
         }
