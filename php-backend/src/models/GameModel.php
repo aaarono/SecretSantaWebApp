@@ -32,9 +32,10 @@ class GameModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createGame($uuid, $name, $description, $budget, $endsAt, $status = 'pending')
+    public function createGame($uuid, $name, $description, $budget, $endsAt, $creatorLogin, $status = 'pending')
     {
-        $query = 'INSERT INTO "Game" (UUID, Name, Description, Budget, EndsAt, Status) VALUES (:uuid, :name, :description, :budget, :endsAt, :status)';
+        $query = 'INSERT INTO "Game" (UUID, Name, Description, Budget, EndsAt, Status, creator_login) 
+                  VALUES (:uuid, :name, :description, :budget, :endsAt, :status, :creator_login)';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':uuid', $uuid);
         $stmt->bindParam(':name', $name);
@@ -42,12 +43,15 @@ class GameModel
         $stmt->bindParam(':budget', $budget);
         $stmt->bindParam(':endsAt', $endsAt);
         $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':creator_login', $creatorLogin);
         return $stmt->execute();
     }
 
     public function updateGame($uuid, $name, $description, $budget, $endsAt, $status)
     {
-        $query = 'UPDATE "Game" SET Name = :name, Description = :description, Budget = :budget, EndsAt = :endsAt, Status = :status WHERE UUID = :uuid';
+        $query = 'UPDATE "Game" 
+                  SET Name = :name, Description = :description, Budget = :budget, EndsAt = :endsAt, Status = :status
+                  WHERE UUID = :uuid';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);

@@ -15,34 +15,24 @@ class PlayerGameModel
         $this->conn = $db->getConnection();
     }
 
-    public function addPlayerToGame($login, $uuid, $creatorLogin = null)
+    public function addPlayerToGame($login, $uuid)
     {
-        $query = 'INSERT INTO "Player_Game" (login, UUID, is_creator) VALUES (:login, :uuid, :is_creator)';
+        $query = 'INSERT INTO "Player_Game" (login, UUID) VALUES (:login, :uuid)';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':login', $login);
         $stmt->bindParam(':uuid', $uuid);
-        $stmt->bindParam(':is_creator', $creatorLogin);
         return $stmt->execute();
     }
 
     public function getPlayersByGameId($uuid)
     {
-        $query = 'SELECT login, is_creator FROM "Player_Game" WHERE UUID = :uuid';
+        $query = 'SELECT login FROM "Player_Game" WHERE UUID = :uuid';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function isUserCreator($uuid, $userId)
-    {
-        $query = 'SELECT 1 FROM "Player_Game" WHERE UUID = :uuid AND login = :userId AND is_creator = :userId LIMIT 1';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':uuid', $uuid);
-        $stmt->bindParam(':userId', $userId);
-        $stmt->execute();
-        return $stmt->fetchColumn() !== false;
-    }
 
     public function removePlayerFromGame($uuid, $login)
     {

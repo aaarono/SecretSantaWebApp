@@ -11,7 +11,6 @@ class PlayerGameController {
         $this->model = new PlayerGameModel();
     }
 
-
     private function getUserIdFromSession() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -20,9 +19,9 @@ class PlayerGameController {
             return null;
         }
         return $_SESSION['user']['username'];
-    }    
+    }
 
-    public function addPlayerToGame($login, $uuid, $creatorLogin) {
+    public function addPlayerToGame($login, $uuid) {
         if ($login === null) {
             $login = $this->getUserIdFromSession();
         }
@@ -31,11 +30,11 @@ class PlayerGameController {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
         }
 
-        $success = $this->model->addPlayerToGame($login, $uuid, $creatorLogin);
+        $success = $this->model->addPlayerToGame($login, $uuid);
         if ($success) {
-            return json_encode(['status' => 'success', 'message' => 'Гравець доданий до гри']);
+            return json_encode(['status' => 'success', 'message' => 'Player added to the game']);
         } else {
-            return json_encode(['status' => 'error', 'message' => 'Не вдалося додати гравця до гри']);
+            return json_encode(['status' => 'error', 'message' => 'Failed to add player to the game']);
         }
     }
 
@@ -44,21 +43,19 @@ class PlayerGameController {
         return json_encode(['status' => 'success', 'players' => $players]);
     }
 
+    /*
     public function isUserCreator($uuid, $login) {
-        if ($login === null) {
-            $login = $this->getUserIdFromSession();
+        // Якщо все ж потрібна, треба через GameModel:
+        $game = (new \Secret\Santa\Models\GameModel())->getGameById($uuid);
+        if (!$game) {
+            return json_encode(['status' => 'error', 'message' => 'Game not found']);
         }
-    
-        if ($login === null) {
-            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
-        }
-    
-        $isCreator = $this->model->isUserCreator($uuid, $login);
-        return json_encode(['status' => 'success', 'is_creator' => $isCreator]);
+        
+        return json_encode(['status' => 'success', 'is_creator' => ($game['creator_login'] === $login)]);
     }
-    
-    public function removePlayerFromGame($uuid, $login)
-    {
+    */
+
+    public function removePlayerFromGame($uuid, $login) {
         if ($login === null) {
             $login = $this->getUserIdFromSession();
         }
@@ -69,9 +66,9 @@ class PlayerGameController {
 
         $success = $this->model->removePlayerFromGame($uuid, $login);
         if ($success) {
-            return json_encode(['status' => 'success', 'message' => 'Гравець видалений з гри']);
+            return json_encode(['status' => 'success', 'message' => 'Player removed from the game']);
         } else {
-            return json_encode(['status' => 'error', 'message' => 'Не вдалося видалити гравця з гри']);
+            return json_encode(['status' => 'error', 'message' => 'Failed to remove player from the game']);
         }
     }
 }

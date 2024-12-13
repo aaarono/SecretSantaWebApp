@@ -38,10 +38,8 @@ class GameController {
 
     private function generateUuid() {
         $data = random_bytes(16);
-
         $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
         $data[8] = chr((ord($data[8]) & 0x3f) | 0x80);
-
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
@@ -53,13 +51,13 @@ class GameController {
 
         $uuid = $this->generateUuid();
 
-        $success = $this->model->createGame($uuid, $name, $description, $budget, $endsAt);
+        $success = $this->model->createGame($uuid, $name, $description, $budget, $endsAt, $userId);
         if ($success) {
-            $playerSuccess = $this->playerGameController->addPlayerToGame($userId, $uuid, $userId);
+            $playerSuccess = $this->playerGameController->addPlayerToGame($userId, $uuid);
             if ($playerSuccess) {
-                return json_encode(['status' => 'success', 'message' => 'Game created and author added', 'uuid' => $uuid]);
+                return json_encode(['status' => 'success', 'message' => 'Game created', 'uuid' => $uuid]);
             } else {
-                return json_encode(['status' => 'error', 'message' => 'Game created, but failed to add author to Player_Game']);
+                return json_encode(['status' => 'error', 'message' => 'Game created, but failed to add player']);
             }
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to create game']);
@@ -95,7 +93,8 @@ class GameController {
             return json_encode(['status' => 'error', 'message' => 'Game not found']);
         }
 
-        if (!$this->playerGameController->isUserCreator($uuid, $userId)) {
+        // Перевірка чи користувач є творцем
+        if ($game['creator_login'] !== $userId) {
             return json_encode(['status' => 'error', 'message' => 'Only the creator can start the game']);
         }
 

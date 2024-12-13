@@ -114,6 +114,8 @@ class AuthController {
             return json_encode(['status' => 'error', 'message' => 'Invalid username or password']);
         }
 
+        session_regenerate_id(true);
+
         // Успешный логин, создание сессии
         $_SESSION['user'] = [
             'username' => $user['login'],
