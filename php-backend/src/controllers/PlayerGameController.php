@@ -11,6 +11,17 @@ class PlayerGameController {
         $this->model = new PlayerGameModel();
     }
 
+    private function checkCsrfToken() {
+        $headers = getallheaders();
+        $clientToken = $headers['X-CSRF-Token'] ?? '';
+    
+        if (!isset($_SESSION['csrf_token']) || $clientToken !== $_SESSION['csrf_token']) {
+            http_response_code(403);
+            echo json_encode(['status' => 'error', 'message' => 'Invalid CSRF token']);
+            exit();
+        }
+    }
+
     private function getUserIdFromSession() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -22,6 +33,7 @@ class PlayerGameController {
     }
 
     public function addPlayerToGame($login, $uuid) {
+        $this->checkCsrfToken();
         if ($login === null) {
             $login = $this->getUserIdFromSession();
         }
@@ -45,7 +57,6 @@ class PlayerGameController {
 
     /*
     public function isUserCreator($uuid, $login) {
-        // Якщо все ж потрібна, треба через GameModel:
         $game = (new \Secret\Santa\Models\GameModel())->getGameById($uuid);
         if (!$game) {
             return json_encode(['status' => 'error', 'message' => 'Game not found']);
@@ -56,6 +67,7 @@ class PlayerGameController {
     */
 
     public function removePlayerFromGame($uuid, $login) {
+        $this->checkCsrfToken();
         if ($login === null) {
             $login = $this->getUserIdFromSession();
         }

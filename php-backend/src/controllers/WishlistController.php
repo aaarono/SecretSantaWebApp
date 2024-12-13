@@ -13,10 +13,20 @@ class WishlistController
         $this->model = new WishlistModel();
     }
 
+    private function checkCsrfToken() {
+        $headers = getallheaders();
+        $clientToken = $headers['X-CSRF-Token'] ?? '';
+
+        if (!isset($_SESSION['csrf_token']) || $clientToken !== $_SESSION['csrf_token']) {
+            http_response_code(403);
+            echo json_encode(['status' => 'error', 'message' => 'Invalid CSRF token']);
+            exit();
+        }
+    }
+
     private function getUserIdFromSession()
     {
         error_log("Received data for 'create' endpoint: " . print_r($_SESSION, true));
-        session_start();
         if (isset($_SESSION['user']['username'])) {
             return $_SESSION['user']['username'];
         }
@@ -40,6 +50,7 @@ class WishlistController
 
     public function createWishlist($name, $description, $url, $login)
     {
+        $this->checkCsrfToken();
         if ($login === null) {
             $login = $this->getUserIdFromSession();
         }
@@ -59,6 +70,8 @@ class WishlistController
 
     public function updateWishlist($id, $name, $description, $url, $login)
     {
+        $this->checkCsrfToken();
+
         if ($login === null) {
             $login = $this->getUserIdFromSession();
         }
@@ -77,6 +90,8 @@ class WishlistController
 
     public function deleteWishlist($id)
     {
+        $this->checkCsrfToken();
+
         $success = $this->model->deleteWishlist($id);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Wishlist deleted successfully']);

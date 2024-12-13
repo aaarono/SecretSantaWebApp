@@ -11,7 +11,19 @@ class PairController {
         $this->model = new PairModel();
     }
 
+    private function checkCsrfToken() {
+        $headers = getallheaders();
+        $clientToken = $headers['X-CSRF-Token'] ?? '';
+    
+        if (!isset($_SESSION['csrf_token']) || $clientToken !== $_SESSION['csrf_token']) {
+            http_response_code(403);
+            echo json_encode(['status' => 'error', 'message' => 'Invalid CSRF token']);
+            exit();
+        }
+    }
+
     public function createPair($gameId, $gifterId, $receiverId) {
+        $this->checkCsrfToken();
         $success = $this->model->createPair($gameId, $gifterId, $receiverId);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Pair created successfully']);
@@ -35,6 +47,7 @@ class PairController {
     }
 
     public function deletePair($pairId) {
+        $this->checkCsrfToken();
         $success = $this->model->deletePair($pairId);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Pair deleted successfully']);
@@ -44,6 +57,7 @@ class PairController {
     }
 
     public function generateRandomPairs($gameId) {
+        $this->checkCsrfToken();
         $players = $this->model->getPlayersByGameId($gameId);
 
         $numPlayers = count($players);

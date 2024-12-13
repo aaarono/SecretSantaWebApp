@@ -6,42 +6,44 @@ class ApiService {
         };
     }
 
-    // Формирование полного URL
     getFullURL(endpoint) {
         return `${this.baseURL}${endpoint}`;
     }
 
-    // Общий метод для запросов
     async request(method, endpoint, body = null, headers = {}) {
         const url = this.getFullURL(endpoint);
-
+    
         const isFormData = body instanceof FormData;
-
+    
+        // Include CSRF token from localStorage
+        const csrfToken = localStorage.getItem('csrf_token'); 
+        if (csrfToken) {
+            headers['X-CSRF-Token'] = csrfToken;
+        }
+    
+        headers = {
+            ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+            ...headers,
+        };
+    
         const options = {
             method: method.toUpperCase(),
-            headers: {
-                // Исключить 'Content-Type', если body — FormData
-                ...(isFormData ? {} : this.defaultHeaders),
-                ...headers,
-            },
-            credentials: 'include', // Для отправки кукисов
+            headers,
+            credentials: 'include', // Include cookies for session management
         };
-
-        // Если body — FormData, не преобразуем его в JSON
+    
         if (body) {
             options.body = isFormData ? body : JSON.stringify(body);
         }
-
+    
         try {
             const response = await fetch(url, options);
-
-            // Проверка успешного статуса
+    
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Error ${response.status}: ${errorText}`);
             }
-
-            // Определение типа ответа
+    
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 return await response.json();

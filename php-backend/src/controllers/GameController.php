@@ -13,6 +13,17 @@ class GameController {
         $this->playerGameController = new PlayerGameController();
     }
 
+    private function checkCsrfToken() {
+        $headers = getallheaders();
+        $clientToken = $headers['X-CSRF-Token'] ?? '';
+    
+        if (!isset($_SESSION['csrf_token']) || $clientToken !== $_SESSION['csrf_token']) {
+            http_response_code(403);
+            echo json_encode(['status' => 'error', 'message' => 'Invalid CSRF token']);
+            exit();
+        }
+    }
+
     private function getUserIdFromSession() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -44,6 +55,7 @@ class GameController {
     }
 
     public function createGame($name, $description, $budget, $endsAt) {
+        $this->checkCsrfToken();
         $userId = $this->getUserIdFromSession();
         if (!$userId) {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
@@ -65,6 +77,7 @@ class GameController {
     }
 
     public function updateGame($uuid, $name, $description, $budget, $endsAt, $status) {
+        $this->checkCsrfToken();
         $success = $this->model->updateGame($uuid, $name, $description, $budget, $endsAt, $status);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Game updated successfully']);
@@ -74,6 +87,7 @@ class GameController {
     }
 
     public function deleteGame($uuid) {
+        $this->checkCsrfToken();
         $success = $this->model->deleteGame($uuid);
         if ($success) {
             return json_encode(['status' => 'success', 'message' => 'Game deleted successfully']);
@@ -83,6 +97,7 @@ class GameController {
     }
 
     public function startGame($uuid) {
+        $this->checkCsrfToken();
         $userId = $this->getUserIdFromSession();
         if (!$userId) {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
@@ -93,7 +108,6 @@ class GameController {
             return json_encode(['status' => 'error', 'message' => 'Game not found']);
         }
 
-        // Перевірка чи користувач є творцем
         if ($game['creator_login'] !== $userId) {
             return json_encode(['status' => 'error', 'message' => 'Only the creator can start the game']);
         }
