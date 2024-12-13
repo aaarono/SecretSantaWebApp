@@ -277,13 +277,13 @@ switch ($firstLayerRoute) {
                     $budget = $input['budget'] ?? null;
                     $endsAt = $input['endsAt'] ?? null;
 
-                    if (!$uuid || !$name || !$endsAt) {
+                    if (!$name || !$endsAt || !$budget) {
                         http_response_code(400);
                         echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
                         break;
                     }
 
-                    echo $gameController->createGame($uuid, $name, $description, $budget, $endsAt);
+                    echo $gameController->createGame($name, $description, $budget, $endsAt);
                 } else {
                     http_response_code(405);
                     echo json_encode(['message' => 'Invalid request method']);
