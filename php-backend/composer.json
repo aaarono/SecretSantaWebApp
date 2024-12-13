@@ -5,5 +5,7 @@
             "Secret\\Santa\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "cboden/ratchet": "^0.4.4"
+    }
 }

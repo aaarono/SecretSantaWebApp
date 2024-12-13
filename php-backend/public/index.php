@@ -268,6 +268,15 @@ switch ($firstLayerRoute) {
     case 'game':
         checkSession();
         switch ($secondLayerRoute) {
+            case 'usergames':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $login = $_GET['login'] ?? null;
+                    echo $playerGameController->getUserGames($login);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
             case 'create':
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $input = json_decode(file_get_contents('php://input'), true);

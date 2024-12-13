@@ -203,11 +203,15 @@ class AuthController
         if (isset($_SESSION['user'])) {
             error_log("Auth check successful for user '{$_SESSION['user']['username']}'");
             return json_encode(['status' => 'success', 'user' => $_SESSION['user']]);
+        } else {
+            error_log("Auth check failed: Not authenticated");
+            return json_encode(['status' => 'error', 'message' => 'Not authenticated']);
         }
 
         error_log("Auth check failed: Not authenticated");
         return json_encode(['status' => 'error', 'message' => 'Not authenticated']);
     }
+    
 
     public function logout() {
         $this->forceLogout();
