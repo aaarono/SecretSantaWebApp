@@ -102,10 +102,10 @@ class GameController {
         $success = $this->model->deleteGame($uuid);
         if ($success) {
             // Оповестим только тех, кто в этом лобби
-            \Secret\Santa\WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
-                'type' => 'game_deleted',
-                'uuid' => $uuid
-            ]);
+            // \Secret\Santa\WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
+            //     'type' => 'game_deleted',
+            //     'uuid' => $uuid
+            // ]);
             return json_encode(['status' => 'success', 'message' => 'Game deleted successfully']);
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to delete game']);
