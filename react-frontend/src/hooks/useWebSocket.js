@@ -8,7 +8,7 @@ const useWebSocket = (onMessage, onOpen, onClose, onError) => {
   const FIXED_URL = 'ws://localhost:9090'; // Задаем статичный URL
 
   useEffect(() => {
-    if (!user?.username) {
+    if (!user?.username) { // Изменено с user.login на user.username
       console.error('Username is required for WebSocket connection');
       return;
     }
@@ -21,7 +21,7 @@ const useWebSocket = (onMessage, onOpen, onClose, onError) => {
       if (onOpen) onOpen(socket);
 
       // Отправляем сообщение `auth` с логином после открытия соединения
-      const authMessage = { type: 'auth', login: user.username };
+      const authMessage = { type: 'auth', login: user.username }; // Изменено с user.login на user.username
       socket.send(JSON.stringify(authMessage));
       console.log('Auth message sent:', authMessage);
     };
@@ -48,14 +48,13 @@ const useWebSocket = (onMessage, onOpen, onClose, onError) => {
 
     socketRef.current = socket;
 
-    // Очистка соединения при размонтировании компонента
+  
     return () => {
       if (socket) {
-        console.log('Closing WebSocket connection:', FIXED_URL);
         socket.close();
       }
     };
-  }, [user?.username, onMessage, onOpen, onClose, onError]);
+  }, [user, onMessage, onOpen, onClose, onError]);
 
   const sendMessage = (message) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {

@@ -4,10 +4,17 @@ import './GameElement.css';
 import showMore from '../../assets/showMore.svg';
 import closeCircle from '../../assets/closeCircle.svg';
 import { SlClose } from "react-icons/sl";
+import { useNavigate } from 'react-router-dom';
 import { SlArrowRightCircle } from "react-icons/sl";
 
 
 const GameElement = ({uuid, gameName, gameStatus, playersCount, playersMax, gameEnds }) => {
+  const navigate = useNavigate();
+
+  const goToLobby = () => {
+    navigate(`/lobby/${uuid}`);
+  };
+
   return (
     <div className='game-element-container'>
         <h3 className='game-name'>{gameName}</h3>
@@ -15,7 +22,7 @@ const GameElement = ({uuid, gameName, gameStatus, playersCount, playersMax, game
         <p className='players-count'>Players: {playersCount}/{playersMax}</p>
         <p className='game-ends'>Ends in: {gameEnds}</p>
         <div className='game-links'>
-            <SlArrowRightCircle />
+            <SlArrowRightCircle onClick={goToLobby} style={{ cursor: 'pointer' }} />
             <SlClose />
         </div>
     </div>

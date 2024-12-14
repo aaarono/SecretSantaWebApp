@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../index.css';
 import './ConnectPage.css';
@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button/Button';
 import api from '../../services/api/api';
 import { GameContext } from '../../components/contexts/GameContext';
 import useWebSocket from '../../hooks/useWebSocket';
+import { UserContext } from '../../components/contexts/UserContext';
 
 const ConnectPage = () => {
   const navigate = useNavigate();
@@ -14,27 +15,33 @@ const ConnectPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { setGameId } = useContext(GameContext);
+  const { user } = useContext(UserContext);
   const [players, setPlayers] = useState([]);
 
-  // const handleWebSocketMessage = (message) => {
-  //   if (message.type === 'player_joined') {
-  //     setPlayers((prev) => [...prev, message.player]);
-  //   } else if (message.type === 'player_left') {
-  //     setPlayers((prev) => prev.filter((p) => p !== message.player));
-  //   }
-  // };
+  // Обробник отриманих повідомлень через WebSocket
+  const handleWebSocketMessage = (message) => {
+    switch (message.type) {
+      case 'player_joined':
+        setPlayers((prev) => [...prev, message.login]);
+        break;
+      case 'player_left':
+        setPlayers((prev) => prev.filter((p) => p !== message.login));
+        break;
+      default:
+        console.log('Отримано повідомлення:', message);
+        break;
+    }
+  };
 
-  // const sendMessage = useWebSocket(
-  //   'ws://localhost:9090', // Убедитесь, что адрес корректен
-  //   handleWebSocketMessage,
-  //   (socket) => {
-  //     console.log('WebSocket connected');
-  //     if (formValues.gameCode) {
-  //       socket.send(JSON.stringify({ type: 'join_game', uuid: formValues.gameCode }));
-  //     }
-  //   }
-  // );
-  
+  // Використання хука useWebSocket
+  const sendMessage = useWebSocket(handleWebSocketMessage);
+
+  useEffect(() => {
+    // Автоматично приєднуємося до гри після успішного підключення
+    if (formValues.gameCode && user?.username) {
+      sendMessage({ type: 'join_game', uuid: formValues.gameCode });
+    }
+  }, [formValues.gameCode, user, sendMessage]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,8 +62,9 @@ const ConnectPage = () => {
       if (response.status === 'success') {
         alert('Connected to the game successfully!');
         setGameId(formValues.gameCode);
-        navigate('/lobby');
-        // sendMessage({ type: 'join_game', uuid: formValues.gameCode });
+        navigate('/lobby/' + formValues.gameCode);
+        // Надсилаємо повідомлення на приєднання до гри через WebSocket
+        sendMessage({ type: 'join_game', uuid: formValues.gameCode });
       } else {
         setErrorMessage(response.message || 'Failed to connect to the game.');
       }
@@ -91,7 +99,7 @@ const ConnectPage = () => {
       </div>
       <ul>
         {players.map((player, index) => (
-          <li key={index}>{player}</li>
+          <li key={index}>{player} приєднався до гри</li>
         ))}
       </ul>
     </div>
