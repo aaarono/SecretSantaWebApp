@@ -145,7 +145,7 @@ const SettingsPage = () => {
           {isLoading ? (
             <div className="spinner">Loading...</div>
           ) : (
-            <img src={avatar} alt="Avatar" />
+            <div className='avatar-settings-container'><img src={avatar} className='avatar-settings' alt="Avatar" /></div>
           )}
           <div className='settings-img-change'>
             <p>Change Avatar:</p>

@@ -19,6 +19,7 @@
 
 .avatar {
     border-radius: 100%;
+    height: 70px;
     width: 70px;
     margin: 0 20px;
 }
@@ -67,6 +68,7 @@
 
     .avatar {
         width: 45px;
+        height: 45px;
     }
 
     .section-container-header {
@@ -82,6 +84,7 @@
 
     .avatar {
         width: 45px;
+        height: 45px;
     }
 
     .section-container-header {

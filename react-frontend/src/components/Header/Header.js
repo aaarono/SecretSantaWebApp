@@ -35,7 +35,7 @@ const Header = () => {
     return (
         <div className='header-container'>
             <div className='section-container-header'>
-                <img className='avatar' src={avatar} alt="Avatar" />
+                <div className='avatar-container'><img className='avatar' src={avatar} alt="Avatar" /></div>
                 <div className='header-user-info'>
                     <h3>{user.username}</h3>
                     <p>{user.email}</p>
