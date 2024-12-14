@@ -25,7 +25,6 @@ class Lobby implements MessageComponentInterface {
             return;
         }
     
-        // Проверка авторизации, если сообщение не 'auth'
         if (!isset($from->userLogin) && ($data['type'] ?? '') !== 'auth') {
             $from->send(json_encode(['type' => 'error', 'message' => 'User not authenticated']));
             error_log("Unauthenticated message from connection {$from->resourceId}");
@@ -46,27 +45,31 @@ class Lobby implements MessageComponentInterface {
                 }
                 break;
     
-            case 'join_game':
-                $uuid = $data['uuid'] ?? null;
-                if ($uuid) {
-                    WebSocketBroadcaster::getInstance()->joinGame($from, $uuid);
-                    error_log("User {$from->userLogin} joined game: $uuid");
-    
-                    // Уведомляем всех в игре
-                    WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
-                        'type' => 'player_joined',
-                        'login' => $from->userLogin,
-                    ]);
-    
-                    $from->send(json_encode([
-                        'type' => 'joined_game',
-                        'uuid' => $uuid,
-                        'player' => $from->userLogin,
-                    ]));
-                } else {
-                    $from->send(json_encode(['type' => 'error', 'message' => 'Game UUID is required']));
-                }
-                break;
+                case 'join_game':
+                    $uuid = $data['uuid'] ?? null;
+                    if ($uuid) {
+                        WebSocketBroadcaster::getInstance()->joinGame($from, $uuid);
+                        error_log("User {$from->userLogin} joined game: $uuid");
+                
+                        // Сповіщаємо інших гравців про приєднання
+                        WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
+                            'type' => 'player_joined',
+                            'login' => $from->userLogin,
+                        ], $from);
+                
+                        // Отримуємо повний список гравців у лоббі
+                        $players = WebSocketBroadcaster::getInstance()->getPlayersInGame($uuid);
+                
+                        $from->send(json_encode([
+                            'type' => 'joined_game',
+                            'uuid' => $uuid,
+                            'players' => $players, // Повертаємо весь список гравців
+                        ]));
+                    } else {
+                        $from->send(json_encode(['type' => 'error', 'message' => 'Game UUID is required']));
+                    }
+                    break;
+                
     
             default:
                 error_log("Unknown message type: {$data['type']}");

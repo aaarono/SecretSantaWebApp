@@ -29,7 +29,7 @@ function App() {
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/new" element={<NewGamePage />} />
                 <Route path="/connect" element={<ConnectPage />} />
-                <Route path="/lobby" element={<LobbyPage />} />
+                <Route path="/lobby/:gameUuid" element={<LobbyPage />} />
               </Route>
             </Route>
             <Route path="*" element={<div>404 Not Found</div>} />

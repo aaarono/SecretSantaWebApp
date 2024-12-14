@@ -5,10 +5,7 @@ use Ratchet\ConnectionInterface;
 
 class WebSocketBroadcaster {
     private static $instance;
-    // Мапы:
-    // gameUuid => SplObjectStorage(connections)
     private $gameClients;
-    // login => SplObjectStorage(connections)
     private $userConnections;
 
     private function __construct() {
@@ -55,7 +52,6 @@ class WebSocketBroadcaster {
         }
     }
 
-    // Добавляем метод, чтобы присоединять всех соединений пользователя к игре
     public function joinUserToGame(string $login, string $gameUuid) {
         if (!isset($this->userConnections[$login])) {
             error_log("No connections found for user: $login");
@@ -74,11 +70,26 @@ class WebSocketBroadcaster {
         }
         $encoded = json_encode($message);
         foreach ($this->gameClients[$gameUuid] as $client) {
-            // Проверяем, чтобы сообщение не отправлялось отправителю
             if ($client !== $except) {
                 $client->send($encoded);
             }
         }
         error_log("Broadcasted message to game $gameUuid: " . json_encode($message));
+    }
+
+    // Новий метод для отримання списку гравців
+    public function getPlayersInGame(string $gameUuid): array {
+        $players = [];
+        if (!isset($this->gameClients[$gameUuid])) {
+            return $players;
+        }
+
+        foreach ($this->gameClients[$gameUuid] as $conn) {
+            if (isset($conn->userLogin)) {
+                $players[] = $conn->userLogin;
+            }
+        }
+
+        return $players;
     }
 }

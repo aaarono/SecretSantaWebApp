@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { GameContext } from '../../components/contexts/GameContext';
-import useWebSocket from '../../hooks/useWebSocket';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import '../../index.css';
 import './LobbyPage.css';
 import GameID from '../../components/LobbyElements/GameID/GameID';
@@ -9,63 +8,95 @@ import PlayersList from '../../components/LobbyElements/PlayersList/PlayersList'
 import DeadlineTimer from '../../components/LobbyElements/DeadlineTimer/DeadlineTimer';
 import WaitingGameWindow from '../../components/LobbyElements/GameWindow/WaitingGameWindow';
 import { UserContext } from '../../components/contexts/UserContext';
+import useWebSocket from '../../hooks/useWebSocket';
 
 const LobbyPage = () => {
-  const { gameId } = useContext(GameContext); // Получаем ID игры из контекста
+  const { gameUuid } = useParams();
   const { user } = useContext(UserContext);
-  const [players, setPlayers] = useState([]); // Список игроков
-  const [isAuthorized, setIsAuthorized] = useState(false); // Статус авторизации
+  const [players, setPlayers] = useState([]);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [gameName, setGameName] = useState('');
+  const [playerCount, setPlayerCount] = useState(0);
+  const [gameEndsAt, setGameEndsAt] = useState(null);
 
-  // Статичный логин пользователя
   const login = user.username;
 
-  const handleWebSocketMessage = (message) => {
+  const handleWebSocketMessage = useCallback((message) => {
     console.log('WebSocket message:', message);
 
-    // Обработка сообщений WebSocket
     switch (message.type) {
+      case 'welcome':
+        console.log('Received welcome message from server.');
+        break;
       case 'auth_success':
         console.log('User authorized via WebSocket');
         setIsAuthorized(true);
+        if (gameUuid) {
+          sendMessage({ type: 'join_game', uuid: gameUuid, login });
+          console.log(`Subscribed to game with ID: ${gameUuid}`);
+        }
+        break;
+      case 'joined_game':
+        if (message.players && Array.isArray(message.players)) {
+          setPlayers(message.players);
+          setPlayerCount(message.players.length);
+        } else {
+          console.warn('joined_game message received without players array');
+        }
         break;
       case 'player_joined':
-        setPlayers((prev) => [...prev, message.login]);
+        setPlayers((prev) => {
+          const newPlayers = [...prev, message.login];
+          setPlayerCount(newPlayers.length);
+          return newPlayers;
+        });
         break;
       case 'player_left':
-        setPlayers((prev) => prev.filter((p) => p !== message.login));
+        setPlayers((prev) => {
+          const newPlayers = prev.filter((p) => p !== message.login);
+          setPlayerCount(newPlayers.length);
+          return newPlayers;
+        });
         break;
       default:
         console.warn('Unknown WebSocket message type:', message.type);
     }
-  };
+  }, [gameUuid, login]);
 
-  const handleWebSocketOpen = (socket) => {
+  const handleWebSocketOpen = useCallback((socket) => {
     console.log('WebSocket connected for lobby');
-    socket.send(JSON.stringify({ type: 'auth', login })); // Отправляем авторизацию
-    if (gameId) {
-      socket.send(JSON.stringify({ type: 'join_game', uuid: gameId , login})); // Присоединяемся к игре
-      console.log(`Subscribed to game with ID: ${gameId}`);
-    }
-  };
+    // НЕ відправляємо тут нічого, auth вже відправляється у useWebSocket
+  }, []);
 
-  // Инициализация WebSocket
+  // Викликаємо useWebSocket ПІСЛЯ того, як оголосили handleWebSocketMessage і handleWebSocketOpen
   const sendMessage = useWebSocket(handleWebSocketMessage, handleWebSocketOpen);
 
   useEffect(() => {
-    if (!gameId) {
-      console.warn('No game ID provided. WebSocket may not function correctly.');
+    if (gameUuid) {
+      fetch(`http://localhost:8000/game/get?uuid=${gameUuid}`, {
+        credentials: 'include',
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 'success' && data.game) {
+            setPlayers(data.game.players || []);
+            setGameName(data.game.name || 'Unnamed Game');
+            setPlayerCount((data.game.players || []).length);
+            setGameEndsAt(data.game.endsAt || ''); // Передаємо час завершення
+          }
+        })
+        .catch((err) => console.error('Error fetching game data:', err));
     }
-  }, [gameId]);
+  }, [gameUuid]);
+  
 
   return (
     <div className="lobby-page-container">
-      <GameID />
-      <GameBanner />
-      <PlayersList players={players} /> {/* Передаем список игроков */}
-      <DeadlineTimer />
-      <WaitingGameWindow />
-      {/* <StartGameWindow />
-      <ActiveGameWindow /> */}
+      <GameID gameUuid={gameUuid} />
+      <GameBanner gameName={gameName} playerCount={playerCount} />
+      <PlayersList players={players} />
+      <DeadlineTimer endsAt={gameEndsAt} />
+      <WaitingGameWindow isAuthorized={isAuthorized} />
     </div>
   );
 };

@@ -7,7 +7,7 @@ use Secret\Santa\Config\Database;
 class AuthController
 {
     private $conn;
-    private $sessionTimeout = 50;
+    private $sessionTimeout = 900;
 
     public function __construct()
     {

@@ -2,11 +2,11 @@ import React from 'react';
 import './GameBanner.css';
 import '../../../index.css';
 
-const GameBanner = () => {
+const GameBanner = ({ gameName, playerCount }) => {
   return (
     <div className="game-banner">
-      <h2>Game Name</h2>
-      <p>10/10</p>
+      <h2>{gameName}</h2>
+      <p>{playerCount} players</p>
     </div>
   );
 };
