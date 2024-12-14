@@ -62,7 +62,7 @@ const ConnectPage = () => {
       if (response.status === 'success') {
         alert('Connected to the game successfully!');
         setGameId(formValues.gameCode);
-        navigate('/lobby');
+        navigate('/lobby/' + formValues.gameCode);
         // Надсилаємо повідомлення на приєднання до гри через WebSocket
         sendMessage({ type: 'join_game', uuid: formValues.gameCode });
       } else {

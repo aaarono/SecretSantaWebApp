@@ -53,7 +53,7 @@ const NewGamePage = () => {
       if (response.status === 'success') {
         setGameId(response.uuid);
         alert('Game created successfully!');
-        navigate('/lobby');
+        navigate('/lobby/' + response.uuid);
 
         // Use the existing sendMessage to send a WebSocket message
         sendMessage({ type: 'join_game', uuid: response.uuid });
