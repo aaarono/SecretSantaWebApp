@@ -13,6 +13,7 @@ import ConnectPage from './pages/ConnectPage/ConnectPage';
 import LobbyPage from './pages/LobbyPage/LobbyPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Layout from './components/Layout/Layout';
+import AdminPage from './pages/AdminPage/AdminPage';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/connect" element={<ConnectPage />} />
                 <Route path="/lobby/:gameUuid" element={<LobbyPage />} />
               </Route>
+                <Route path="/admin" element={<AdminPage />} />
             </Route>
             <Route path="*" element={<div>404 Not Found</div>} />
           </Routes>
