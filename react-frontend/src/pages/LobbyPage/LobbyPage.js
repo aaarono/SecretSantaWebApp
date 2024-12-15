@@ -109,6 +109,7 @@ const LobbyPage = () => {
             };
             setChatMessages((prevMessages) => [...prevMessages, newMessage]);
           }
+          break;
         default:
           console.warn("Unknown WebSocket message type:", message.type);
       }
