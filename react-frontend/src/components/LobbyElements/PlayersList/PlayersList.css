@@ -28,3 +28,24 @@
     border-bottom-left-radius: 15px;
 }
 
+.player-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .santa-icon {
+    margin-left: 10px;
+  }
+  
+  .online-status {
+    color: green;
+    margin-left: auto;
+  }
+  
+  .offline-status {
+    color: red;
+    margin-left: auto;
+  }
+  
+
