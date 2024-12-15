@@ -26,6 +26,17 @@ class PlayerGameModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function updatePlayerGame($login, $uuid, $isGifted)
+    {
+        $query = 'UPDATE "Player_Game" SET is_gifted = :isGifted WHERE login = :login AND UUID = :uuid';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':isGifted', $isGifted, PDO::PARAM_BOOL);
+        $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+        $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
+
     public function addPlayerToGame($login, $uuid)
     {
         $query = 'INSERT INTO "Player_Game" (login, UUID) VALUES (:login, :uuid)';
@@ -52,5 +63,12 @@ class PlayerGameModel
         $stmt->bindParam(':login', $login);
         $stmt->bindParam(':uuid', $uuid);
         return $stmt->execute();
+    }
+
+    public function getAllPlayerGame () {
+        $query = 'SELECT * FROM "Player_Game"';
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
