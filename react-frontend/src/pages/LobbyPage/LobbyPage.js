@@ -113,7 +113,7 @@ const LobbyPage = () => {
           console.warn("Unknown WebSocket message type:", message.type);
       }
     },
-    [gameUuid, login]
+    [gameUuid, login, updatePlayerList, setPlayerStatus]
   );
 
   const handleWebSocketOpen = useCallback((socket) => {
@@ -150,16 +150,9 @@ const LobbyPage = () => {
         .catch((err) => console.error("Error fetching game data:", err));
     }
 
-    fetchGameCreator();
+    
   }, [gameUuid, updatePlayerList]);
 
-  const fetchGameCreator = async () => {
-    const response = await api.get(`/game/player/creator?uuid=${gameUuid}`);
-    console.log("Response from server:", response.creator);
-    if (response.status === "success") {
-      setGameCreator(response.creator);
-    }
-  };
 
   // const handleBeforeUnload = async () => {
   //   if (gameUuid && login) {
@@ -183,7 +176,7 @@ const LobbyPage = () => {
       <GameBanner gameName={gameName} playerCount={playerCount} />
       <PlayersList players={players} creatorLogin={creatorLogin} />
       <DeadlineTimer endsAt={gameEndsAt} />
-      {gameCreator ? (
+      {creatorLogin ? (
         <StartGameWindow
           isAuthorized={isAuthorized}
           playersCount={playerCount}
