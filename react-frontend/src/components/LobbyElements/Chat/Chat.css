@@ -1,25 +1,30 @@
 .chat {
-    border: 1px solid #ccc;
     padding: 10px;
     border-radius: 15px;
+    background-color: var(--secondary-bg-dark);
 }
 
 .chat-messages {
-    height: 200px;
-    background-color: var(--text-dark);
+    height: 80px;
+    background-color: var(--main-element-dark);
     overflow-y: auto;
     margin-bottom: 10px;
+    padding: 10px;
 }
 
 .chat-input {
     display: flex;
+
 }
 
 .chat-input input {
     flex: 1;
     padding: 5px;
+    border-radius: 5px;
 }
 
 .chat-input button {
     padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 5px;
 }

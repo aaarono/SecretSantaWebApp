@@ -28,7 +28,8 @@
 }
 
 .admin-table button {
-  width: 110%;
+  margin-bottom: 10px;
+  width: 100%;
 }
 .admin-table h1 {
     text-align: center;

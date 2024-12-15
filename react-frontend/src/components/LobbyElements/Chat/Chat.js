@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
+import './Chat.css';
+import "../../../index.css";
 
 const Chat = ({ gameUuid, sendMessage, messages = [] }) => {
   const { user } = useContext(UserContext);

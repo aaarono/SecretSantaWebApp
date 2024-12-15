@@ -90,6 +90,7 @@ const AdminPage = () => {
                             <Button text={'Pairs'} onClick={() => setActiveTable('pairs')} />
                             <Button text={'Wishlists'} onClick={() => setActiveTable('wishlists')} />
                             <Button text={'Player_Game'} onClick={() => setActiveTable('player_game')} />
+                            <Button text={'SMS'} onClick={() => setActiveTable('sms')} />
                         </div>
                     </div>
                 </div>

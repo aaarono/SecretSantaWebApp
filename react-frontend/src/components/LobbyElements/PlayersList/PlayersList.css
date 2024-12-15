@@ -1,51 +1,59 @@
 .players-list {
-    background-color: var(--secondary-bg-dark);
-  }
-  
+  background-color: var(--secondary-bg-dark);
+  height: 330px;
+  position: relative;
+}
+
 .players-list h3 {
-    font-size: 24px;
-    margin-top: 5px;
-    padding: 10px;
-    text-align: center;
+  font-size: 24px;
+  margin-top: 5px;
+  padding: 10px;
+  text-align: center;
 }
-  
+
 .players-list ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
-  
+
 .players-list li {
-    padding: 7px 20px;
+  padding: 7px 20px;
+  font-size: 16px;
 }
 
 .players-list li:nth-child(odd) {
-    background-color: var(--main-element-dark);
+  background-color: var(--main-element-dark);
 }
 
 .players-list li:nth-child(even):last-child {
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 
 .player-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .santa-icon {
-    margin-left: 10px;
-  }
-  
-  .online-status {
-    color: green;
-    margin-left: auto;
-  }
-  
-  .offline-status {
-    color: red;
-    margin-left: auto;
-  }
-  
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
+.santa-icon {
+  margin-left: 10px;
+  position: absolute;
+  right: 10px;
+}
+
+.online-status {
+  color: green;
+  margin-left: auto;
+}
+
+.offline-status {
+  color: red;
+  margin-left: auto;
+}
+
+.online-status, .offline-status {
+  position: absolute;
+  right: 33px;
+}
