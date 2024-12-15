@@ -99,7 +99,7 @@ const ActiveGameWindow = ({ gameUuid, gameStatus }) => {
   }
 
   // Если игра завершена, показываем экран завершенной игры с выводом всех пар
-  if (gameEnded) {
+  if (gameEnded == 'ended') {
     return <FinishedGame gameUuid={gameUuid} />;
   }
 
