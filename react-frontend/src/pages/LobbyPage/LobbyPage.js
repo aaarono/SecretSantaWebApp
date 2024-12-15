@@ -40,14 +40,6 @@ const LobbyPage = () => {
           console.log(`Subscribed to game with ID: ${gameUuid}`);
         }
         break;
-      case 'joined_game':
-        if (message.players && Array.isArray(message.players)) {
-          setPlayers(message.players);
-          setPlayerCount(message.players.length);
-        } else {
-          console.warn('joined_game message received without players array');
-        }
-        break;
       case 'player_joined':
         setPlayers((prev) => {
           const newPlayers = [...prev, message.login];
@@ -55,12 +47,22 @@ const LobbyPage = () => {
           return newPlayers;
         });
         break;
+      case 'joined_game':
+        console.log('joined_game message received:', message);
+          if (message.players && Array.isArray(message.players)) {
+            setPlayers(message.players);
+            setPlayerCount(message.players.length);
+          } else {
+            console.warn('joined_game message received without players array');
+          }
+          break;
       case 'player_left':
         setPlayers((prev) => {
           const newPlayers = prev.filter((p) => p !== message.login);
           setPlayerCount(newPlayers.length);
           return newPlayers;
         });
+        break;
       case 'game_deleted':
         alert(message.message);
         window.location.href = '/'; 
@@ -86,9 +88,8 @@ const LobbyPage = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 'success' && data.game) {
-            setPlayers(data.game.players || []);
+            console.log('Game data:', data.game);
             setGameName(data.game.name || 'Unnamed Game');
-            setPlayerCount((data.game.players || []).length);
             setGameEndsAt(data.game.endsAt || ''); // Передаємо час завершення
           }
         })
