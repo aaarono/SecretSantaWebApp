@@ -8,6 +8,7 @@ use Secret\Santa\Controllers\GameController;
 use Secret\Santa\Controllers\WishlistController;
 use Secret\Santa\Controllers\PlayerGameController;
 use Secret\Santa\Controllers\AdminController;
+use Secret\Santa\Controllers\SmsController;
 
 // Настройка CORS
 $allowed_origins = ["http://localhost:3000"];
@@ -90,6 +91,7 @@ $gameController = new GameController();
 $wishlistController = new WishlistController();
 $playerGameController = new PlayerGameController();
 $adminController = new AdminController();
+$smsController = new SmsController();
 
 // Обработка маршрутов
 switch ($firstLayerRoute) {
@@ -513,6 +515,102 @@ switch ($firstLayerRoute) {
         }
         break;
 
+    case 'sms':
+        checkSession();
+        switch ($secondLayerRoute) {
+            case 'create':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    $gameId = $input['game_id'] ?? null;
+                    $message = $input['message'] ?? null;
+
+                    if (!$gameId || !$message) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'Missing game_id or message']);
+                        break;
+                    }
+
+                    echo $smsController->createSms($gameId, $message);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'get':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $gameId = $_GET['game_id'] ?? null;
+                    if (!$gameId) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'Missing game_id']);
+                        break;
+                    }
+                    echo $smsController->getAllSms($gameId);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'get-single':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $id = $_GET['id'] ?? null;
+                    if (!$id) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'Missing SMS id']);
+                        break;
+                    }
+                    echo $smsController->getSms($id);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'update':
+                if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    $id = $input['id'] ?? null;
+                    $message = $input['message'] ?? null;
+
+                    if (!$id || !$message) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'Missing id or message']);
+                        break;
+                    }
+
+                    echo $smsController->updateSms($id, $message);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'delete':
+                if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    $id = $input['id'] ?? null;
+
+                    if (!$id) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'Missing SMS id']);
+                        break;
+                    }
+
+                    echo $smsController->deleteSms($id);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            default:
+                http_response_code(404);
+                echo json_encode(['message' => 'SMS route not found']);
+                break;
+        }
+        break;
+
     case 'api':
         checkSession();
         switch ($secondLayerRoute) {
@@ -618,4 +716,3 @@ switch ($firstLayerRoute) {
         echo json_encode(['message' => 'Route not found']);
         break;
 }
-?>
