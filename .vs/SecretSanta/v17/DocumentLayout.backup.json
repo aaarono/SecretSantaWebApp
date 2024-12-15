@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\_\\source\\repos\\SecretSanta\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\AdminController.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php-backend\\src\\controllers\\AdminController.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\WishlistModel.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php-backend\\src\\models\\WishlistModel.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\AdminPage\\AdminPage.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:react-frontend\\src\\pages\\AdminPage\\AdminPage.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\AdminPage\\AdminPage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:react-frontend\\src\\pages\\AdminPage\\AdminPage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\PlayerGameModel.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php-backend\\src\\models\\PlayerGameModel.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\AdminController.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php-backend\\src\\controllers\\AdminController.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\postgresql-database\\db-init\\data-base-init.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:postgresql-database\\db-init\\data-base-init.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\public\\index.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -25,18 +41,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\UserModel.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php-backend\\src\\models\\UserModel.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\AdminPage\\AdminPage.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:react-frontend\\src\\pages\\AdminPage\\AdminPage.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\AdminPage\\AdminPage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:react-frontend\\src\\pages\\AdminPage\\AdminPage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\postgresql-database\\db-init\\data-base-init.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:postgresql-database\\db-init\\data-base-init.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\UserController.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -85,10 +89,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\RegistrationPage\\RegistrationPage.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:react-frontend\\src\\pages\\RegistrationPage\\RegistrationPage.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\_\\source\\repos\\SecretSanta\\postgresql-database\\db-init\\data-base-init.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:postgresql-database\\db-init\\data-base-init.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
     }
   ],
   "DocumentGroupContainers": [
@@ -98,7 +98,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -114,20 +114,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "WishlistModel.php",
+              "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\WishlistModel.php",
+              "RelativeDocumentMoniker": "php-backend\\src\\models\\WishlistModel.php",
+              "ToolTip": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\WishlistModel.php",
+              "RelativeToolTip": "php-backend\\src\\models\\WishlistModel.php",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAADMAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-12-15T19:33:50.821Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "PlayerGameModel.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\PlayerGameModel.php",
               "RelativeDocumentMoniker": "php-backend\\src\\models\\PlayerGameModel.php",
               "ToolTip": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\PlayerGameModel.php",
               "RelativeToolTip": "php-backend\\src\\models\\PlayerGameModel.php",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAuwBwAAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACAAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-12-15T12:18:16.495Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T12:18:16.495Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 3,
               "Title": "AdminPage.css",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\AdminPage\\AdminPage.css",
               "RelativeDocumentMoniker": "react-frontend\\src\\pages\\AdminPage\\AdminPage.css",
@@ -135,12 +147,11 @@
               "RelativeToolTip": "react-frontend\\src\\pages\\AdminPage\\AdminPage.css",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-12-15T11:05:46.396Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T11:05:46.396Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "PairModel.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\PairModel.php",
               "RelativeDocumentMoniker": "php-backend\\src\\models\\PairModel.php",
@@ -148,38 +159,37 @@
               "RelativeToolTip": "php-backend\\src\\models\\PairModel.php",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-12-15T11:01:40.639Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T11:01:40.639Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "AdminPage.js",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\AdminPage\\AdminPage.js",
               "RelativeDocumentMoniker": "react-frontend\\src\\pages\\AdminPage\\AdminPage.js",
               "ToolTip": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\AdminPage\\AdminPage.js",
               "RelativeToolTip": "react-frontend\\src\\pages\\AdminPage\\AdminPage.js",
-              "ViewState": "AgIAAGAAAAAAAAAAAAAIwIMAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-12-15T10:57:58.26Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "AdminController.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\AdminController.php",
               "RelativeDocumentMoniker": "php-backend\\src\\controllers\\AdminController.php",
               "ToolTip": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\AdminController.php",
               "RelativeToolTip": "php-backend\\src\\controllers\\AdminController.php",
-              "ViewState": "AgIAANcAAAAAAAAAAAAAAPQAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAKQAAAAAAAAAAAAAAM0AAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
               "WhenOpened": "2024-12-15T10:57:04.26Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "UserContext.js",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\components\\contexts\\UserContext.js",
               "RelativeDocumentMoniker": "react-frontend\\src\\components\\contexts\\UserContext.js",
@@ -187,12 +197,11 @@
               "RelativeToolTip": "react-frontend\\src\\components\\contexts\\UserContext.js",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-12-15T10:44:43.214Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T10:44:43.214Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "GameContext.js",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\components\\contexts\\GameContext.js",
               "RelativeDocumentMoniker": "react-frontend\\src\\components\\contexts\\GameContext.js",
@@ -200,12 +209,11 @@
               "RelativeToolTip": "react-frontend\\src\\components\\contexts\\GameContext.js",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-12-15T10:44:42.283Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T10:44:42.283Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "App.js",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\App.js",
               "RelativeDocumentMoniker": "react-frontend\\src\\App.js",
@@ -217,7 +225,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "ws-server.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\public\\ws-server.php",
               "RelativeDocumentMoniker": "php-backend\\public\\ws-server.php",
@@ -229,7 +237,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "PlayerGameController.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\PlayerGameController.php",
               "RelativeDocumentMoniker": "php-backend\\src\\controllers\\PlayerGameController.php",
@@ -237,23 +245,22 @@
               "RelativeToolTip": "php-backend\\src\\controllers\\PlayerGameController.php",
               "ViewState": "AgIAAFQAAAAAAAAAAAAAAHIAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-12-15T09:10:08.125Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T09:10:08.125Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "data-base-init.sql ",
+              "DocumentIndex": 5,
+              "Title": "data-base-init.sql",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\postgresql-database\\db-init\\data-base-init.sql",
               "RelativeDocumentMoniker": "postgresql-database\\db-init\\data-base-init.sql",
-              "ToolTip": "data-base-init.sql ",
+              "ToolTip": "C:\\Users\\_\\source\\repos\\SecretSanta\\postgresql-database\\db-init\\data-base-init.sql",
+              "RelativeToolTip": "postgresql-database\\db-init\\data-base-init.sql",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-12-15T08:45:08.539Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T08:45:08.539Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "GameController.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\GameController.php",
               "RelativeDocumentMoniker": "php-backend\\src\\controllers\\GameController.php",
@@ -265,7 +272,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "GameModel.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\GameModel.php",
               "RelativeDocumentMoniker": "php-backend\\src\\models\\GameModel.php",
@@ -273,12 +280,11 @@
               "RelativeToolTip": "php-backend\\src\\models\\GameModel.php",
               "ViewState": "AgIAAC0AAAAAAAAAAAAAAD0AAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-12-15T08:43:49.569Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T08:43:49.569Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "UserModel.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\models\\UserModel.php",
               "RelativeDocumentMoniker": "php-backend\\src\\models\\UserModel.php",
@@ -286,12 +292,11 @@
               "RelativeToolTip": "php-backend\\src\\models\\UserModel.php",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-12-15T08:40:42.393Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T08:40:42.393Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "UserController.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\UserController.php",
               "RelativeDocumentMoniker": "php-backend\\src\\controllers\\UserController.php",
@@ -299,12 +304,11 @@
               "RelativeToolTip": "php-backend\\src\\controllers\\UserController.php",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAALoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-12-15T08:40:26.446Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T08:40:26.446Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "SettingsPage.js",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\SettingsPage\\SettingsPage.js",
               "RelativeDocumentMoniker": "react-frontend\\src\\pages\\SettingsPage\\SettingsPage.js",
@@ -312,12 +316,11 @@
               "RelativeToolTip": "react-frontend\\src\\pages\\SettingsPage\\SettingsPage.js",
               "ViewState": "AgIAAM0AAAAAAAAAAAAIwOcAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-12-15T08:39:15.316Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T08:39:15.316Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "SettingsPage.css",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\SettingsPage\\SettingsPage.css",
               "RelativeDocumentMoniker": "react-frontend\\src\\pages\\SettingsPage\\SettingsPage.css",
@@ -325,12 +328,11 @@
               "RelativeToolTip": "react-frontend\\src\\pages\\SettingsPage\\SettingsPage.css",
               "ViewState": "AgIAADYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-12-15T08:39:12.876Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T08:39:12.876Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "database.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\config\\database.php",
               "RelativeDocumentMoniker": "php-backend\\src\\config\\database.php",
@@ -342,7 +344,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "AuthController.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\src\\controllers\\AuthController.php",
               "RelativeDocumentMoniker": "php-backend\\src\\controllers\\AuthController.php",
@@ -350,12 +352,11 @@
               "RelativeToolTip": "php-backend\\src\\controllers\\AuthController.php",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAEYAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-12-14T23:47:43.585Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-14T23:47:43.585Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "RegistrationPage.js",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\react-frontend\\src\\pages\\RegistrationPage\\RegistrationPage.js",
               "RelativeDocumentMoniker": "react-frontend\\src\\pages\\RegistrationPage\\RegistrationPage.js",
@@ -367,7 +368,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "index.php",
               "DocumentMoniker": "C:\\Users\\_\\source\\repos\\SecretSanta\\php-backend\\public\\index.php",
               "RelativeDocumentMoniker": "php-backend\\public\\index.php",
@@ -375,8 +376,7 @@
               "RelativeToolTip": "php-backend\\public\\index.php",
               "ViewState": "AgIAAN0BAAAAAAAAAAAAAPUBAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-12-14T23:34:21.348Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-14T23:34:21.348Z"
             }
           ]
         }

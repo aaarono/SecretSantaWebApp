@@ -31,6 +31,21 @@ class SmsModel
         return $smsList;
     }
 
+     public function getAllSms()
+    {
+        $query = 'SELECT * FROM "SMS" ORDER BY created_at ASC';
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $smsList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($smsList as &$sms) {
+            $sms['message'] = $this->decryptMessage($sms['message_encrypted']);
+            unset($sms['message_encrypted']);
+        }
+
+        return $smsList;
+    }
+
     private function decryptMessage($data)
     {
         $encryptionKey = getenv('ENCRYPTION_KEY');

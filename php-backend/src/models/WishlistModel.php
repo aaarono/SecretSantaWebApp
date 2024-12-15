@@ -62,12 +62,18 @@ class WishlistModel
     }
 
     public function deleteWishlist($id)
-    {
-        $query = 'DELETE FROM "Wishlist" WHERE id = :id';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        return $stmt->execute();
+{
+    $query = 'DELETE FROM "Wishlist" WHERE id = :id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+    if (!$stmt->execute()) {
+        error_log('Error executing DELETE query: ' . implode(', ', $stmt->errorInfo()));
+        return false;
     }
+
+    return true;
+}
 
     public function getAllWishlistsByUserId($userId)
     {

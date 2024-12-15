@@ -761,6 +761,24 @@ switch ($firstLayerRoute) {
                 }
                 break;
 
+            case 'sms':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $adminController->getAllSms();
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->createSms($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->updateSms($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->deleteSms($input['id']);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
             default:
                 http_response_code(404);
                 echo json_encode(['message' => 'Admin route not found']);

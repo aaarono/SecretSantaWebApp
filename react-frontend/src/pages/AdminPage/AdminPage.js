@@ -26,12 +26,20 @@ const AdminPage = () => {
     };
 
     const handleDelete = (id) => {
+        if (!id) {
+            console.error('No ID provided for deletion');
+            return;
+        }
+
         api.delete(`/api/${activeTable}/${id}`)
             .then(() => {
                 console.log('Deleted item:', id);
                 fetchData(activeTable);
             })
-            .catch(error => console.error('Error deleting item:', error));
+            .catch((error) => {
+                console.error('Error deleting item:', error);
+                alert('Failed to delete item. Please try again.');
+            });
     };
 
     const handleSubmit = (e) => {
@@ -64,18 +72,41 @@ const AdminPage = () => {
                             <td key={index}>{value}</td>
                         ))}
                         <td>
-                            <button onClick={() => handleDelete(item.id || item.uuid)}>Delete</button>
-                            <button onClick={() => {
-                                setFormData(item);
-                                setIsUpdate(true);
-                                setModalIsOpen(true);
-                            }}>Update</button>
+                            <button
+                                onClick={() => handleDelete(item.id || item.uuid)}
+                            >
+                                Delete
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setFormData(item);
+                                    setIsUpdate(true);
+                                    setModalIsOpen(true);
+                                }}
+                            >
+                                Update
+                            </button>
                         </td>
                     </tr>
                 ))}
             </tbody>
         </table>
     );
+
+    const renderModalFields = () => {
+        if (data.length === 0) return null;
+
+        return Object.keys(data[0]).map((key) => (
+            <div key={key}>
+                <label>{key}</label>
+                <input
+                    type="text"
+                    value={formData[key] || ''}
+                    onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+                />
+            </div>
+        ));
+    };
 
     return (
         <>
@@ -97,13 +128,13 @@ const AdminPage = () => {
 
                 <div className="section-container">
                     <div className="admin-table">
-                        <Button 
-                            text={`Add ${activeTable}`} 
+                        <Button
+                            text={`Add ${activeTable}`}
                             onClick={() => {
                                 setFormData({});
                                 setIsUpdate(false);
                                 setModalIsOpen(true);
-                            }} 
+                            }}
                         />
                         {renderTable()}
                     </div>
@@ -113,16 +144,7 @@ const AdminPage = () => {
             {modalIsOpen && (
                 <div className="modal">
                     <form onSubmit={handleSubmit}>
-                        {Object.keys(formData || {}).map((key) => (
-                            <div key={key}>
-                                <label>{key}</label>
-                                <input
-                                    type="text"
-                                    value={formData[key] || ''}
-                                    onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                                />
-                            </div>
-                        ))}
+                        {renderModalFields()}
                         <button type="submit">Save</button>
                         <button type="button" onClick={() => setModalIsOpen(false)}>Cancel</button>
                     </form>

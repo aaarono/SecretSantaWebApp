@@ -7,6 +7,7 @@ use Secret\Santa\Models\GameModel;
 use Secret\Santa\Models\WishlistModel;
 use Secret\Santa\Models\PlayerGameModel;
 use Secret\Santa\Models\PairModel;
+use Secret\Santa\Models\SmsModel;
 
 class AdminController
 {
@@ -23,6 +24,73 @@ class AdminController
         $this->wishlistModel = new WishlistModel();
         $this->playerGameModel = new PlayerGameModel();
         $this->pairModel = new PairModel();
+        $this->smsModel = new SmsModel();
+
+    }
+
+    //SMS CRUD operations
+    public function getAllSms()
+    {
+        return json_encode($this->smsModel->getAllSms());
+    }
+
+    public function createSms($data)
+    {
+        $sanitizedData = [
+            'game_id' => filter_var($data['game_id'] ?? '', FILTER_SANITIZE_STRING),
+            'login'   => filter_var($data['login'] ?? '', FILTER_SANITIZE_STRING),
+            'message' => filter_var($data['message'] ?? '', FILTER_SANITIZE_STRING),
+        ];
+
+        if (!$sanitizedData['game_id'] || !$sanitizedData['login'] || !$sanitizedData['message']) {
+            return json_encode(['status' => 'error', 'message' => 'Missing required fields']);
+        }
+
+        $createSuccess = $this->smsModel->createSms(
+            $sanitizedData['game_id'],
+            $sanitizedData['login'],
+            $sanitizedData['message']
+        );
+
+        if ($createSuccess) {
+            return json_encode(['status' => 'success', 'message' => 'SMS created successfully']);
+        } else {
+            return json_encode(['status' => 'error', 'message' => 'Failed to create SMS']);
+        }
+    }
+
+    public function updateSms($data)
+    {
+        $sanitizedData = [
+            'id'      => $data['id'] ?? null,
+            'message' => filter_var($data['message'] ?? '', FILTER_SANITIZE_STRING),
+        ];
+
+        if (!$sanitizedData['id'] || !$sanitizedData['message']) {
+            return json_encode(['status' => 'error', 'message' => 'Missing required fields']);
+        }
+
+        $updateSuccess = $this->smsModel->updateSms(
+            $sanitizedData['id'],
+            $sanitizedData['message']
+        );
+
+        if ($updateSuccess) {
+            return json_encode(['status' => 'success', 'message' => 'SMS updated successfully']);
+        } else {
+            return json_encode(['status' => 'error', 'message' => 'Failed to update SMS']);
+        }
+    }
+
+    public function deleteSms($id)
+    {
+        $deleteSuccess = $this->smsModel->deleteSms($id);
+
+        if ($deleteSuccess) {
+            return json_encode(['status' => 'success', 'message' => 'SMS deleted successfully']);
+        } else {
+            return json_encode(['status' => 'error', 'message' => 'Failed to delete SMS']);
+        }
     }
 
     // User CRUD operations
@@ -181,13 +249,13 @@ class AdminController
     public function createWishlist($data)
     {
         $sanitizedData = [
-            'Name'        => filter_var($data['Name'] ?? '', FILTER_SANITIZE_STRING),
-            'Description' => filter_var($data['Description'] ?? '', FILTER_SANITIZE_STRING),
-            'URL'         => filter_var($data['URL'] ?? '', FILTER_SANITIZE_URL),
-            'Login'       => filter_var($data['Login'] ?? '', FILTER_SANITIZE_STRING)
+            'name'        => filter_var($data['name'] ?? '', FILTER_SANITIZE_STRING),
+            'description' => filter_var($data['description'] ?? '', FILTER_SANITIZE_STRING),
+            'url'         => filter_var($data['url'] ?? '', FILTER_SANITIZE_URL),
+            'login'       => filter_var($data['login'] ?? '', FILTER_SANITIZE_STRING)
         ];
 
-        $createSuccess = $this->wishlistModel->createWishlist($sanitizedData);
+        $createSuccess = $this->wishlistModel->createWishlist($sanitizedData['name'], $sanitizedData['description'], $sanitizedData['url'], $sanitizedData['login']);
 
         if ($createSuccess) {
             return json_encode(['status' => 'success', 'message' => 'Wishlist created successfully']);
@@ -200,13 +268,13 @@ class AdminController
     {
         $sanitizedData = [
             'id'          => $data['id'] ?? null,
-            'Name'        => filter_var($data['Name'] ?? '', FILTER_SANITIZE_STRING),
-            'Description' => filter_var($data['Description'] ?? '', FILTER_SANITIZE_STRING),
-            'URL'         => filter_var($data['URL'] ?? '', FILTER_SANITIZE_URL),
-            'Login'       => filter_var($data['Login'] ?? '', FILTER_SANITIZE_STRING)
+            'name'        => filter_var($data['name'] ?? '', FILTER_SANITIZE_STRING),
+            'description' => filter_var($data['description'] ?? '', FILTER_SANITIZE_STRING),
+            'url'         => filter_var($data['url'] ?? '', FILTER_SANITIZE_URL),
+            'login'       => filter_var($data['login'] ?? '', FILTER_SANITIZE_STRING)
         ];
 
-        $updateSuccess = $this->wishlistModel->updateWishlist($sanitizedData);
+        $updateSuccess = $this->wishlistModel->updateWishlist($sanitizedData['id'], $sanitizedData['name'], $sanitizedData['description'], $sanitizedData['url'], $sanitizedData['login']);
 
         if ($updateSuccess) {
             return json_encode(['status' => 'success', 'message' => 'Wishlist updated successfully']);
@@ -216,15 +284,18 @@ class AdminController
     }
 
     public function deleteWishlist($id)
-    {
-        $deleteSuccess = $this->wishlistModel->deleteWishlist($id);
+{
+    $deleteSuccess = $this->wishlistModel->deleteWishlist($id);
 
-        if ($deleteSuccess) {
-            return json_encode(['status' => 'success', 'message' => 'Wishlist deleted successfully']);
-        } else {
-            return json_encode(['status' => 'error', 'message' => 'Failed to delete wishlist']);
-        }
+    if ($deleteSuccess) {
+        error_log("Wishlist with ID {$id} deleted successfully.");
+        return json_encode(['status' => 'success', 'message' => 'Wishlist deleted successfully']);
+    } else {
+        error_log("Failed to delete wishlist with ID {$id}.");
+        return json_encode(['status' => 'error', 'message' => 'Failed to delete wishlist']);
     }
+}
+
 
     // Player_Game CRUD operations
     public function getAllPlayerGame()
