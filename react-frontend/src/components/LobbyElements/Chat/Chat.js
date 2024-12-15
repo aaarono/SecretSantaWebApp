@@ -1,22 +1,9 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
-import useWebSocket from '../../../hooks/useWebSocket';
 
-const Chat = ({ gameUuid }) => {
+const Chat = ({ gameUuid, sendMessage, messages = [] }) => {
   const { user } = useContext(UserContext);
-  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-
-  const handleWebSocketMessage = useCallback(
-    (message) => {
-      if (message.type === 'chat_message' && message.gameUuid === gameUuid) {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      }
-    },
-    [gameUuid],
-  );
-
-  const sendMessage = useWebSocket(handleWebSocketMessage);
 
   const handleSendMessage = () => {
     if (inputMessage.trim() !== '') {
@@ -35,7 +22,7 @@ const Chat = ({ gameUuid }) => {
       <div className="chat-messages">
         {messages.map((msg, index) => (
           <div key={index}>
-            <strong>{msg.sender}:</strong> {msg.content}
+            <strong>{msg.login}:</strong> {msg.message}
           </div>
         ))}
       </div>

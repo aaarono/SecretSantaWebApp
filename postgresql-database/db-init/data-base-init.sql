@@ -54,3 +54,13 @@ CREATE TABLE "Pair" (
     FOREIGN KEY (gifter_id) REFERENCES "User"(login),
     FOREIGN KEY (receiver_id) REFERENCES "User"(login)
 );
+
+CREATE TABLE "SMS" (
+    id SERIAL PRIMARY KEY,
+    game_id UUID NOT NULL,
+    login VARCHAR(255) NOT NULL,
+    message_encrypted TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (game_id) REFERENCES "Game"(UUID) ON DELETE CASCADE,
+    FOREIGN KEY (login) REFERENCES "User"(login) ON DELETE CASCADE
+);
