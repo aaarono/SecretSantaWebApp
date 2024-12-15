@@ -96,8 +96,8 @@ const LobbyPage = () => {
         case "chat_message":
           if (message.gameUuid === gameUuid) {
             const newMessage = {
-              login: message.sender,
-              message: message.content,
+              login: message.login,
+              message: message.message,
             };
             setChatMessages((prevMessages) => [...prevMessages, newMessage]);
           }
