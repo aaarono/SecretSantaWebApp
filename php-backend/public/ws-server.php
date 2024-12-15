@@ -114,8 +114,31 @@ class Lobby implements MessageComponentInterface
                 } else {
                     $from->send(json_encode(['type' => 'error', 'message' => 'Invalid chat message data']));
                 }
-                break;
-
+            break;
+            case 'start_game':
+                $uuid = $data['uuid'] ?? null;
+                if (!$uuid) {
+                    $from->send(json_encode(['type' => 'error', 'message' => 'Game UUID is required to start']));
+                    break;
+                }
+            
+                // Проверяем авторизацию пользователя
+                if (!isset($from->userLogin)) {
+                    $from->send(json_encode(['type' => 'error', 'message' => 'User not authenticated']));
+                    break;
+                }
+            
+                // Отправляем всем сообщение о том, что игра началась
+                WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
+                    'type' => 'game_started',
+                    'uuid' => $uuid,
+                    'status' => 'running'
+                ]);
+            
+                // Отправляем инициатору подтверждение
+                $from->send(json_encode(['type' => 'info', 'message' => 'Game started successfully']));
+            break;
+                
             default:
                 error_log("Unknown message type: {$data['type']}");
                 $from->send(json_encode(['type' => 'error', 'message' => 'Unknown message type']));

@@ -149,24 +149,31 @@ class GameController
         if (!$userId) {
             return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
         }
-
+    
         $game = $this->model->getGameById($uuid);
         if (!$game) {
             return json_encode(['status' => 'error', 'message' => 'Game not found']);
         }
-
+    
         if ($game['creator_login'] !== $userId) {
             return json_encode(['status' => 'error', 'message' => 'Only the creator can start the game']);
         }
-
+    
         $success = $this->model->startGame($uuid);
         if ($success) {
-            return json_encode(['status' => 'success', 'message' => 'Game started successfully']);
+            // Генерация случайных пар
+            $pairController = new \Secret\Santa\Controllers\PairController();
+            $pairsResponse = json_decode($pairController->generateRandomPairs($uuid), true);
+    
+            if ($pairsResponse['status'] !== 'success') {
+                return json_encode(['status' => 'error', 'message' => 'Failed to generate pairs']);
+            }       
+            return json_encode(['status' => 'success', 'message' => 'Game started successfully', 'pairs' => $pairsResponse['pairs']]);
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to start game']);
         }
     }
-
+    
     public function getGameCreator($uuid)
     {
         $userId = $this->getUserIdFromSession();

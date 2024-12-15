@@ -67,6 +67,13 @@ class PairModel
         $stmt->bindParam(':game_id', $gameId);
         return $stmt->execute();
     }
+
+    public function getPairForGifter($gameId, $gifterId) {
+        $stmt = $this->conn->prepare("SELECT * FROM \"Pair\" WHERE game_id = :game_id AND gifter_id = :gifter_id");
+        $stmt->execute(['game_id' => $gameId, 'gifter_id' => $gifterId]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+    
 }
 
 ?>

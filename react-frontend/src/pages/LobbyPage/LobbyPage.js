@@ -3,7 +3,6 @@ import React, {
   useState,
   useContext,
   useCallback,
-  response,
 } from "react";
 import { useParams } from "react-router-dom";
 import "../../index.css";
@@ -18,6 +17,7 @@ import Chat from "../../components/LobbyElements/Chat/Chat";
 import { UserContext } from "../../components/contexts/UserContext";
 import useWebSocket from "../../hooks/useWebSocket";
 import api from "../../services/api/api";
+import ActiveGameWindow from "../../components/LobbyElements/GameWindow/ActiveGameWindow";
 
 const LobbyPage = () => {
   const { gameUuid } = useParams();
@@ -29,6 +29,7 @@ const LobbyPage = () => {
   const [gameEndsAt, setGameEndsAt] = useState(null);
   const [creatorLogin, setCreatorLogin] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
+  const [gameStatus, setGameStatus] = useState("pending"); // Новое состояние для статуса игры
 
   const login = user.username;
 
@@ -37,12 +38,10 @@ const LobbyPage = () => {
     setPlayerCount(newPlayers.length);
   }, []);
 
-  // Функция для установки или обновления статуса конкретного игрока по логину
   const setPlayerStatus = useCallback((playerLogin, isOnline = true) => {
     setPlayers((prevPlayers) => {
       const playerIndex = prevPlayers.findIndex((p) => p.login === playerLogin);
       if (playerIndex !== -1) {
-        // Обновляем статус существующего игрока
         const updatedPlayers = [...prevPlayers];
         updatedPlayers[playerIndex] = {
           ...updatedPlayers[playerIndex],
@@ -50,7 +49,6 @@ const LobbyPage = () => {
         };
         return updatedPlayers;
       } else {
-        // Если игрока нет в списке, добавим его с минимальными данными
         return [...prevPlayers, { login: playerLogin, is_online: isOnline }];
       }
     });
@@ -58,26 +56,25 @@ const LobbyPage = () => {
 
   const handleWebSocketMessage = useCallback(
     (message) => {
-      console.log("WebSocket message:", message);
+      //console.log("WebSocket message:", message);
 
       switch (message.type) {
         case "welcome":
-          console.log("Received welcome message from server.");
+          //console.log("Received welcome message from server.");
           break;
         case "auth_success":
-          console.log("User authorized via WebSocket");
+          //console.log("User authorized via WebSocket");
           setIsAuthorized(true);
           if (gameUuid) {
             sendMessage({ type: "join_game", uuid: gameUuid, login });
-            console.log(`Subscribed to game with ID: ${gameUuid}`);
+            //console.log(`Subscribed to game with ID: ${gameUuid}`);
           }
           break;
         case "player_joined":
-          // Когда новый игрок присоединяется, устанавливаем его в онлайн
           setPlayerStatus(message.login, true);
           break;
         case "joined_game":
-          console.log("joined_game message received:", message);
+         //  console.log("joined_game message received:", message);
           if (message.players && Array.isArray(message.players)) {
             const initialPlayers = message.players.map((plLogin) => ({
               login: plLogin,
@@ -86,7 +83,7 @@ const LobbyPage = () => {
             updatePlayerList(initialPlayers);
             setChatMessages(message.messages);
           } else {
-            console.warn("joined_game message received without players array");
+            //console.warn("joined_game message received without players array");
           }
           break;
         case "player_left":
@@ -105,16 +102,18 @@ const LobbyPage = () => {
             setChatMessages((prevMessages) => [...prevMessages, newMessage]);
           }
           break;
+        case "game_started":
+          setGameStatus("running");
+          break;
         default:
-          console.warn("Unknown WebSocket message type:", message.type);
+          //console.warn("Unknown WebSocket message type:", message.type);
       }
     },
     [gameUuid, login, updatePlayerList, setPlayerStatus]
   );
 
   const handleWebSocketOpen = useCallback((socket) => {
-    console.log("WebSocket connected for lobby");
-    // НЕ відправляємо тут нічого, auth вже відправляється у useWebSocket
+    //console.log("WebSocket connected for lobby");
   }, []);
 
   const sendMessage = useWebSocket(handleWebSocketMessage, handleWebSocketOpen);
@@ -130,41 +129,40 @@ const LobbyPage = () => {
             console.log("Game data:", data.game);
             setGameName(data.game.name || "Unnamed Game");
             setGameEndsAt(data.game.endsat || "");
+            setGameStatus(data.game.status); // Устанавливаем статус игры из полученных данных
 
-            // Считаем, что игроки возвращаются уже как [{ login: "...", is_gifted: ... }, ...]
-            // Присвоим им is_online: true по умолчанию, или сделайте логику проверки на онлайность отдельно
-            const fullPlayers = (data.game.players || []).map(p => ({
+            const fullPlayers = (data.game.players || []).map((p) => ({
               ...p,
-              is_online: true // Или определяйте логику иначе
+              is_online: true,
             }));
             updatePlayerList(fullPlayers);
-
-            // Устанавливаем логин создателя из данных
             setCreatorLogin(data.game.creator_login);
           }
         })
         .catch((err) => console.error("Error fetching game data:", err));
     }
-
-    
   }, [gameUuid, updatePlayerList]);
 
-
-  // const handleBeforeUnload = async () => {
-  //   if (gameUuid && login) {
-  //     sendMessage({
-  //       type: 'leave_game',
-  //       uuid: gameUuid,
-  //       login,
-  //     });
-  //   }
-  // };
-
-  // useEffect(() => {
-
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
-
-  // });
+  let windowToRender;
+  if (gameStatus === "running" || gameStatus === "ended") {
+    // Если статус running – показываем активное окно игры
+    windowToRender = <ActiveGameWindow gameUuid={gameUuid} gameStatus={gameStatus}/>;
+  } else {
+    // Если игра еще не запущена (pending):
+    if (creatorLogin && creatorLogin === login) {
+      windowToRender = (
+        <StartGameWindow
+          isAuthorized={isAuthorized}
+          playersCount={playerCount}
+          gameUuid={gameUuid}
+          api={api}
+          sendMessage={sendMessage}
+        />
+      );
+    } else {
+      windowToRender = <WaitingGameWindow isAuthorized={isAuthorized} />;
+    }
+  }
 
   return (
     <div className="lobby-page-container">
@@ -172,17 +170,7 @@ const LobbyPage = () => {
       <GameBanner gameName={gameName} playerCount={playerCount} />
       <PlayersList players={players} creatorLogin={creatorLogin} />
       <DeadlineTimer endsAt={gameEndsAt} />
-      {creatorLogin ? (
-        <StartGameWindow
-          isAuthorized={isAuthorized}
-          playersCount={playerCount}
-          gameUuid={gameUuid}
-          api={api}
-          sendMessage={sendMessage} // Передаем WebSocket функцию
-        />
-      ) : (
-        <WaitingGameWindow isAuthorized={isAuthorized} />
-      )}
+      {windowToRender}
       <Chat
         gameUuid={gameUuid}
         sendMessage={sendMessage}

@@ -8,7 +8,7 @@ const StartGameWindow = ({ isAuthorized, playersCount, gameUuid, api, sendMessag
 
   const handleStartGame = async () => {
     try {
-      const response = await api.put('/game/update', {
+      const response = await api.post('/game/start-game', {
         uuid: gameUuid,
         status: 'running',
       });
@@ -16,7 +16,7 @@ const StartGameWindow = ({ isAuthorized, playersCount, gameUuid, api, sendMessag
         alert('Game started successfully!');
         // Отправка уведомления через WebSocket
         sendMessage({
-          type: 'game_started',
+          type: 'start_game',
           uuid: gameUuid,
         });
       } else {

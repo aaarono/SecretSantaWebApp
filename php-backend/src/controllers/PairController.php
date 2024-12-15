@@ -22,6 +22,18 @@ class PairController {
         }
     }
 
+    
+    private function getUserIdFromSession()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['user']['username'])) {
+            return null;
+        }
+        return $_SESSION['user']['username'];
+    }
+
     public function createPair($gameId, $gifterId, $receiverId) {
         $this->checkCsrfToken();
         $success = $this->model->createPair($gameId, $gifterId, $receiverId);
@@ -97,6 +109,33 @@ class PairController {
 
         return json_encode(['status' => 'success', 'message' => 'Random pairs created successfully', 'pairs' => $pairs]);
     }
+
+    public function getUserPairForGame($uuid) {
+        $userId = $this->getUserIdFromSession();
+        if (!$userId) {
+            http_response_code(401);
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+    
+        $pair = $this->model->getPairForGifter($uuid, $userId);
+        if (!$pair) {
+            return json_encode(['status' => 'error', 'message' => 'No pair found for this user in the given game']);
+        }
+    
+        // Получаем статус подарка для текущего пользователя и его получателя
+        $playerGameModel = new \Secret\Santa\Models\PlayerGameModel();
+        $userStatus = $playerGameModel->getPlayerStatus($userId, $uuid);
+        $receiverStatus = $playerGameModel->getPlayerStatus($pair['receiver_id'], $uuid);
+    
+        return json_encode([
+            'status' => 'success',
+            'gifter' => $userId,
+            'receiver' => $pair['receiver_id'],
+            'user_is_gifted' => $userStatus['is_gifted'] ?? false,
+            'receiver_is_gifted' => $receiverStatus['is_gifted'] ?? false
+        ]);
+    }
+    
 }
 
 ?>

@@ -9,6 +9,7 @@ use Secret\Santa\Controllers\WishlistController;
 use Secret\Santa\Controllers\PlayerGameController;
 use Secret\Santa\Controllers\AdminController;
 use Secret\Santa\Controllers\SmsController;
+use Secret\Santa\Controllers\PairController;
 
 // Настройка CORS
 $allowed_origins = ["http://localhost:3000"];
@@ -88,6 +89,7 @@ $thirdLayerRoute = $uri[2] ?? '';
 $authController = new AuthController();
 $userController = new UserController();
 $gameController = new GameController();
+$pairController = new PairController();
 $wishlistController = new WishlistController();
 $playerGameController = new PlayerGameController();
 $adminController = new AdminController();
@@ -340,6 +342,24 @@ switch ($firstLayerRoute) {
                     echo json_encode(['message' => 'Invalid request method']);
                 }
                 break;
+                
+            case 'pairs':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $uuid = $_GET['uuid'] ?? null;
+    
+                    if (!$uuid) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                        break;
+                    }
+    
+                    // Возвращаем все пары для данной игры
+                    echo $pairController->getPairsByGameId($uuid);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+            break; 
 
             case 'usergames':
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -500,7 +520,44 @@ switch ($firstLayerRoute) {
                             echo json_encode(['message' => 'Invalid request method']);
                         }
                         break;
-
+                    
+                        case 'pair':
+                            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                                $uuid = $_GET['uuid'] ?? null;
+                        
+                                if (!$uuid) {
+                                    http_response_code(400);
+                                    echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                                    break;
+                                }
+                        
+                                // Возвращаем пару текущего пользователя для данной игры
+                                echo $pairController->getUserPairForGame($uuid);
+                            } else {
+                                http_response_code(405);
+                                echo json_encode(['message' => 'Invalid request method']);
+                            }
+                        break;         
+                        case 'gift-presented':
+                            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                                $input = json_decode(file_get_contents('php://input'), true);
+                                $uuid = $input['uuid'] ?? null;
+                                $receiver = $input['receiver'] ?? null;
+                        
+                                if (!$uuid || !$receiver) {
+                                    http_response_code(400);
+                                    echo json_encode(['status' => 'error', 'message' => 'UUID and receiver are required']);
+                                    break;
+                                }
+                        
+                                // Обрабатываем логику подарка
+                                $playerGameController = new PlayerGameController();
+                                echo $playerGameController->markGiftPresented($uuid, $receiver);
+                            } else {
+                                http_response_code(405);
+                                echo json_encode(['message' => 'Invalid request method']);
+                            }
+                        break;               
                     default:
                         http_response_code(404);
                         echo json_encode(['message' => 'Player route not found']);

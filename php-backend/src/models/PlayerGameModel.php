@@ -71,4 +71,20 @@ class PlayerGameModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getPlayerStatus($login, $uuid) {
+        $stmt = $this->conn->prepare("SELECT is_gifted FROM \"Player_Game\" WHERE login = :login AND UUID = :uuid");
+        $stmt->execute(['login' => $login, 'uuid' => $uuid]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function countNotGiftedInGame($uuid)
+    {
+        $query = 'SELECT COUNT(*) as cnt FROM "Player_Game" WHERE UUID = :uuid AND is_gifted = false';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)$result['cnt'];
+    }
 }

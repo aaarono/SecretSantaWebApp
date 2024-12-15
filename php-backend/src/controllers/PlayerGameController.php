@@ -113,4 +113,32 @@ class PlayerGameController {
             return json_encode(['status' => 'error', 'message' => 'Failed to remove player from the game']);
         }
     }
+    
+    public function markGiftPresented($uuid, $receiver) {
+        $this->checkCsrfToken();
+        $userId = $this->getUserIdFromSession();
+        if (!$userId) {
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+    
+        // Обновляем статус подарка для receiver
+        $updated = $this->model->updatePlayerGame($receiver, $uuid, true);
+        if (!$updated) {
+            return json_encode(['status' => 'error', 'message' => 'Failed to update gift status']);
+        }
+    
+        // Проверяем, есть ли еще непреподнесённые подарки
+        $notGiftedCount = $this->model->countNotGiftedInGame($uuid);
+    
+        $gameEnded = false;
+    
+        if ($notGiftedCount === 0) {
+            // Все подарки подарены, завершаем игру
+            $gameModel = new \Secret\Santa\Models\GameModel();
+            $gameModel->updateGameStatus($uuid, 'ended');
+            $gameEnded = true;
+        }
+    
+        return json_encode(['status' => 'success', 'game_ended' => $gameEnded]);
+    }    
 }
