@@ -75,11 +75,6 @@ const LobbyPage = () => {
         case "player_joined":
           // Когда новый игрок присоединяется, устанавливаем его в онлайн
           setPlayerStatus(message.login, true);
-          setPlayers((prev) => {
-            const newPlayers = [...prev, message.login];
-            setPlayerCount(newPlayers.length);
-            return newPlayers;
-          });
           break;
         case "joined_game":
           console.log("joined_game message received:", message);
@@ -134,7 +129,7 @@ const LobbyPage = () => {
           if (data.status === "success" && data.game) {
             console.log("Game data:", data.game);
             setGameName(data.game.name || "Unnamed Game");
-            setGameEndsAt(data.game.endsAt || "");
+            setGameEndsAt(data.game.endsat || "");
 
             // Считаем, что игроки возвращаются уже как [{ login: "...", is_gifted: ... }, ...]
             // Присвоим им is_online: true по умолчанию, или сделайте логику проверки на онлайность отдельно
