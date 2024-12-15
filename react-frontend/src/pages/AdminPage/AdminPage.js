@@ -4,6 +4,7 @@ import Button from '../../components/ui/Button/Button';
 import Logo from '../../components/Logo/Logo';
 import '../../index.css';
 import './AdminPage.css';
+import api from '../../services/api/api';
 
 const AdminPage = () => {
   const [activeTable, setActiveTable] = useState('users');
@@ -16,20 +17,20 @@ const AdminPage = () => {
   }, [activeTable]);
 
   const fetchData = (table) => {
-    axios.get(`/api/${table}`)
+    api.get(`/api/${table}`)
       .then(response => setData(response.data))
       .catch(error => console.error(error));
   };
 
   const handleDelete = (id) => {
-    axios.delete(`/api/${activeTable}/${id}`)
+    api.delete(`/api/${activeTable}/${id}`)
       .then(() => fetchData(activeTable))
       .catch(error => console.error(error));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post(`/api/${activeTable}`, formData)
+    api.post(`/api/${activeTable}`, formData)
       .then(() => {
         fetchData(activeTable);
         setModalIsOpen(false);

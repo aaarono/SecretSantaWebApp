@@ -7,6 +7,7 @@ import GameBanner from '../../components/LobbyElements/GameBanner/GameBanner';
 import PlayersList from '../../components/LobbyElements/PlayersList/PlayersList';
 import DeadlineTimer from '../../components/LobbyElements/DeadlineTimer/DeadlineTimer';
 import WaitingGameWindow from '../../components/LobbyElements/GameWindow/WaitingGameWindow';
+import Chat from '../../components/LobbyElements/Chat/Chat';
 import { UserContext } from '../../components/contexts/UserContext';
 import useWebSocket from '../../hooks/useWebSocket';
 
@@ -97,6 +98,7 @@ const LobbyPage = () => {
       <PlayersList players={players} />
       <DeadlineTimer endsAt={gameEndsAt} />
       <WaitingGameWindow isAuthorized={isAuthorized} />
+      <Chat gameUuid={gameUuid} />
     </div>
   );
 };
