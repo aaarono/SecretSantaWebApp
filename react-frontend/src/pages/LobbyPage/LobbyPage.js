@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useCallback, response } from 'react';
 import { useParams } from 'react-router-dom';
 import '../../index.css';
 import './LobbyPage.css';
@@ -7,9 +7,11 @@ import GameBanner from '../../components/LobbyElements/GameBanner/GameBanner';
 import PlayersList from '../../components/LobbyElements/PlayersList/PlayersList';
 import DeadlineTimer from '../../components/LobbyElements/DeadlineTimer/DeadlineTimer';
 import WaitingGameWindow from '../../components/LobbyElements/GameWindow/WaitingGameWindow';
+import StartGameWindow from '../../components/LobbyElements/GameWindow/StartGameWindow';
 import Chat from '../../components/LobbyElements/Chat/Chat';
 import { UserContext } from '../../components/contexts/UserContext';
 import useWebSocket from '../../hooks/useWebSocket';
+import api from '../../services/api/api';
 
 const LobbyPage = () => {
   const { gameUuid } = useParams();
@@ -19,6 +21,7 @@ const LobbyPage = () => {
   const [gameName, setGameName] = useState('');
   const [playerCount, setPlayerCount] = useState(0);
   const [gameEndsAt, setGameEndsAt] = useState(null);
+  const [gameCreator, setGameCreator] = useState(false);
 
   const login = user.username;
 
@@ -88,8 +91,36 @@ const LobbyPage = () => {
         })
         .catch((err) => console.error('Error fetching game data:', err));
     }
+  
+    fetchGameCreator();
+
+    // Слушаем событие перед закрытием страницы
+  window.addEventListener('beforeunload', handleBeforeUnload);
+
+  // Убираем слушатель при размонтировании компонента
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
   }, [gameUuid]);
   
+
+  const fetchGameCreator = async () => {
+    const response = await api.get(`/game/player/creator?uuid=${gameUuid}`);
+    console.log('Response from server:', response.creator);
+    if (response.status === 'success') {
+      setGameCreator(response.creator);
+    }
+  }; 
+
+  const handleBeforeUnload = () => {
+    if (gameUuid && login) {
+      sendMessage({
+        type: 'player_left',
+        uuid: gameUuid,
+        login,
+      });
+    }
+  };
 
   return (
     <div className="lobby-page-container">
@@ -97,7 +128,7 @@ const LobbyPage = () => {
       <GameBanner gameName={gameName} playerCount={playerCount} />
       <PlayersList players={players} />
       <DeadlineTimer endsAt={gameEndsAt} />
-      <WaitingGameWindow isAuthorized={isAuthorized} />
+      {gameCreator ? <StartGameWindow isAuthorized={isAuthorized} /> : <WaitingGameWindow isAuthorized={isAuthorized} />}
       <Chat gameUuid={gameUuid} />
     </div>
   );
