@@ -9,10 +9,12 @@
 
 .admin-section {
   grid-area: admin-section;
+  height: 470px;
 }
 
 .admin-table {
   grid-area: admin-table;
+  height: 470px;
 }
 
 .admin-section h1 {
@@ -43,9 +45,62 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  background: var(--main-bg-dark);
+  color: var(--text-dark);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  width: 350px;
+}
+
+.modal form {
+  position: relative;
+  font-size: 18px;
+}
+
+.modal input {
+  position: absolute;
+  right: 0;
+  padding: 0 10px;
+  background: var(--secondary-bg-dark);
+  color: var(--text-input-dark);
+  font-size: 16px;
+}
+
+.modal button {
+  margin-top: 10px;
+  width: 100%;
+  background: var(--main-element-dark);
+  color: var(--text-dark);
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: var(--main-element-dark);
+  color: var(--text-dark);
+}
+
+tbody {
+  background-color: var(--main-bg-dark);
+  color: var(--text-dark);
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--text-input-dark);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody td {
+  padding: 10px;
 }
