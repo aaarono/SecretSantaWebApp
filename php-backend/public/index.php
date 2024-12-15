@@ -7,6 +7,7 @@ use Secret\Santa\Controllers\UserController;
 use Secret\Santa\Controllers\GameController;
 use Secret\Santa\Controllers\WishlistController;
 use Secret\Santa\Controllers\PlayerGameController;
+use Secret\Santa\Controllers\AdminController;
 
 // Настройка CORS
 $allowed_origins = ["http://localhost:3000"];
@@ -22,14 +23,13 @@ if (in_array($origin, $allowed_origins)) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-        header("Access-Control-Allow-Methods: DELETE, GET, POST, OPTIONS");
+        header("Access-Control-Allow-Methods: DELETE, GET, POST, OPTIONS, PUT");
     }
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
     }
     exit(0);
 }
-
 
 header('Content-Type: application/json');
 
@@ -89,8 +89,8 @@ $thirdLayerRoute = $uri[2] ?? '';
 $authController = new AuthController();
 $userController = new UserController();
 $gameController = new GameController();
-$wishlistController = new WishlistController();
 $playerGameController = new PlayerGameController();
+$adminController = new AdminController();
 
 // Обработка маршрутов
 switch ($firstLayerRoute) {
@@ -144,7 +144,6 @@ switch ($firstLayerRoute) {
                 }
                 break;
 
-
             default:
                 http_response_code(404);
                 echo json_encode(['message' => 'Auth route not found']);
@@ -186,6 +185,25 @@ switch ($firstLayerRoute) {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $userId = $_POST['user_id'] ?? null;
                     echo $userController->deleteUserImage($userId);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'get-data':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $userController->getUserData();
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'update-data':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $data = json_decode(file_get_contents('php://input'), true);
+                    echo $userController->updateUserData($data);
                 } else {
                     http_response_code(405);
                     echo json_encode(['message' => 'Invalid request method']);
@@ -330,6 +348,7 @@ switch ($firstLayerRoute) {
                     echo json_encode(['message' => 'Invalid request method']);
                 }
                 break;
+
             case 'create':
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $input = json_decode(file_get_contents('php://input'), true);
@@ -405,43 +424,38 @@ switch ($firstLayerRoute) {
                     echo json_encode(['message' => 'Invalid request method']);
                 }
                 break;
+
             case 'player':
-                    switch ($thirdLayerRoute) {
-                        case 'add':
-                            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                                $input = json_decode(file_get_contents('php://input'), true);
-                                $login = $input['login'] ?? null;
-                                $uuid = $input['uuid'] ?? null;
-                
-                                if (!$uuid) {
-                                    http_response_code(400);
-                                    echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
-                                    break;
-                                }
-                
-                                echo $playerGameController->addPlayerToGame($login, $uuid, null);
-                            } else {
-                                http_response_code(405);
-                                echo json_encode(['message' => 'Invalid request method']);
+                switch ($thirdLayerRoute) {
+                    case 'add':
+                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                            $input = json_decode(file_get_contents('php://input'), true);
+                            $login = $input['login'] ?? null;
+                            $uuid = $input['uuid'] ?? null;
+
+                            if (!$uuid) {
+                                http_response_code(400);
+                                echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                                break;
                             }
-                            break;
-                
-                        case 'remove':
-                            if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-                                $input = json_decode(file_get_contents('php://input'), true);
-                                $login = $input['login'] ?? null;
-                                $uuid = $input['uuid'] ?? null;
-                
-                                if (!$uuid) {
-                                    http_response_code(400);
-                                    echo json_encode(['status' => 'error', 'message' => 'UUID are required']);
-                                    break;
-                                }
-                
-                                echo $playerGameController->removePlayerFromGame($uuid, $login);
-                            } else {
-                                http_response_code(405);
-                                echo json_encode(['message' => 'Invalid request method']);
+
+                            echo $playerGameController->addPlayerToGame($login, $uuid, null);
+                        } else {
+                            http_response_code(405);
+                            echo json_encode(['message' => 'Invalid request method']);
+                        }
+                        break;
+
+                    case 'remove':
+                        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                            $input = json_decode(file_get_contents('php://input'), true);
+                            $login = $input['login'] ?? null;
+                            $uuid = $input['uuid'] ?? null;
+
+                            if (!$uuid) {
+                                http_response_code(400);
+                                echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                                break;
                             }
                             break;
                         
@@ -477,21 +491,128 @@ switch ($firstLayerRoute) {
                                 http_response_code(405);
                                 echo json_encode(['message' => 'Invalid request method']);
                             }
-                            break;
-                
-                        default:
-                            http_response_code(404);
-                            echo json_encode(['message' => 'Player route not found']);
-                            break;
-                    }
-                    break;
-                
+
+                            echo $playerGameController->getPlayersByGameId($uuid);
+                        } else {
+                            http_response_code(405);
+                            echo json_encode(['message' => 'Invalid request method']);
+                        }
+                        break;
+
+                    default:
+                        http_response_code(404);
+                        echo json_encode(['message' => 'Player route not found']);
+                        break;
+                }
+                break;
+
             default:
                 http_response_code(404);
                 echo json_encode(['message' => 'Game route not found']);
                 break;
         }
         break;
+
+        case 'api':
+        checkSession();
+        switch ($secondLayerRoute) {
+            case 'users':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $adminController->getAllUsers();
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->createUser($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->updateUser($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->deleteUser($input['login']);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'games':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $adminController->getAllGames();
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->createGame($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->updateGame($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->deleteGame($input['UUID']);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'wishlists':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $adminController->getAllWishlists();
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->createWishlist($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->updateWishlist($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->deleteWishlist($input['id']);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'player_game':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $adminController->getAllPlayerGame();
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->createPlayerGame($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->updatePlayerGame($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->deletePlayerGame($input['login'], $input['UUID']);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            case 'pairs':
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    echo $adminController->getAllPairs();
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->createPair($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->updatePair($input);
+                } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    echo $adminController->deletePair($input['id']);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+
+            default:
+                http_response_code(404);
+                echo json_encode(['message' => 'Admin route not found']);
+                break;
+        }
+        break;
+
     default:
         http_response_code(404);
         echo json_encode(['message' => 'Route not found']);

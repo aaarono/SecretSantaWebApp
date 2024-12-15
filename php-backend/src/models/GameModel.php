@@ -34,6 +34,9 @@ class GameModel
 
     public function createGame($uuid, $name, $description, $budget, $endsAt, $creatorLogin, $status = 'pending')
     {
+        // �������������� ���� � ������ Y-m-d H:i:s
+        $endsAtFormatted = date('Y-m-d H:i:s', strtotime($endsAt));
+
         $query = 'INSERT INTO "Game" (UUID, Name, Description, Budget, EndsAt, Status, creator_login) 
                   VALUES (:uuid, :name, :description, :budget, :endsAt, :status, :creator_login)';
         $stmt = $this->conn->prepare($query);
@@ -41,7 +44,7 @@ class GameModel
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':budget', $budget);
-        $stmt->bindParam(':endsAt', $endsAt);
+        $stmt->bindParam(':endsAt', $endsAtFormatted);
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':creator_login', $creatorLogin);
         return $stmt->execute();
@@ -49,6 +52,8 @@ class GameModel
 
     public function updateGame($uuid, $name, $description, $budget, $endsAt, $status)
     {
+        $endsAtFormatted = date('Y-m-d H:i:s', strtotime($endsAt));
+
         $query = 'UPDATE "Game" 
                   SET Name = :name, Description = :description, Budget = :budget, EndsAt = :endsAt, Status = :status
                   WHERE UUID = :uuid';
@@ -56,7 +61,7 @@ class GameModel
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':budget', $budget);
-        $stmt->bindParam(':endsAt', $endsAt);
+        $stmt->bindParam(':endsAt', $endsAtFormatted);
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
         return $stmt->execute();

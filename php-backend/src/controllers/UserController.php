@@ -36,7 +36,6 @@ class UserController
         return $_SESSION['user']['username'];
     }
 
-
     public function getAllUsers()
     {
         return json_encode($this->model->getAllUsers());
@@ -81,7 +80,6 @@ class UserController
         }
     }
 
-
     public function getUserImage($login)
     {
         if ($login === null) {
@@ -109,7 +107,6 @@ class UserController
         }
     }
 
-
     public function deleteUserImage($login)
     {
         $this->checkCsrfToken();
@@ -127,6 +124,64 @@ class UserController
             return json_encode(['status' => 'success', 'message' => 'Image deleted successfully']);
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to delete image']);
+        }
+    }
+
+    public function getUserData()
+    {
+        $login = $this->getUserIdFromSession();
+        error_log("User login: $login");
+
+        if (!$login) {
+            echo json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+            return;
+        }
+
+        $userData = $this->model->getUserData($login);
+        error_log('User data from model: ' . print_r($userData, true));
+
+        if ($userData) {
+            echo json_encode(['status' => 'success', 'data' => $userData]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to retrieve user data']);
+        }
+    }
+
+    public function updateUserData($data)
+    {
+        $this->checkCsrfToken();
+        error_log('CSRF token verified');
+
+        $login = $this->getUserIdFromSession();
+        error_log("User: $login");
+
+        if (!$login) {
+            echo json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+            return;
+        }
+
+        // Validate and sanitize data
+        $sanitizedData = [
+            'firstName'   => filter_var($data['firstName'] ?? '', FILTER_SANITIZE_STRING),
+            'lastName'    => filter_var($data['lastName'] ?? '', FILTER_SANITIZE_STRING),
+            'phoneNumber' => filter_var($data['phoneNumber'] ?? '', FILTER_SANITIZE_STRING),
+            'email'       => filter_var($data['email'] ?? '', FILTER_VALIDATE_EMAIL),
+            'gender'      => filter_var($data['gender'] ?? '', FILTER_SANITIZE_STRING)
+        ];
+
+        error_log('Sanitized data: ' . print_r($sanitizedData, true));
+
+        if (!$sanitizedData['email']) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid email format']);
+            return;
+        }
+
+        $updateSuccess = $this->model->updateUserData($login, $sanitizedData);
+
+        if ($updateSuccess) {
+            echo json_encode(['status' => 'success', 'message' => 'User data updated successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update user data']);
         }
     }
 }

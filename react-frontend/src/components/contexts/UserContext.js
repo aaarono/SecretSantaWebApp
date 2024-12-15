@@ -4,11 +4,11 @@ import api from '../../services/api/api';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    username: '',
-    email: '',
-    sessionId: ''
-  });
+    const [user, setUser] = useState({
+        username: '',
+        email: '',
+        sessionId: ''
+    });
 
   useEffect(() => {
     fetchUserData();
