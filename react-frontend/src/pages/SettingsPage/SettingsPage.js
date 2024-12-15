@@ -137,6 +137,8 @@ const SettingsPage = () => {
     navigate('/auth');
   };
 
+  
+
   return (
     <>
       <div className='settings-container'>
