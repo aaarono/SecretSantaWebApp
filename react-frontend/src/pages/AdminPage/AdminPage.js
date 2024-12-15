@@ -13,26 +13,7 @@ const AdminPage = () => {
     const [formData, setFormData] = useState({});
     const [isUpdate, setIsUpdate] = useState(false);
 
-  useEffect(() => {
-    fetchData(activeTable);
-  }, [activeTable]);
-
-  const fetchData = (table) => {
-    api.get(`/api/${table}`)
-      .then(response => setData(response.data))
-      .catch(error => console.error(error));
-  };
-
-  const handleDelete = (id) => {
-    api.delete(`/api/${activeTable}/${id}`)
-      .then(() => fetchData(activeTable))
-      .catch(error => console.error(error));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    api.post(`/api/${activeTable}`, formData)
-      .then(() => {
+    useEffect(() => {
         fetchData(activeTable);
     }, [activeTable]);
 
@@ -58,6 +39,7 @@ const AdminPage = () => {
         e.preventDefault();
         const method = isUpdate ? 'put' : 'post';
         console.log('Submitting form data:', formData);
+
         api[method](`/api/${activeTable}`, formData)
             .then(() => {
                 console.log('Form submitted successfully');
@@ -116,11 +98,14 @@ const AdminPage = () => {
                 <div className="section-container">
                     <div className="admin-table">
                         <h1>{activeTable.charAt(0).toUpperCase() + activeTable.slice(1)}</h1>
-                        <Button text={`Add ${activeTable}`} onClick={() => {
-                            setFormData({});
-                            setIsUpdate(false);
-                            setModalIsOpen(true);
-                        }} />
+                        <Button 
+                            text={`Add ${activeTable}`} 
+                            onClick={() => {
+                                setFormData({});
+                                setIsUpdate(false);
+                                setModalIsOpen(true);
+                            }} 
+                        />
                         {renderTable()}
                     </div>
                 </div>

@@ -107,15 +107,15 @@ const LobbyPage = () => {
     }
   }; 
 
-  const handleBeforeUnload = async () => {
-    if (gameUuid && login) {
-      sendMessage({
-        type: 'leave_game',
-        uuid: gameUuid,
-        login,
-      });
-    }
-  };
+  // const handleBeforeUnload = async () => {
+  //   if (gameUuid && login) {
+  //     sendMessage({
+  //       type: 'leave_game',
+  //       uuid: gameUuid,
+  //       login,
+  //     });
+  //   }
+  // };
 
   // useEffect(() => {
 
