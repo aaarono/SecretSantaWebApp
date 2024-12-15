@@ -97,7 +97,6 @@ const AdminPage = () => {
 
                 <div className="section-container">
                     <div className="admin-table">
-                        <h1>{activeTable.charAt(0).toUpperCase() + activeTable.slice(1)}</h1>
                         <Button 
                             text={`Add ${activeTable}`} 
                             onClick={() => {
