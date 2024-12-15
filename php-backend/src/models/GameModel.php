@@ -62,6 +62,16 @@ class GameModel
         return $stmt->execute();
     }
 
+    public function updateGameStatus($uuid, $status)
+    {
+        $query = 'UPDATE "Game" SET Status = :status WHERE UUID = :uuid';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+        $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+        return $stmt->execute();
+    }
+
+
     public function deleteGame($uuid)
     {
         $query = 'DELETE FROM "Game" WHERE UUID = :uuid';

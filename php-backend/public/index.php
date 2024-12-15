@@ -271,6 +271,56 @@ switch ($firstLayerRoute) {
     case 'game':
         checkSession();
         switch ($secondLayerRoute) {
+            case 'start-game':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    $uuid = $input['uuid'] ?? null;
+            
+                    if (!$uuid) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                        break;
+                    }
+                    echo $gameController->startGame($uuid);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+            
+            case 'delete-game':
+                if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    $uuid = $input['uuid'] ?? null;
+            
+                    if (!$uuid) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                        break;
+                    }
+                    echo $gameController->deleteGame($uuid);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;
+            
+            case 'end-game':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    $uuid = $input['uuid'] ?? null;
+            
+                    if (!$uuid) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                        break;
+                    }
+                    echo $gameController->endGame($uuid);
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Invalid request method']);
+                }
+                break;            
             case 'usergames':
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $login = $_GET['login'] ?? null;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/ui/Button/Button';
 import TextInput from '../../components/ui/TextInput/TextInput';
@@ -6,16 +6,18 @@ import Logo from '../../components/Logo/Logo';
 import '../../index.css';
 import './LoginPage.css';
 import { login } from '../../services/api/authService';
+import { UserContext } from '../../components/contexts/UserContext'; // Подключаем контекст пользователя
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const { fetchUserData } = useContext(UserContext); // Достаем функцию fetchUserData из контекста
   const [formValues, setFormValues] = useState({
     username: '',
     password: '',
   });
   const [showErrors, setShowErrors] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateUsername = (username) => {
     return username.length >= 3;
@@ -43,14 +45,13 @@ const LoginForm = () => {
       setIsLoading(true);
       try {
         const response = await login(formValues.username, formValues.password);
-        console.log(response)
         if (response.status === 'success') {
-          navigate('/');
+          await fetchUserData(); // Вызываем фетч данных пользователя
+          navigate('/'); // Перенаправляем на главную страницу
         } else {
           setErrorMessage(response.message || 'Login failed. Please try again.');
         }
       } catch (error) {
-        // Обработка ошибок, полученных от сервера
         setErrorMessage(
           error.response?.message || 'Login failed. Please try again.'
         );
@@ -64,7 +65,7 @@ const LoginForm = () => {
     <>
       <Logo />
       <div className="section-container">
-        <form className='login-form' onSubmit={handleFormSubmit}>
+        <form className="login-form" onSubmit={handleFormSubmit}>
           <TextInput
             name="username"
             placeholder="Username"
@@ -85,7 +86,7 @@ const LoginForm = () => {
             showErrors={showErrors}
           />
           {errorMessage && <div className="error-message">{errorMessage}</div>}
-          <div className='button-container-login'>
+          <div className="button-container-login">
             <Button text={isLoading ? "Logging In..." : "Log In"} type="submit" disabled={isLoading} />
           </div>
         </form>

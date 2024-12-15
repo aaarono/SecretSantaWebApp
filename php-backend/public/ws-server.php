@@ -69,7 +69,26 @@ class Lobby implements MessageComponentInterface {
                         $from->send(json_encode(['type' => 'error', 'message' => 'Game UUID is required']));
                     }
                     break;
-                
+                case 'leave_game':
+                    $uuid = $data['uuid'] ?? null;
+                    if ($uuid && isset($from->userLogin)) {
+                        WebSocketBroadcaster::getInstance()->leaveGame($from, $uuid);
+                        error_log("Player {$from->userLogin} left game manually: $uuid");
+                    }
+                    break;
+                case 'delete_game':
+                    $uuid = $data['uuid'] ?? null;
+                    if ($uuid) {
+                        WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
+                            'type' => 'game_deleted',
+                            'uuid' => $uuid,
+                            'message' => 'The game has been deleted. You have been removed from the lobby.',
+                        ]);
+                        error_log("Game $uuid deleted, all players removed.");
+                        WebSocketBroadcaster::getInstance()->clearGame($uuid);
+                    }
+                    break;
+                    
     
             default:
                 error_log("Unknown message type: {$data['type']}");
@@ -82,11 +101,13 @@ class Lobby implements MessageComponentInterface {
     public function onClose(ConnectionInterface $conn) {
         error_log("Connection closed: {$conn->resourceId}");
 
+        // Удаляем соединение игрока
         WebSocketBroadcaster::getInstance()->removeUserConnection($conn);
 
+        // Уведомляем игроков об уходе, если игрок был в игре
         if (isset($conn->gameUuid)) {
             WebSocketBroadcaster::getInstance()->leaveGame($conn, $conn->gameUuid);
-            error_log("Connection {$conn->resourceId} left game: {$conn->gameUuid}");
+            error_log("Player {$conn->userLogin} disconnected and left game: {$conn->gameUuid}");
         }
     }
 

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../../index.css';
 import './MainSection.css';
+import { useNavigate } from 'react-router-dom';
 import GameElement from '../GameElement/GameElement';
+import GameElementNull from '../GameElement/GameElementNull';
 import WishlistElement from '../WishlistElement/WishlistElement';
 import AddNewElement from '../AddNewElement/AddNewElement';
 
@@ -11,6 +13,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import api from '../../services/api/api'; // Подключение API
 
 const MainSection = () => {
+  const navigate = useNavigate();
   const [wishlist, setWishlist] = useState([]); 
   const [loading, setLoading] = useState(true); 
   const [games, setGames] = useState([]); // Список игр пользователя
@@ -49,6 +52,10 @@ const MainSection = () => {
 
   const handleAddToWishlist = (newItem) => {
     setWishlist((prevWishlist) => [...prevWishlist, newItem]);
+  };
+
+  const onAddGame = () => {
+    navigate(`/new`);
   };
 
   useEffect(() => {
@@ -103,6 +110,15 @@ const MainSection = () => {
               />
             </div>
           ))}
+          <div>
+              <GameElementNull onAddGame={onAddGame} />
+            </div>
+            <div>
+              {games.length <= 1 ? <GameElementNull onAddGame={onAddGame} /> : null}
+            </div>
+            <div>
+              {games.length === 0 ? <GameElementNull onAddGame={onAddGame} /> : null}
+            </div>
         </Slider>
       </div>
       <div className="main-section-wishlist">

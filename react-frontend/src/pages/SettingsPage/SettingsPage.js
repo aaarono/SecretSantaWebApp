@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../components/Logo/Logo';
 import Header from '../../components/Header/Header';
@@ -10,9 +10,7 @@ import Button from '../../components/ui/Button/Button';
 import SelectInput from '../../components/ui/SelectInput/SelectInput';
 import { logout } from '../../services/api/authService';
 import api from '../../services/api/api';
-import { useContext } from 'react';
 import { AvatarContext } from '../../components/contexts/AvatarContext'; // Подключаем контекст
-
 
 const uploadUserImage = async (file) => {
   const formData = new FormData();
@@ -22,7 +20,7 @@ const uploadUserImage = async (file) => {
   try {
     const response = await api.post('/user/update-image', formData, {
       headers: {
-          'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
       },
     });
     console.log(response);
@@ -85,7 +83,7 @@ const SettingsPage = () => {
         setIsLoading(false);
       }
     };
-  
+
     fetchImage();
   }, []);
 
@@ -132,69 +130,72 @@ const SettingsPage = () => {
     }
   };
 
-  const fetchOnLogout = () => {
-    logout();
-    navigate('/auth');
+  const handleLogout = async () => {
+    try {
+      await logout(); // Вызываем метод logout для удаления сессии
+      navigate('/auth'); // Перенаправляем на страницу авторизации
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
-  
-
   return (
-    <>
-      <div className='settings-container'>
-        <h2>Settings</h2>
-        <div className='settings-img'>
-          {isLoading ? (
-            <div className="spinner">Loading...</div>
-          ) : (
-            <div className='avatar-settings-container'><img src={avatar} className='avatar-settings' alt="Avatar" /></div>
-          )}
-          <div className='settings-img-change'>
-            <p>Change Avatar:</p>
-            <input type='file' accept='image/jpeg, image/png, image/gif' onChange={handleImageUpload} disabled={isLoading} />
-            <Button text='Delete' type='button' onClick={handleImageDelete} disabled={isLoading} />
+    <div className='settings-container'>
+      <h2>Settings</h2>
+      <div className='settings-img'>
+        {isLoading ? (
+          <div className="spinner">Loading...</div>
+        ) : (
+          <div className='avatar-settings-container'>
+            <img src={avatar} className='avatar-settings' alt="Avatar" />
           </div>
+        )}
+        <div className='settings-img-change'>
+          <p>Change Avatar:</p>
+          <input type='file' accept='image/jpeg, image/png, image/gif' onChange={handleImageUpload} disabled={isLoading} />
+          <Button text='Delete' type='button' onClick={handleImageDelete} disabled={isLoading} />
         </div>
-        <div className='settings-inputs'>
-          <div>
-            <TextInput
-              name="firstName"
-              type='text'
-              placeholder="First Name"
-              value={formValues.firstName}
-              onChange={handleInputChange}
-              disabled
-            />
-          </div>
-          <div>
-            <TextInput
-              name="lastName"
-              type='text'
-              placeholder="Last Name"
-              value={formValues.lastName}
-              onChange={handleInputChange}
-              disabled
-            />
-          </div>
-          <div>
-            <TextInput
-              name="phoneNumber"
-              type='phone'
-              placeholder="Phone"
-              value={formValues.phoneNumber}
-              onChange={handleInputChange}
-              disabled
-            />
-          </div>
+      </div>
+      <div className='settings-inputs'>
+        <div>
           <TextInput
-            name="email"
-            type='email'
-            placeholder="E-mail"
-            value={formValues.email}
+            name="firstName"
+            type='text'
+            placeholder="First Name"
+            value={formValues.firstName}
             onChange={handleInputChange}
+            disabled
           />
-          <div>
-          <div className="select-input-container; margin:0px;" class="">
+        </div>
+        <div>
+          <TextInput
+            name="lastName"
+            type='text'
+            placeholder="Last Name"
+            value={formValues.lastName}
+            onChange={handleInputChange}
+            disabled
+          />
+        </div>
+        <div>
+          <TextInput
+            name="phoneNumber"
+            type='phone'
+            placeholder="Phone"
+            value={formValues.phoneNumber}
+            onChange={handleInputChange}
+            disabled
+          />
+        </div>
+        <TextInput
+          name="email"
+          type='email'
+          placeholder="E-mail"
+          value={formValues.email}
+          onChange={handleInputChange}
+        />
+        <div>
+          <div className="select-input-container" style={{ margin: '0px' }}>
             <select
               name="gender"
               value={formValues.gender}
@@ -207,16 +208,15 @@ const SettingsPage = () => {
               <option value="female">Female</option>
             </select>
           </div>
-          </div>
-          <div>
-            <Button text="Log Out" type="submit" onClick={fetchOnLogout} />
-          </div>
         </div>
-        <div className='settings-button'>
-          <Button text="Save" type="submit" disabled={isLoading} />
+        <div>
+          <Button text="Log Out" type="submit" onClick={handleLogout} />
         </div>
       </div>
-    </>
+      <div className='settings-button'>
+        <Button text="Save" type="submit" disabled={isLoading} />
+      </div>
+    </div>
   );
 };
 

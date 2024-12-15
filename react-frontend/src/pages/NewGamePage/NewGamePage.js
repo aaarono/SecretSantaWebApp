@@ -54,9 +54,9 @@ const NewGamePage = () => {
         setGameId(response.uuid);
         alert('Game created successfully!');
         navigate('/lobby/' + response.uuid);
-
+        const resp = fetchGameCreator(response.uuid);
         // Use the existing sendMessage to send a WebSocket message
-        sendMessage({ type: 'join_game', uuid: response.uuid });
+        sendMessage({ type: 'join_game', uuid: response.uuid, creator: resp.creator});
       } else {
         alert(response.message || 'Failed to create game');
       }
@@ -67,6 +67,16 @@ const NewGamePage = () => {
       setIsLoading(false);
     }
   };
+
+  const fetchGameCreator = async (uuid) => {
+    const response = await api.get(`/game/player/creator?uuid=${uuid}`);
+    console.log('Response from server:', response.creator);
+    if (response.status === 'success') {
+      return response.creator;
+    }
+    return null;
+  }; 
+
 
   return (
     <div className="new-game-container">

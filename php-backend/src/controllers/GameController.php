@@ -110,16 +110,37 @@ class GameController
         $this->checkCsrfToken();
         $success = $this->model->deleteGame($uuid);
         if ($success) {
-            // Оповестим только тех, кто в этом лобби
-            // \Secret\Santa\WebSocketBroadcaster::getInstance()->broadcastToGame($uuid, [
-            //     'type' => 'game_deleted',
-            //     'uuid' => $uuid
-            // ]);
             return json_encode(['status' => 'success', 'message' => 'Game deleted successfully']);
         } else {
             return json_encode(['status' => 'error', 'message' => 'Failed to delete game']);
         }
     }
+
+    public function endGame($uuid)
+    {
+        $this->checkCsrfToken();
+        $userId = $this->getUserIdFromSession();
+        if (!$userId) {
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+    
+        $game = $this->model->getGameById($uuid);
+        if (!$game) {
+            return json_encode(['status' => 'error', 'message' => 'Game not found']);
+        }
+    
+        if ($game['creator_login'] !== $userId) {
+            return json_encode(['status' => 'error', 'message' => 'Only the creator can end the game']);
+        }
+    
+        $success = $this->model->updateGameStatus($uuid, 'ended');
+        if ($success) {
+            return json_encode(['status' => 'success', 'message' => 'Game ended successfully']);
+        } else {
+            return json_encode(['status' => 'error', 'message' => 'Failed to end the game']);
+        }
+    }
+    
 
     public function startGame($uuid)
     {

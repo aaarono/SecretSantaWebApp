@@ -61,6 +61,9 @@ const LobbyPage = () => {
           setPlayerCount(newPlayers.length);
           return newPlayers;
         });
+      case 'game_deleted':
+        alert(message.message);
+        window.location.href = '/'; 
         break;
       default:
         console.warn('Unknown WebSocket message type:', message.type);
@@ -93,14 +96,6 @@ const LobbyPage = () => {
     }
   
     fetchGameCreator();
-
-    // Слушаем событие перед закрытием страницы
-  window.addEventListener('beforeunload', handleBeforeUnload);
-
-  // Убираем слушатель при размонтировании компонента
-  return () => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-  };
   }, [gameUuid]);
   
 
@@ -112,15 +107,24 @@ const LobbyPage = () => {
     }
   }; 
 
-  const handleBeforeUnload = () => {
+  const handleBeforeUnload = async () => {
     if (gameUuid && login) {
       sendMessage({
-        type: 'player_left',
+        type: 'leave_game',
         uuid: gameUuid,
         login,
       });
     }
   };
+
+  // useEffect(() => {
+
+  
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+
+  // });
+  
+
 
   return (
     <div className="lobby-page-container">
@@ -128,7 +132,17 @@ const LobbyPage = () => {
       <GameBanner gameName={gameName} playerCount={playerCount} />
       <PlayersList players={players} />
       <DeadlineTimer endsAt={gameEndsAt} />
-      {gameCreator ? <StartGameWindow isAuthorized={isAuthorized} /> : <WaitingGameWindow isAuthorized={isAuthorized} />}
+      {gameCreator ? (
+      <StartGameWindow
+        isAuthorized={isAuthorized}
+        playersCount={playerCount}
+        gameUuid={gameUuid}
+        api={api}
+        sendMessage={sendMessage} // Передаем WebSocket функцию
+      />
+    ) : (
+      <WaitingGameWindow isAuthorized={isAuthorized} />
+    )}
       <Chat gameUuid={gameUuid} />
     </div>
   );

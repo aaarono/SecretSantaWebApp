@@ -25,7 +25,10 @@ export const register = async (userData) => {
 
 export const logout = async () => {
     try {
-        return await api.post('/auth/logout');
+        const response = await api.post('/auth/logout');
+        localStorage.removeItem('PHPSESSID');
+        localStorage.removeItem('csrf_token');
+        return response;
     } catch (error) {
         console.error('Logout error:', error);
         throw error;

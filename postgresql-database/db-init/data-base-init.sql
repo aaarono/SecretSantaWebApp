@@ -42,7 +42,7 @@ CREATE TABLE "Player_Game" (
     is_gifted BOOLEAN DEFAULT FALSE NOT NULL,
     PRIMARY KEY (login, UUID),
     FOREIGN KEY (login) REFERENCES "User"(login),
-    FOREIGN KEY (UUID) REFERENCES "Game"(UUID)
+    FOREIGN KEY (UUID) REFERENCES "Game"(UUID) ON DELETE CASCADE -- Каскадное удаление
 );
 
 CREATE TABLE "Pair" (
@@ -50,7 +50,7 @@ CREATE TABLE "Pair" (
     game_id UUID,
     gifter_id VARCHAR(255),
     receiver_id VARCHAR(255),
-    FOREIGN KEY (game_id) REFERENCES "Game"(UUID),
+    FOREIGN KEY (game_id) REFERENCES "Game"(UUID) ON DELETE CASCADE, -- Каскадное удаление
     FOREIGN KEY (gifter_id) REFERENCES "User"(login),
     FOREIGN KEY (receiver_id) REFERENCES "User"(login)
 );

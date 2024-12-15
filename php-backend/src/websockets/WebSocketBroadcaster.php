@@ -48,9 +48,29 @@ class WebSocketBroadcaster {
     public function leaveGame(ConnectionInterface $conn, string $gameUuid) {
         if (isset($this->gameClients[$gameUuid])) {
             $this->gameClients[$gameUuid]->detach($conn);
-            error_log("Connection {$conn->resourceId} left game: $gameUuid");
+    
+            // Уведомляем остальных игроков, что игрок покинул игру
+            if (isset($conn->userLogin)) {
+                $this->broadcastToGame($gameUuid, [
+                    'type' => 'player_left',
+                    'login' => $conn->userLogin,
+                ], $conn);
+    
+                error_log("Player {$conn->userLogin} left game: $gameUuid");
+            }
         }
     }
+    
+    public function clearGame(string $gameUuid) {
+        if (isset($this->gameClients[$gameUuid])) {
+            foreach ($this->gameClients[$gameUuid] as $conn) {
+                $this->gameClients[$gameUuid]->detach($conn);
+                unset($conn->gameUuid); // Удаляем привязку игрока к лобби
+                error_log("Player {$conn->userLogin} removed from game: $gameUuid");
+            }
+            unset($this->gameClients[$gameUuid]); // Полностью очищаем игру
+        }
+    }    
 
     public function joinUserToGame(string $login, string $gameUuid) {
         if (!isset($this->userConnections[$login])) {
@@ -86,6 +106,7 @@ class WebSocketBroadcaster {
 
         foreach ($this->gameClients[$gameUuid] as $conn) {
             if (isset($conn->userLogin)) {
+                error_log("Player found in game: {$conn->userLogin}");
                 $players[] = $conn->userLogin;
             }
         }
