@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Button from '../../components/ui/Button/Button';
 import Logo from '../../components/Logo/Logo';
 import '../../index.css';
