@@ -145,4 +145,16 @@ class GameController
             return json_encode(['status' => 'error', 'message' => 'Failed to start game']);
         }
     }
+
+    public function getGameCreator($uuid)
+    {
+        $userId = $this->getUserIdFromSession();
+        if (!$userId) {
+            return json_encode(['status' => 'error', 'message' => 'User not authenticated']);
+        }
+        if ($this->model->getGameCreator($userId, $uuid))
+            return json_encode(['status' => 'success', 'creator' => true]);
+        else
+            return json_encode(['status' => 'success', 'creator' => false]);
+    }
 }

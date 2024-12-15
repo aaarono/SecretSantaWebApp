@@ -407,22 +407,39 @@ switch ($firstLayerRoute) {
                                 echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
                                 break;
                             }
-
-                            echo $playerGameController->removePlayerFromGame($uuid, $login);
-                        } else {
-                            http_response_code(405);
-                            echo json_encode(['message' => 'Invalid request method']);
-                        }
-                        break;
-
-                    case 'list':
-                        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                            $uuid = $_GET['uuid'] ?? null;
-
-                            if (!$uuid) {
-                                http_response_code(400);
-                                echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
-                                break;
+                            break;
+                        
+                        case 'creator':
+                            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                                $uuid = $_GET['uuid'] ?? null;
+                
+                                if (!$uuid) {
+                                    http_response_code(400);
+                                    echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                                    break;
+                                }
+                
+                                echo $gameController->getGameCreator($uuid);
+                            } else {
+                                http_response_code(405);
+                                echo json_encode(['message' => 'Invalid request method']);
+                            }
+                            break;
+                
+                        case 'list':
+                            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                                $uuid = $_GET['uuid'] ?? null;
+                
+                                if (!$uuid) {
+                                    http_response_code(400);
+                                    echo json_encode(['status' => 'error', 'message' => 'UUID is required']);
+                                    break;
+                                }
+                
+                                echo $playerGameController->getPlayersByGameId($uuid);
+                            } else {
+                                http_response_code(405);
+                                echo json_encode(['message' => 'Invalid request method']);
                             }
 
                             echo $playerGameController->getPlayersByGameId($uuid);

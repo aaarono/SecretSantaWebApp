@@ -13,7 +13,26 @@ const AdminPage = () => {
     const [formData, setFormData] = useState({});
     const [isUpdate, setIsUpdate] = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
+    fetchData(activeTable);
+  }, [activeTable]);
+
+  const fetchData = (table) => {
+    api.get(`/api/${table}`)
+      .then(response => setData(response.data))
+      .catch(error => console.error(error));
+  };
+
+  const handleDelete = (id) => {
+    api.delete(`/api/${activeTable}/${id}`)
+      .then(() => fetchData(activeTable))
+      .catch(error => console.error(error));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    api.post(`/api/${activeTable}`, formData)
+      .then(() => {
         fetchData(activeTable);
     }, [activeTable]);
 
@@ -37,7 +56,7 @@ const AdminPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const method = isUpdate ? 'put' : 'post';û
+        const method = isUpdate ? 'put' : 'post';
         console.log('Submitting form data:', formData);
         api[method](`/api/${activeTable}`, formData)
             .then(() => {

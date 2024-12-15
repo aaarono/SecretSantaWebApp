@@ -34,7 +34,7 @@ class GameModel
 
     public function createGame($uuid, $name, $description, $budget, $endsAt, $creatorLogin, $status = 'pending')
     {
-        // Преобразование даты в формат Y-m-d H:i:s
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Y-m-d H:i:s
         $endsAtFormatted = date('Y-m-d H:i:s', strtotime($endsAt));
 
         $query = 'INSERT INTO "Game" (UUID, Name, Description, Budget, EndsAt, Status, creator_login) 
@@ -83,5 +83,15 @@ class GameModel
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
         return $stmt->execute();
+    }
+
+    public function getGameCreator($creatorLogin, $uuid)
+    {
+        $query = 'SELECT 1 FROM "Game" WHERE creator_login = :creator_login AND UUID = :uuid';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':creator_login', $creatorLogin, PDO::PARAM_STR);
+        $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
