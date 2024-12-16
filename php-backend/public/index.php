@@ -716,14 +716,19 @@ switch ($firstLayerRoute) {
                 } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                     $input = json_decode(file_get_contents('php://input'), true);
                     echo $adminController->updateWishlist($input);
-                } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-                    $input = json_decode(file_get_contents('php://input'), true);
-                    echo $adminController->deleteWishlist($input['id']);
+                } elseif  ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                    $id = $uri[2]; // Получение ID из URL
+                        if (!$id) {
+                        http_response_code(400);
+                        echo json_encode(['status' => 'error', 'message' => 'ID is required']);
+                        return;
+                    }
+                    echo $adminController->deleteWishlist($id);
                 } else {
                     http_response_code(405);
                     echo json_encode(['message' => 'Invalid request method']);
                 }
-                break;
+                    break;
 
             case 'player_game':
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

@@ -2,15 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\php-backend",
-    "\\php-backend\\public",
-    "\\php-backend\\src",
     "\\php-backend\\src\\controllers",
     "\\php-backend\\src\\models",
-    "\\react-frontend",
+    "\\postgresql-database\\db-init",
     "\\react-frontend\\src",
     "\\react-frontend\\src\\pages",
     "\\react-frontend\\src\\pages\\AdminPage"
   ],
-  "SelectedNode": "\\postgresql-database\\db-init\\data-base-init.sql",
   "PreviewInSolutionExplorer": false
 }
