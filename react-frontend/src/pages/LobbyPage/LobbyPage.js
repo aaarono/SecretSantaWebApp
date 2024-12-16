@@ -25,17 +25,15 @@ const LobbyPage = () => {
   const [players, setPlayers] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [gameName, setGameName] = useState("");
-  const [playerCount, setPlayerCount] = useState(0);
   const [gameEndsAt, setGameEndsAt] = useState(null);
   const [creatorLogin, setCreatorLogin] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
-  const [gameStatus, setGameStatus] = useState("pending"); // Новое состояние для статуса игры
+  const [gameStatus, setGameStatus] = useState("pending");
 
   const login = user.username;
 
   const updatePlayerList = useCallback((newPlayers) => {
     setPlayers(newPlayers);
-    setPlayerCount(newPlayers.length);
   }, []);
 
   const setPlayerStatus = useCallback((playerLogin, isOnline = true) => {
@@ -56,25 +54,19 @@ const LobbyPage = () => {
 
   const handleWebSocketMessage = useCallback(
     (message) => {
-      //console.log("WebSocket message:", message);
-
       switch (message.type) {
         case "welcome":
-          //console.log("Received welcome message from server.");
           break;
         case "auth_success":
-          //console.log("User authorized via WebSocket");
           setIsAuthorized(true);
           if (gameUuid) {
             sendMessage({ type: "join_game", uuid: gameUuid, login });
-            //console.log(`Subscribed to game with ID: ${gameUuid}`);
           }
           break;
         case "player_joined":
           setPlayerStatus(message.login, true);
           break;
         case "joined_game":
-         //  console.log("joined_game message received:", message);
           if (message.players && Array.isArray(message.players)) {
             const initialPlayers = message.players.map((plLogin) => ({
               login: plLogin,
@@ -82,8 +74,6 @@ const LobbyPage = () => {
             }));
             updatePlayerList(initialPlayers);
             setChatMessages(message.messages);
-          } else {
-            //console.warn("joined_game message received without players array");
           }
           break;
         case "player_left":
@@ -106,15 +96,13 @@ const LobbyPage = () => {
           setGameStatus("running");
           break;
         default:
-          //console.warn("Unknown WebSocket message type:", message.type);
+          break;
       }
     },
     [gameUuid, login, updatePlayerList, setPlayerStatus]
   );
 
-  const handleWebSocketOpen = useCallback((socket) => {
-    //console.log("WebSocket connected for lobby");
-  }, []);
+  const handleWebSocketOpen = useCallback((socket) => {}, []);
 
   const sendMessage = useWebSocket(handleWebSocketMessage, handleWebSocketOpen);
 
@@ -126,10 +114,9 @@ const LobbyPage = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "success" && data.game) {
-            console.log("Game data:", data.game);
             setGameName(data.game.name || "Unnamed Game");
             setGameEndsAt(data.game.endsat || "");
-            setGameStatus(data.game.status); // Устанавливаем статус игры из полученных данных
+            setGameStatus(data.game.status);
 
             const fullPlayers = (data.game.players || []).map((p) => ({
               ...p,
@@ -145,15 +132,13 @@ const LobbyPage = () => {
 
   let windowToRender;
   if (gameStatus === "running" || gameStatus === "ended") {
-    // Если статус running – показываем активное окно игры
-    windowToRender = <ActiveGameWindow gameUuid={gameUuid} gameStatus={gameStatus}/>;
+    windowToRender = <ActiveGameWindow gameUuid={gameUuid} gameStatus={gameStatus} />;
   } else {
-    // Если игра еще не запущена (pending):
     if (creatorLogin && creatorLogin === login) {
       windowToRender = (
         <StartGameWindow
           isAuthorized={isAuthorized}
-          playersCount={playerCount}
+          playersCount={players.length} // Используем длину массива игроков
           gameUuid={gameUuid}
           api={api}
           sendMessage={sendMessage}
@@ -167,7 +152,7 @@ const LobbyPage = () => {
   return (
     <div className="lobby-page-container">
       <GameID gameUuid={gameUuid} />
-      <GameBanner gameName={gameName} playerCount={playerCount} />
+      <GameBanner gameName={gameName} playerCount={players.length} />
       <PlayersList players={players} creatorLogin={creatorLogin} />
       <DeadlineTimer endsAt={gameEndsAt} />
       {windowToRender}
