@@ -1,5 +1,5 @@
 import ApiService from './ApiService';
 
-const api = new ApiService('http://20.126.41.73:8000');
+const api = new ApiService('http://secretsantawebapp-production.up.railway.app');
 
 export default api;
