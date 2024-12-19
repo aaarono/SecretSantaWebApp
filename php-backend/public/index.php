@@ -79,6 +79,16 @@ function checkSession()
     }
 }
 
+function checkAdmin()
+{
+    checkSession();
+    if (!isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
+        echo json_encode(['status' => 'error', 'message' => 'Access denied: Admins only']);
+        http_response_code(403);
+        exit();
+    }
+}
+
 // Парсинг URI
 $uri = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
 $firstLayerRoute = $uri[0] ?? '';
@@ -670,6 +680,7 @@ switch ($firstLayerRoute) {
 
     case 'api':
         checkSession();
+        checkAdmin();
         switch ($secondLayerRoute) {
             case 'users':
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

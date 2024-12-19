@@ -1,0 +1,20 @@
+FROM php:8.1-cli
+
+# Установим зависимости
+RUN apt-get update && apt-get install -y libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql
+
+# Устанавливаем рабочую директорию на public
+WORKDIR /app/public
+
+# Копируем все файлы проекта
+COPY . /app
+
+# Устанавливаем зависимости через Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install --no-dev --optimize-autoloader --working-dir=/app
+
+# Запускаем встроенный сервер PHP
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "/app/public"]
+
+EXPOSE 8080

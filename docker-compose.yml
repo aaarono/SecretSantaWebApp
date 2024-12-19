@@ -1,28 +1,6 @@
 version: '3.8'
 
 services:
-  # php-backend:
-  #   build:
-  #     context: ./php-backend
-  #     dockerfile: Dockerfile
-  #   container_name: php-backend
-  #   volumes:
-  #     - ./php-backend:/var/www/html
-  #   depends_on:
-  #     - db
-  #   ports:
-  #     - "8080:8080"  # Проброс порта 8080
-  #   networks:
-  #     - app-network
-  #   working_dir: /var/www/html
-
-  # react-frontend:
-  #   build: ./react-frontend
-  #   container_name: react-frontend
-  #   networks:
-  #     - app-network
-  #   # Порт не экспонируется, так как Nginx обслуживает статические файлы
-
   db:
     image: postgres:13
     container_name: postgres-db
@@ -38,12 +16,50 @@ services:
     networks:
       - app-network
 
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: always
+  rest-api:
+    build:
+      context: ./php-backend
+      dockerfile: Dockerfile-rest-api
+    container_name: rest-api
+    environment:
+      DB_HOST: db
+      DB_NAME: mydb
+      DB_USER: user
+      DB_PASSWORD: password
     ports:
-      - "8081:8081"
+      - "8080:8080"
+    volumes:
+      - ./php-backend:/var/www/html  # Для синхронизации локальных изменений с контейнером (если нужно)
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  ws-server:
+    build:
+      context: ./php-backend
+      dockerfile: Dockerfile-ws-server
+    container_name: ws-server
+    depends_on:
+      - db
+    ports:
+      - "9090:9090"
+    networks:
+      - app-network
+
+  react-frontend:
+    build: 
+      context: ./react-frontend
+      dockerfile: Dockerfile-frontend
+    container_name: react-frontend
+    environment:
+      REACT_APP_API_URL: "http://localhost:8080"
+      REACT_APP_WS_URL: "ws://localhost:9090"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rest-api
+      - ws-server
     networks:
       - app-network
 
