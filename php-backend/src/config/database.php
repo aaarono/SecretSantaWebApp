@@ -5,20 +5,22 @@ namespace Secret\Santa\Config;
 use PDO;
 
 class Database {
-    private $host = '127.0.0.1'; // Хост базы данных (например, имя сервиса Docker или IP-адрес)
-    private $port = '5432'; // Порт PostgreSQL
-    private $db_name = 'mydb'; // Имя базы данных
-    private $username = 'user'; // Имя пользователя базы данных
-    private $password = 'password'; // Пароль базы данных
-    public $conn;
+    private $conn;
 
     public function getConnection() {
         $this->conn = null;
 
         try {
+            // Получаем параметры подключения из переменных окружения
+            $host = getenv('PGHOST');
+            $port = getenv('PGPORT');
+            $db_name = getenv('PGDATABASE');
+            $username = getenv('PGUSER');
+            $password = getenv('PGPASSWORD');
+
             // Формируем строку подключения для PostgreSQL
-            $dsn = "pgsql:host=$this->host;port=$this->port;dbname=$this->db_name";
-            $this->conn = new PDO($dsn, $this->username, $this->password);
+            $dsn = "pgsql:host=$host;port=$port;dbname=$db_name";
+            $this->conn = new PDO($dsn, $username, $password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $exception) {
             // Выводим сообщение об ошибке, если не удалось подключиться
