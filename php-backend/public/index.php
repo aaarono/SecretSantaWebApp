@@ -65,7 +65,7 @@ function checkSession()
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
-        'secure' => false, // Установите true, если используете HTTPS
+        'secure' => true, // Установите true, если используете HTTPS
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
