@@ -12,7 +12,10 @@ use Secret\Santa\Controllers\SmsController;
 use Secret\Santa\Controllers\PairController;
 
 // Настройка CORS
-$allowed_origins = ["https://secret-santa-web-app.vercel.app/"];
+$allowed_origins = [
+    "https://secret-santa-web-app.vercel.app",
+    "https://secret-santa-web-m69qysv6m-aaaronos-projects.vercel.app"
+];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowed_origins)) {
@@ -65,7 +68,7 @@ function checkSession()
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
-        'secure' => false, // Установите true, если используете HTTPS
+        'secure' => true, // Установите true, если используете HTTPS
         'httponly' => true,
         'samesite' => 'Lax',
     ]);

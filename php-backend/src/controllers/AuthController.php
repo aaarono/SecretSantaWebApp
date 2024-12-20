@@ -16,7 +16,7 @@ class AuthController
 
         // Настройка CORS
         $allowed_origins = [
-            "http://localhost:3000",
+            "https://secret-santa-web-app.vercel.app/",
         ];
 
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
