@@ -12,7 +12,7 @@ use Secret\Santa\Controllers\SmsController;
 use Secret\Santa\Controllers\PairController;
 
 // Настройка CORS
-$allowed_origins = ["http://localhost:3000"];
+$allowed_origins = ["https://secret-santa-web-app.vercel.app/"];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowed_origins)) {
