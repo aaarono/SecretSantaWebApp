@@ -19,11 +19,11 @@ $allowed_origins = [
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowed_origins)) {
-    header("Access-Control-Allow-Origin: https://secret-santa-web-app.vercel.app");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token");
-
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token");
+    header("Access-Control-Max-Age: 86400"); // Кеширование preflight-запросов на 1 день
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
