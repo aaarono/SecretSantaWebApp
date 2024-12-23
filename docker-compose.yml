@@ -26,14 +26,13 @@ services:
       DB_NAME: mydb
       DB_USER: user
       DB_PASSWORD: password
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./php-backend:/var/www/html  # Для синхронизации локальных изменений с контейнером (если нужно)
     depends_on:
       - db
     networks:
       - app-network
+    volumes:
+      # Монтируем локальную папку ./php-backend в /app внутри контейнера
+      - ./php-backend:/app
 
   ws-server:
     build:
@@ -42,29 +41,45 @@ services:
     container_name: ws-server
     depends_on:
       - db
-    ports:
-      - "9090:9090"
     networks:
       - app-network
+    volumes:
+      # Аналогично, монтируем тот же код (или, при необходимости, другую папку)
+      - ./php-backend:/app
 
   react-frontend:
-    build: 
+    build:
       context: ./react-frontend
       dockerfile: Dockerfile-frontend
     container_name: react-frontend
     environment:
-      REACT_APP_API_URL: "http://localhost:8080"
-      REACT_APP_WS_URL: "ws://localhost:9090"
-    ports:
-      - "3000:3000"
+      REACT_APP_API_URL: "http://localhost/api"
+      REACT_APP_WS_URL: "ws://localhost/ws"
     depends_on:
       - rest-api
       - ws-server
     networks:
       - app-network
+    # Можно тоже добавить volume, если нужно "горячее" обновление кода React:
+    # volumes:
+    #   - ./react-frontend:/app
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - rest-api
+      - ws-server
+      - react-frontend
+    networks:
+      - app-network
+    # Обычно конфиги Nginx правятся в ./nginx/Dockerfile и ./nginx/default.conf,
+    # так что отдельный volume не всегда нужен
 
 networks:
   app-network:
-
-volumes:
-  pgdata:
+    driver: bridge

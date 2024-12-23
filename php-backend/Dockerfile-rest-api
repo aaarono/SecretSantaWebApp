@@ -1,20 +1,24 @@
 FROM php:8.1-cli
 
-# Установим зависимости
+# Устанавливаем системные пакеты и расширения PHP
 RUN apt-get update && apt-get install -y libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql
 
-# Устанавливаем рабочую директорию на public
-WORKDIR /app/public
+# Устанавливаем рабочую директорию на /app
+WORKDIR /app
 
-# Копируем все файлы проекта
+# Копируем все файлы проекта в контейнер
 COPY . /app
 
-# Устанавливаем зависимости через Composer
+# Устанавливаем Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install --no-dev --optimize-autoloader --working-dir=/app
 
-# Запускаем встроенный сервер PHP
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "/app/public"]
+# Устанавливаем зависимости (Composer)
+# --working-dir=/app не нужен, так как мы уже находимся в /app (WORKDIR)
+RUN composer install --no-dev --optimize-autoloader
 
+# Открываем порт 8080
 EXPOSE 8080
+
+# Запускаем встроенный сервер PHP, указывая корень сайта как /app/public
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]

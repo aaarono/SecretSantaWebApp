@@ -12,7 +12,12 @@ use Secret\Santa\Controllers\SmsController;
 use Secret\Santa\Controllers\PairController;
 
 // Настройка CORS
-$allowed_origins = ["http://localhost:3000"];
+$allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost",
+    "https://your-domain.com"
+];
+
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowed_origins)) {
@@ -89,11 +94,26 @@ function checkAdmin()
     }
 }
 
-// Парсинг URI
+// Если у нас настроен Nginx так, что все запросы к API приходят через /api/...
+// Тогда проверим, начинается ли URI с "api"
+// Разбор REQUEST_URI
 $uri = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+error_log("First layer route: $uri[0]");
+error_log("Second layer route: $uri[1]");
+
+if (isset($uri[0]) && $uri[0] === 'api') {
+    // "Сдвигаем" массив маршрутов на 1
+    array_shift($uri);
+}
+
+// И только после этого уже берём $firstLayerRoute, $secondLayerRoute...
 $firstLayerRoute = $uri[0] ?? '';
 $secondLayerRoute = $uri[1] ?? '';
-$thirdLayerRoute = $uri[2] ?? '';
+$thirdLayerRoute  = $uri[2] ?? '';
+
+error_log("First layer route: $firstLayerRoute");
+error_log("Second layer route: $secondLayerRoute");
+
 
 // Инициализация контроллеров
 $authController = new AuthController();
@@ -369,8 +389,6 @@ switch ($firstLayerRoute) {
                     http_response_code(405);
                     echo json_encode(['message' => 'Invalid request method']);
                 }
-            break; 
-
             case 'usergames':
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $login = $_GET['login'] ?? null;

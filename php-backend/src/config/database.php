@@ -5,7 +5,7 @@ namespace Secret\Santa\Config;
 use PDO;
 
 class Database {
-    private $host = '127.0.0.1'; // Хост базы данных (например, имя сервиса Docker или IP-адрес)
+    private $host = 'db'; // Хост базы данных (например, имя сервиса Docker или IP-адрес)
     private $port = '5432'; // Порт PostgreSQL
     private $db_name = 'mydb'; // Имя базы данных
     private $username = 'user'; // Имя пользователя базы данных

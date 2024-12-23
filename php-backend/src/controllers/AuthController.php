@@ -16,7 +16,7 @@ class AuthController
 
         // Настройка CORS
         $allowed_origins = [
-            "http://localhost:3000",
+            "http://localhost",
         ];
 
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
@@ -50,7 +50,7 @@ class AuthController
         session_start();
 
         $currentRoute = $_SERVER['REQUEST_URI'] ?? '';
-        if(strpos($currentRoute, '/auth/login') === false && strpos($currentRoute, '/auth/register') === false) {
+        if(strpos($currentRoute, '/api/auth/login') === false && strpos($currentRoute, '/api/auth/register') === false) {
             $this-> checkSessionTimeout();
         }
     }

@@ -1,4 +1,4 @@
 import ApiService from './ApiService';
 
-const api = new ApiService('http://localhost:8080');
+const api = new ApiService('http://localhost/api');
 export default api;
