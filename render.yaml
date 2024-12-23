@@ -1,0 +1,29 @@
+services:
+  - name: my-backend
+    type: web
+    env: docker
+    plan: free
+    build:
+      dockerfilePath: backend/Dockerfile
+    # Если бэкенд слушает, например, на 5000 порту, укажите:
+    serviceDetails:
+      ports:
+        - port: 5000
+    envVars:
+      # Если нужны переменные окружения, указывайте тут
+      # SAMPLE_ENV: "my-value"
+      # ...
+    
+  - name: my-frontend
+    type: web
+    env: docker
+    plan: free
+    build:
+      dockerfilePath: frontend/Dockerfile
+    # Предположим, что фронтенд также поднимается на 3000 порту
+    serviceDetails:
+      ports:
+        - port: 3000
+    # Аналогично для переменных окружения
+    envVars:
+      # ...
