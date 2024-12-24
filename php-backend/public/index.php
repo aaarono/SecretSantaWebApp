@@ -11,6 +11,11 @@ use Secret\Santa\Controllers\AdminController;
 use Secret\Santa\Controllers\SmsController;
 use Secret\Santa\Controllers\PairController;
 
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', '/tmp/php-error.log'); // или другой путь
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING); 
+
 // Настройка CORS
 $allowed_origins = [
     "http://localhost:3000",
@@ -278,7 +283,9 @@ switch ($firstLayerRoute) {
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $input = json_decode(file_get_contents('php://input'), true);
                             error_log("Received data for 'create' endpoint: " . print_r($input, true));
-                            echo $wishlistController->createWishlist($input['name'], $input['description'], $input['url'], $input['login']);
+                            $responce = $wishlistController->createWishlist($input['name'], $input['description'], $input['url'], $input['login']);
+                            error_log("Response from 'create' endpoint: " . print_r($responce, true));
+                            echo $responce;
                         } else {
                             http_response_code(405);
                             echo json_encode(['message' => 'Invalid request method']);

@@ -31,7 +31,6 @@ services:
     networks:
       - app-network
     volumes:
-      # Монтируем локальную папку ./php-backend в /app внутри контейнера
       - ./php-backend:/app
 
   ws-server:
@@ -44,7 +43,6 @@ services:
     networks:
       - app-network
     volumes:
-      # Аналогично, монтируем тот же код (или, при необходимости, другую папку)
       - ./php-backend:/app
 
   react-frontend:
@@ -60,9 +58,6 @@ services:
       - ws-server
     networks:
       - app-network
-    # Можно тоже добавить volume, если нужно "горячее" обновление кода React:
-    # volumes:
-    #   - ./react-frontend:/app
 
   nginx:
     build:
@@ -77,8 +72,6 @@ services:
       - react-frontend
     networks:
       - app-network
-    # Обычно конфиги Nginx правятся в ./nginx/Dockerfile и ./nginx/default.conf,
-    # так что отдельный volume не всегда нужен
 
 networks:
   app-network:
