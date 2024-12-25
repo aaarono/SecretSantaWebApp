@@ -16,10 +16,11 @@ ini_set('log_errors', 1);
 ini_set('error_log', '/tmp/php-error.log'); // или другой путь
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING); 
 
-// Настройка CORS
 $allowed_origins = [
     "http://localhost:3000",
     "http://localhost",
+    "http://16.171.60.26",    // добавляем
+    "https://16.171.60.26",  // если планируете HTTPS
     "https://your-domain.com"
 ];
 

@@ -16,8 +16,12 @@ class AuthController
 
         // Настройка CORS
         $allowed_origins = [
+            "http://localhost:3000",
             "http://localhost",
-        ];
+            "http://16.171.60.26",    // добавляем
+            "https://16.171.60.26",  // если планируете HTTPS
+            "https://your-domain.com"
+        ];        
 
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 

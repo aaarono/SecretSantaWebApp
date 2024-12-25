@@ -51,8 +51,9 @@ services:
       dockerfile: Dockerfile-frontend
     container_name: react-frontend
     environment:
-      REACT_APP_API_URL: "http://localhost/api"
-      REACT_APP_WS_URL: "ws://localhost/ws"
+      # Указываем IP вашего сервера (или домен), чтобы React знал, куда слать запросы
+      REACT_APP_API_URL: "http://16.171.60.26/api"
+      REACT_APP_WS_URL: "ws://16.171.60.26/ws"
     depends_on:
       - rest-api
       - ws-server
