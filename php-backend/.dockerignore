@@ -1,0 +1,7 @@
+vendor
+.git
+.gitignore
+README.md
+.env
+composer.lock
+.DS_Store

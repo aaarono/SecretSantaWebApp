@@ -1,5 +1,5 @@
 # Stage 1: Сборка React-приложения
-FROM node:14 AS build
+FROM node:18 AS build
 
 # Установите рабочую директорию
 WORKDIR /app
@@ -16,14 +16,17 @@ COPY . .
 # Соберите приложение
 RUN npm run build
 
-# Stage 2: Запуск с помощью Apache
-FROM httpd:2.4
+# Stage 2: Запуск с помощью Nginx
+FROM nginx:alpine
 
 # Копируйте собранные файлы из предыдущего этапа
-COPY --from=build /app/build/ /usr/local/apache2/htdocs/
+COPY --from=build /app/build/ /usr/share/nginx/html/
+
+# Копируйте конфигурацию nginx для SPA
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Откройте порт 80
 EXPOSE 80
 
-# Запустите Apache
-CMD ["httpd-foreground"]
+# Запустите Nginx
+CMD ["nginx", "-g", "daemon off;"]

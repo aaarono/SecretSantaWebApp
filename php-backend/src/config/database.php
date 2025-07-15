@@ -5,12 +5,21 @@ namespace Secret\Santa\Config;
 use PDO;
 
 class Database {
-    private $host = '20.126.41.73'; // Host
-    private $port = '65433'; // PostgreSQL Port
-    private $db_name = 'postgres'; // Database Name
-    private $username = 'santa'; // DB Username
-    private $password = 'santa_password!'; // DB Password
+    // Используем переменные окружения с fallback на localhost
+    private $host;
+    private $port;
+    private $db_name;
+    private $username;
+    private $password;
     public $conn;
+
+    public function __construct() {
+        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
+        $this->port = $_ENV['DB_PORT'] ?? '5432';
+        $this->db_name = $_ENV['DB_NAME'] ?? 'mydb';
+        $this->username = $_ENV['DB_USER'] ?? 'user';
+        $this->password = $_ENV['DB_PASSWORD'] ?? 'password';
+    }
 
     public function getConnection() {
         $this->conn = null;

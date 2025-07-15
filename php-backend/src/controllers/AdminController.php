@@ -16,6 +16,7 @@ class AdminController
     private $wishlistModel;
     private $playerGameModel;
     private $pairModel;
+    private $smsModel;
 
     public function __construct()
     {

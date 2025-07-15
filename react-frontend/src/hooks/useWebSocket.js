@@ -5,7 +5,8 @@ const useWebSocket = (onMessage, onOpen, onClose, onError) => {
   const socketRef = useRef(null);
   const { user } = useContext(UserContext); // Получаем данные из контекста UserContext
 
-  const FIXED_URL = 'ws://localhost:9090'; // Задаем статичный URL
+  // Используем переменную окружения для WebSocket URL, с fallback на localhost
+  const WS_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:9090';
 
   useEffect(() => {
     if (!user?.username) { // Изменено с user.login на user.username
@@ -14,10 +15,10 @@ const useWebSocket = (onMessage, onOpen, onClose, onError) => {
     }
 
     // Создаем WebSocket соединение
-    const socket = new WebSocket(FIXED_URL);
+    const socket = new WebSocket(WS_URL);
 
     socket.onopen = () => {
-      console.log('WebSocket connected:', FIXED_URL);
+      console.log('WebSocket connected:', WS_URL);
       if (onOpen) onOpen(socket);
 
       // Отправляем сообщение `auth` с логином после открытия соединения
@@ -37,7 +38,7 @@ const useWebSocket = (onMessage, onOpen, onClose, onError) => {
     };
 
     socket.onclose = (event) => {
-      console.log('WebSocket disconnected:', FIXED_URL);
+      console.log('WebSocket disconnected:', WS_URL);
       if (onClose) onClose(event);
     };
 

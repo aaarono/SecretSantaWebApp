@@ -1,4 +1,8 @@
 <?php
+// Отключаем отображение ошибок для production
+error_reporting(E_ERROR | E_PARSE);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -14,7 +18,8 @@ use Secret\Santa\Controllers\PairController;
 // Настройка CORS
 $allowed_origins = [
     "https://secret-santa-web-app.vercel.app",
-    "https://secret-santa-web-m69qysv6m-aaaronos-projects.vercel.app"
+    "https://secret-santa-web-m69qysv6m-aaaronos-projects.vercel.app",
+    "http://localhost:3000"
 ];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
@@ -63,17 +68,21 @@ function checkSession()
             $path = sys_get_temp_dir();
         }
     }
-    session_save_path($path);
-
-    session_set_cookie_params([
-        'lifetime' => 0,
-        'path' => '/',
-        'secure' => true, // Установите true, если используете HTTPS
-        'httponly' => true,
-        'samesite' => 'Lax',
-    ]);
-
-    session_start();
+    
+    // Настройка сессий только если сессия еще не запущена
+    if (session_status() === PHP_SESSION_NONE) {
+        session_save_path($path);
+        
+        session_set_cookie_params([
+            'lifetime' => 0,
+            'path' => '/',
+            'secure' => false, // В Docker обычно HTTP
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+        
+        session_start();
+    }
 
     if (!isset($_SESSION['user'])) {
         echo json_encode(['status' => 'error', 'message' => 'User not authenticated']);
@@ -97,6 +106,9 @@ $wishlistController = new WishlistController();
 $playerGameController = new PlayerGameController();
 $adminController = new AdminController();
 $smsController = new SmsController();
+
+// Устанавливаем правильные JSON headers для всех API запросов
+header('Content-Type: application/json; charset=utf-8');
 
 // Обработка маршрутов
 switch ($firstLayerRoute) {

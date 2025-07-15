@@ -1,0 +1,29 @@
+# Используем официальный PHP образ
+FROM php:8.2-cli
+
+# Устанавливаем системные зависимости
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    zip \
+    unzip \
+    git \
+    && docker-php-ext-install pdo pdo_pgsql pgsql sockets \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Устанавливаем Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Настраиваем рабочую директорию
+WORKDIR /var/www/html
+
+# Копируем файлы приложения
+COPY . .
+
+# Устанавливаем зависимости PHP
+RUN composer install --no-dev --optimize-autoloader
+
+# Открываем порт 9090 для WebSocket
+EXPOSE 9090
+
+# Запускаем WebSocket сервер
+CMD ["php", "public/ws-server.php"]
