@@ -15,12 +15,20 @@ use Secret\Santa\Controllers\AdminController;
 use Secret\Santa\Controllers\SmsController;
 use Secret\Santa\Controllers\PairController;
 
-// Настройка CORS
+
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', '/tmp/php-error.log'); // или другой путь
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING); 
+
 $allowed_origins = [
-    "https://secret-santa-web-app.vercel.app",
-    "https://secret-santa-web-m69qysv6m-aaaronos-projects.vercel.app",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://localhost",
+    "http://16.171.60.26",    // добавляем
+    "https://16.171.60.26",  // если планируете HTTPS
+    "https://your-domain.com"
 ];
+
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowed_origins)) {
@@ -91,11 +99,36 @@ function checkSession()
     }
 }
 
-// Парсинг URI
+function checkAdmin()
+{
+    checkSession();
+    if (!isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
+        echo json_encode(['status' => 'error', 'message' => 'Access denied: Admins only']);
+        http_response_code(403);
+        exit();
+    }
+}
+
+// Если у нас настроен Nginx так, что все запросы к API приходят через /api/...
+// Тогда проверим, начинается ли URI с "api"
+// Разбор REQUEST_URI
 $uri = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+error_log("First layer route: $uri[0]");
+error_log("Second layer route: $uri[1]");
+
+if (isset($uri[0]) && $uri[0] === 'api') {
+    // "Сдвигаем" массив маршрутов на 1
+    array_shift($uri);
+}
+
+// И только после этого уже берём $firstLayerRoute, $secondLayerRoute...
 $firstLayerRoute = $uri[0] ?? '';
 $secondLayerRoute = $uri[1] ?? '';
-$thirdLayerRoute = $uri[2] ?? '';
+$thirdLayerRoute  = $uri[2] ?? '';
+
+error_log("First layer route: $firstLayerRoute");
+error_log("Second layer route: $secondLayerRoute");
+
 
 // Инициализация контроллеров
 $authController = new AuthController();
@@ -263,7 +296,9 @@ switch ($firstLayerRoute) {
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $input = json_decode(file_get_contents('php://input'), true);
                             error_log("Received data for 'create' endpoint: " . print_r($input, true));
-                            echo $wishlistController->createWishlist($input['name'], $input['description'], $input['url'], $input['login']);
+                            $responce = $wishlistController->createWishlist($input['name'], $input['description'], $input['url'], $input['login']);
+                            error_log("Response from 'create' endpoint: " . print_r($responce, true));
+                            echo $responce;
                         } else {
                             http_response_code(405);
                             echo json_encode(['message' => 'Invalid request method']);
@@ -374,8 +409,6 @@ switch ($firstLayerRoute) {
                     http_response_code(405);
                     echo json_encode(['message' => 'Invalid request method']);
                 }
-            break; 
-
             case 'usergames':
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $login = $_GET['login'] ?? null;
@@ -685,6 +718,7 @@ switch ($firstLayerRoute) {
 
     case 'api':
         checkSession();
+        checkAdmin();
         switch ($secondLayerRoute) {
             case 'users':
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

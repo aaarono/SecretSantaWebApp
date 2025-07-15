@@ -5,8 +5,7 @@ const useWebSocket = (onMessage, onOpen, onClose, onError) => {
   const socketRef = useRef(null);
   const { user } = useContext(UserContext); // Получаем данные из контекста UserContext
 
-  // Используем переменную окружения для WebSocket URL, с fallback на localhost
-  const WS_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:9090';
+  const FIXED_URL = 'ws://16.171.60.26/ws/'; // Задаем статичный URL
 
   useEffect(() => {
     if (!user?.username) { // Изменено с user.login на user.username

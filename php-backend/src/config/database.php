@@ -5,12 +5,13 @@ namespace Secret\Santa\Config;
 use PDO;
 
 class Database {
-    // Используем переменные окружения с fallback на localhost
-    private $host;
-    private $port;
-    private $db_name;
-    private $username;
-    private $password;
+
+    private $host = 'db'; // Хост базы данных (например, имя сервиса Docker или IP-адрес)
+    private $port = '5432'; // Порт PostgreSQL
+    private $db_name = 'mydb'; // Имя базы данных
+    private $username = 'user'; // Имя пользователя базы данных
+    private $password = 'password'; // Пароль базы данных
+
     public $conn;
 
     public function __construct() {

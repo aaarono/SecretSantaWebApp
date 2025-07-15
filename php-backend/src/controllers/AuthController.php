@@ -16,8 +16,12 @@ class AuthController
 
         // Настройка CORS
         $allowed_origins = [
-            "https://secret-santa-web-app.vercel.app/",
-        ];
+            "http://localhost:3000",
+            "http://localhost",
+            "http://16.171.60.26",    // добавляем
+            "https://16.171.60.26",  // если планируете HTTPS
+            "https://your-domain.com"
+        ];        
 
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 
@@ -50,7 +54,7 @@ class AuthController
         session_start();
 
         $currentRoute = $_SERVER['REQUEST_URI'] ?? '';
-        if(strpos($currentRoute, '/auth/login') === false && strpos($currentRoute, '/auth/register') === false) {
+        if(strpos($currentRoute, '/api/auth/login') === false && strpos($currentRoute, '/api/auth/register') === false) {
             $this-> checkSessionTimeout();
         }
     }

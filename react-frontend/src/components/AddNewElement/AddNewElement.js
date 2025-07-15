@@ -49,8 +49,20 @@ const AddNewElement = ({ onAdd }) => {
         setIsOpen(false);
       }
     } catch (error) {
+      // 1. Сообщение об ошибке
       console.error('Ошибка при добавлении элемента:', error);
-      alert('Не удалось добавить элемент.');
+    
+      // 2. Если это ошибка от сервера (response), логируем всю возможную информацию
+      if (error.response) {
+        console.error('Data:', error.response.data);
+        console.error('Status:', error.response.status);
+        console.error('Headers:', error.response.headers);
+      }
+    
+      // 3. Можно также вывести stack, если нужно
+      console.error('Stack:', error.stack);
+    
+      alert('Не удалось добавить элемент.');    
     } finally {
       setIsLoading(false);
     }

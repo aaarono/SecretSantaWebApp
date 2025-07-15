@@ -1,0 +1,29 @@
+FROM php:8.1-cli
+
+# Устанавливаем системные пакеты и расширения PHP
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    unzip \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && apt-get clean
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем все файлы проекта в контейнер
+COPY . /app
+
+# Устанавливаем Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Проверяем, существует ли composer.json и устанавливаем зависимости
+RUN if [ -f "composer.json" ]; then composer install --no-dev --optimize-autoloader; else echo "composer.json not found, skipping"; fi
+
+# Проверяем, существует ли папка public
+RUN if [ ! -d "/app/public" ]; then echo "Error: /app/public directory not found" && exit 1; fi
+
+# Открываем порт 8080
+EXPOSE 8080
+
+# Запускаем встроенный сервер PHP, указывая корень сайта как /app/public
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]

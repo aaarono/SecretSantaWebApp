@@ -1,5 +1,4 @@
 services:
-  # PostgreSQL Database
   db:
     image: postgres:13
     container_name: secret-santa-db
@@ -80,14 +79,61 @@ services:
       - "3000:80"
     networks:
       - app-network
+  rest-api:
+    build:
+      context: ./php-backend
+      dockerfile: Dockerfile-rest-api
+    container_name: rest-api
+    environment:
+      DB_HOST: db
+      DB_NAME: mydb
+      DB_USER: user
+      DB_PASSWORD: password
+    depends_on:
+      - db
+    networks:
+      - app-network
+    volumes:
+      - ./php-backend:/app
 
-  # Database Admin Interface
-  adminer:
-    image: adminer
-    container_name: secret-santa-adminer
-    restart: always
+  ws-server:
+    build:
+      context: ./php-backend
+      dockerfile: Dockerfile-ws-server
+    container_name: ws-server
+    depends_on:
+      - db
+    networks:
+      - app-network
+    volumes:
+      - ./php-backend:/app
+
+  react-frontend:
+    build:
+      context: ./react-frontend
+      dockerfile: Dockerfile-frontend
+    container_name: react-frontend
+    environment:
+      # Указываем IP вашего сервера (или домен), чтобы React знал, куда слать запросы
+      REACT_APP_API_URL: "http://16.171.60.26/api"
+      REACT_APP_WS_URL: "ws://16.171.60.26/ws"
+    depends_on:
+      - rest-api
+      - ws-server
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
     ports:
-      - "8081:8080"
+      - "80:80"
+    depends_on:
+      - rest-api
+      - ws-server
+      - react-frontend
     networks:
       - app-network
     depends_on:
@@ -96,6 +142,3 @@ services:
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  pgdata:

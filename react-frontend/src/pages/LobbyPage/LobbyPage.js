@@ -16,12 +16,13 @@ import StartGameWindow from "../../components/LobbyElements/GameWindow/StartGame
 import Chat from "../../components/LobbyElements/Chat/Chat";
 import { UserContext } from "../../components/contexts/UserContext";
 import useWebSocket from "../../hooks/useWebSocket";
-import api from "../../services/api/api";
+import api from "../../services/api/api"; // <-- используем ваш ApiService
 import ActiveGameWindow from "../../components/LobbyElements/GameWindow/ActiveGameWindow";
 
 const LobbyPage = () => {
   const { gameUuid } = useParams();
   const { user } = useContext(UserContext);
+
   const [players, setPlayers] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [gameName, setGameName] = useState("");
@@ -30,12 +31,14 @@ const LobbyPage = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [gameStatus, setGameStatus] = useState("pending");
 
-  const login = user.username;
+  const login = user?.username;
 
+  // Колбэк для обновления списка игроков
   const updatePlayerList = useCallback((newPlayers) => {
     setPlayers(newPlayers);
   }, []);
 
+  // Колбэк для изменения статуса игрока (online/offline)
   const setPlayerStatus = useCallback((playerLogin, isOnline = true) => {
     setPlayers((prevPlayers) => {
       const playerIndex = prevPlayers.findIndex((p) => p.login === playerLogin);
@@ -47,11 +50,13 @@ const LobbyPage = () => {
         };
         return updatedPlayers;
       } else {
+        // Если игрока ещё нет в списке, добавим
         return [...prevPlayers, { login: playerLogin, is_online: isOnline }];
       }
     });
   }, []);
 
+  // Обрабатываем входящие сообщения от WebSocket
   const handleWebSocketMessage = useCallback(
     (message) => {
       switch (message.type) {
@@ -92,53 +97,72 @@ const LobbyPage = () => {
             setChatMessages((prevMessages) => [...prevMessages, newMessage]);
           }
           break;
+
         case "game_started":
+          // Игра переведена в статус "running"
           setGameStatus("running");
           break;
+
         default:
+          console.warn("Unknown message type:", message.type);
           break;
       }
     },
     [gameUuid, login, updatePlayerList, setPlayerStatus]
   );
 
-  const handleWebSocketOpen = useCallback((socket) => {}, []);
+  const handleWebSocketOpen = useCallback((socket) => {
+  }, []);
 
   const sendMessage = useWebSocket(handleWebSocketMessage, handleWebSocketOpen);
 
+  // Загружаем данные о игре (название, статус, игроки и т.д.)
   useEffect(() => {
     if (gameUuid) {
-      fetch(`http://localhost:8000/game/get?uuid=${gameUuid}`, {
-        credentials: "include",
-      })
-        .then((res) => res.json())
+      // Раньше было fetch("http://localhost:8000/game/get?uuid=..."),
+      // теперь используем api.get:
+      // Предположим, что ваш ApiService уже добавляет credentials: 'include'
+      // Если нет, можно указать явно вторым параметром headers/конфиг
+      api
+        .get(`/game/get?uuid=${gameUuid}`)
         .then((data) => {
           if (data.status === "success" && data.game) {
             setGameName(data.game.name || "Unnamed Game");
             setGameEndsAt(data.game.endsat || "");
             setGameStatus(data.game.status);
 
+            // Формируем список игроков
             const fullPlayers = (data.game.players || []).map((p) => ({
               ...p,
-              is_online: true,
+              is_online: true, // можно считать их online
             }));
             updatePlayerList(fullPlayers);
+
             setCreatorLogin(data.game.creator_login);
+          } else {
+            console.error("Game data response error:", data);
           }
         })
-        .catch((err) => console.error("Error fetching game data:", err));
+        .catch((err) =>
+          console.error("Error fetching game data via ApiService:", err)
+        );
     }
   }, [gameUuid, updatePlayerList]);
 
+  // Определяем, какое окно отобразить (зависит от gameStatus)
   let windowToRender;
   if (gameStatus === "running" || gameStatus === "ended") {
-    windowToRender = <ActiveGameWindow gameUuid={gameUuid} gameStatus={gameStatus} />;
+    // Если игра запущена/завершена, показываем активное окно
+    windowToRender = (
+      <ActiveGameWindow gameUuid={gameUuid} gameStatus={gameStatus} />
+    );
   } else {
+    // Если игра ещё не начата (pending), смотрим: пользователь - создатель или нет
     if (creatorLogin && creatorLogin === login) {
       windowToRender = (
         <StartGameWindow
           isAuthorized={isAuthorized}
-          playersCount={players.length} // Используем длину массива игроков
+          playersCount={players.length}
           gameUuid={gameUuid}
           api={api}
           sendMessage={sendMessage}
